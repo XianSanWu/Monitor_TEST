@@ -1,0 +1,36 @@
+<div
+  class="fieldGroup"
+  [ngClass]="customClass||'col-12'"
+  [ngClass]="{ error: hasError(), essential: required, disabled: disabled }"
+  [formGroup]="form"
+>
+  <label [for]="ctlName">
+    {{ title }}
+  </label>
+  <mat-form-field appearance="fill" [ngClass]="customClass||'col-12'">
+    <mat-label>{{ title }}</mat-label>
+    <input
+      matInput
+      [type]="type"
+      [placeholder]="placeholder"
+      [formControlName]="ctlName"
+      [maxlength]="maxlength"
+      [readonly]="disabled"
+    />
+  </mat-form-field>
+
+  <!-- 錯誤訊息 -->
+  <div class="note errorText" *ngIf="hasError()">
+    <p
+      *ngIf="(ctl?.dirty || ctl?.touched) && ctl?.errors?.['required']; else otherErr"
+    >
+      此為必填欄位
+    </p>
+    <ng-template #otherErr>
+      <p>{{ firstErr }}</p>
+    </ng-template>
+  </div>
+
+  <!-- 預留錯誤訊息的空間 -->
+  <div class="errorPlaceholder" *ngIf="!hasError()"></div>
+</div>

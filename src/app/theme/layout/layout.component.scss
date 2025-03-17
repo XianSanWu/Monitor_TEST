@@ -1,0 +1,19 @@
+.layout-container {
+  display: flex;
+}
+
+.content-container {
+  margin-left: 250px; /* 與選單分開 */
+  padding: 20px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .layout-container {
+    flex-direction: column;
+  }
+
+  .content-container {
+    margin-left: 0;
+  }
+}

@@ -1,0 +1,24 @@
+<h1 mat-dialog-title><strong>{{ option.title }}</strong></h1>
+
+<mat-dialog-content *ngIf="option.content; else noContent">
+  <div [innerHTML]="option.content"></div>
+</mat-dialog-content>
+
+<ng-template #noContent>
+  <div>
+    <strong *ngIf="option.contentTitle">{{ option.contentTitle }}</strong>
+    <div *ngIf="option.contentTitle && option.contentArrayStr && (option?.contentArrayStr?.length ?? 0) > 0" class="spacer"></div>
+    <ul *ngIf="option.contentArrayStr && (option?.contentArrayStr?.length ?? 0) > 0" class="list-unstyled">
+      <li *ngFor="let content of option.contentArrayStr">{{ content }}</li>
+    </ul>
+    <strong *ngIf="option.contentTitle_1">{{ option.contentTitle_1 }}</strong>
+    <br *ngIf="option.contentTitle_2">
+    <strong *ngIf="option.contentTitle_2">{{ option.contentTitle_2 }}</strong>
+  </div>
+</ng-template>
+
+<mat-dialog-actions align="end">
+  <button *ngIf="option.leftButtonName && option.leftButtonName !== 'hide'" mat-button (click)="option.leftCallback && option.leftCallback()">{{option.leftButtonName}}</button>
+  <button *ngIf="option.midButtonName && option.leftButtonName !== 'hide'" mat-button (click)="option.midCallback && option.midCallback()">{{option.midButtonName}}</button>
+  <button *ngIf="option.rightButtonName && option.rightButtonName !== 'hide'" mat-button (click)="option.rightCallback && option.rightCallback()">{{option.rightButtonName}}</button>
+</mat-dialog-actions>

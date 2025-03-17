@@ -1,0 +1,53 @@
+<div
+  class="fieldGroup"
+  [ngClass]="customClass || 'col-12'"
+  [ngClass]="{ error: hasError(), essential: required }"
+  [formGroup]="form"
+>
+  <label [for]="ctlName">
+    {{ title }}
+    <span
+      class="popoverIcon"
+      *ngIf="popupText"
+      matTooltip="{{ popupText }}"
+      matTooltipPosition="above"
+      >?</span
+    >
+  </label>
+
+  <div class="inputWrapper">
+    <mat-form-field appearance="outline" *ngIf="!!selectList?.options">
+      <mat-select
+        #selectListDropdown
+        [formControlName]="ctlName"
+        [placeholder]="placeholder"
+        [panelClass]="hasError() ? 'mat-select-error' : ''"
+        [multiple]="isMultiple === true"
+        (selectionChange)="valueChangeFn($event.value)"
+        [id]="ctlName"
+        [ngClass]="customClass || 'col-12'"
+      >
+        <mat-option *ngIf="!!showPlaceholder" [value]="null">{{
+          showPlaceholder
+        }}</mat-option>
+        <mat-option
+          *ngFor="let option of selectList?.options"
+          [value]="option[selectList!.key] ?? ''"
+          [disabled]="isOptionDisabled(option[selectList!.key])"
+        >
+          {{ option[selectList!.val] }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <!-- 錯誤訊息 -->
+    <div class="note errorText" *ngIf="ctl?.dirty || ctl?.touched">
+      <p *ngIf="ctl?.errors?.['required']; else otherErr">此為必填欄位</p>
+      <ng-template #otherErr>
+        <p>{{ firstErr }}</p>
+      </ng-template>
+    </div>
+
+    <!-- 預留錯誤訊息的空間，即使錯誤訊息未顯示 -->
+    <div class="errorPlaceholder" *ngIf="!hasError()"></div>
+  </div>
+</div>

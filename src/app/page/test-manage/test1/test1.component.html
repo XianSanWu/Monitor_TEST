@@ -1,0 +1,28 @@
+<div class="pageTitle">
+  <h2>【使用元件範例】</h2>
+</div>
+<div class="row">
+  <div class="col-6">
+    <basic-input
+      title="輸入框範例"
+      [form]="form"
+      ctlName="username"
+      placeholder="請輸入帳號"
+      [maxlength]="30"
+    ></basic-input>
+  </div>
+  <div class="col-6">
+    <dropdown
+      title="下拉選單範例"
+      [form]="form"
+      ctlName="testControl"
+      [selectList]="selectList"
+      [disabledSelectList]="disabledSelectList"
+      (valueChange)="onValueChange($event)"
+    ></dropdown>
+  </div>
+</div>
+<div class="row">
+  <button nbButton (click)="openConfirmDialog()">開啟確認對話框</button>
+</div>
+

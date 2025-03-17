@@ -1,0 +1,51 @@
+.fieldGroup {
+  &.essential label::after {
+    content: '*';
+    color: red;
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  label {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+    color: #333;
+  }
+
+  .inputWrapper {
+    display: flex;
+    flex-direction: column;  // 讓 input 和錯誤訊息垂直排列
+    position: relative;
+
+    mat-form-field {
+      width: 100%;  // 確保填滿容器
+    }
+  }
+
+  .note {
+    margin-top: 0;
+    display: block;  // 讓錯誤訊息換行到 input 下方
+    color: #f44336;
+    font-size: 12px;
+    line-height: 3px;
+
+    p {
+      margin: 0;
+      font-size: 12px;
+    }
+
+    &.errorText {
+      min-height: 20px; // 確保錯誤訊息的佔位空間一致
+    }
+  }
+
+  .errorPlaceholder {
+    min-height: 20px; // 預留錯誤訊息的空間
+    visibility: hidden;
+  }
+}

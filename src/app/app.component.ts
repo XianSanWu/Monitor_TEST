@@ -1,12 +1,40 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AuthService } from './core/services/auth.service';
+import { ConfigService } from './core/services/config.service';
+import { LoadingService } from './core/services/loading.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [
+    RouterOutlet,
+    CommonModule,
+  ],
+  providers: [],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Feib_Monitor';
+  isLoggedIn = false;
+
+  constructor(
+    private configService: ConfigService,
+    public authService: AuthService,
+    public loadingService: LoadingService
+  ) { }
+
+  ngOnInit(): void {
+    this.configService.loadConfig().subscribe({
+      next: (data) => {
+        // console.log('Configuration loaded in AppComponent:', data);
+      },
+      error: (err) => {
+        console.error('Error loading configuration:', err);
+      }
+    });
+  }
+
 }

@@ -1,0 +1,63 @@
+* {
+  font-family: "Arial", "微軟正黑體", "Microsoft JhengHei", "黑體-繁",
+    "Heiti TC", "DFKai-SB" !important;
+}
+
+body {
+  overflow: hidden;
+}
+
+.parent {
+  display: flex;
+  justify-content: center;  /* 水平置中 */
+  align-items: center;      /* 垂直置中 */
+  height: 100vh;            /* 讓父容器佔滿整個視窗高度 */
+}
+
+button[nbButton][status="primary"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  border: none;
+  outline: none;
+  appearance: none;
+  background-color: #007bff; // 預設藍色
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
+
+  &:hover {
+    background-color: #0056b3;
+    box-shadow: 0 6px 10px rgba(0, 123, 255, 0.3);
+  }
+
+  &:active {
+    background-color: #004494;
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+    color: #666;
+  }
+
+  &.col-6 {
+    max-width: 250px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
