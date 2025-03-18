@@ -33,6 +33,9 @@
       <span>{{ getFirstError() }}</span>
     </p>
     <ng-template #otherErr>
+      <!-- <span *ngIf="required && !ctlStartDate?.value && !ctlEndDate?.value"
+        >此為必填欄位
+      </span> -->
       <span *ngIf="ctlStartDate?.errors?.['required'] && !ctlStartDate?.value"
         >此{{ titleStart }}為必填欄位
       </span>

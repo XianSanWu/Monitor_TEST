@@ -62,23 +62,6 @@ export class Test1Component {
     val: 'name'
   };
 
-
-  // openConfirmDialog() {
-  //   const option: ConfirmDialogOption = {
-  //     title: '確認操作',
-  //     content: '你確定要執行此操作嗎？',
-  //     leftButtonName: '取消',
-  //     rightButtonName: '確定',
-  //     leftCallback: () => console.log('取消'),
-  //     rightCallback: () => console.log('確定'),
-  //     isCloseBtn: true
-  //   };
-  //   const dialogRef = this.dialog.open(ConfirmDialogComponent, { data: option });
-
-  //   dialogRef.afterClosed().subscribe();
-  // }
-
-
   openConfirmDialog() {
     const dialogData: ConfirmDialogOption = {
       title: '確認操作',
@@ -100,6 +83,12 @@ export class Test1Component {
 
     // 開啟確認對話框
     this.dialogService.openConfirmDialog(dialogData).subscribe();
+  }
+
+  openCustomSnackbar(){
+    this.dialogService.openCustomSnackbar({
+      message: '錯誤訊息內容'
+    });
   }
 
   onValueChange(value: any) {

@@ -14,7 +14,7 @@ import { DialogService } from '../../../core/services/dialog.service';
 // import { RestStatus } from '../../../common/enums/rest-enum';
 
 @Component({
-  selector: 'app-login',
+  selector: 'login-verify',
   standalone: true,
   imports: [
     CommonModule,
@@ -24,10 +24,10 @@ import { DialogService } from '../../../core/services/dialog.service';
     LoadingIndicatorComponent,
   ],
   providers: [LoadingService, LoginManageService],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  templateUrl: './login-verify.component.html',
+  styleUrl: './login-verify.component.scss'
 })
-export class LoginComponent {
+export class LoginVerifyComponent {
   validateForm: FormGroup;
 
   constructor(

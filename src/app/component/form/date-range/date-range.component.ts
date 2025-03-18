@@ -62,47 +62,40 @@ export class DateRangeComponent implements OnInit, AfterViewInit {
   }
 
   hasError(): boolean {
-    const startDateHasError = this.ctlStartDate?.dirty || this.ctlStartDate?.touched && this.ctlStartDate?.errors;
-    const endDateHasError = this.ctlEndDate?.dirty || this.ctlEndDate?.touched && this.ctlEndDate?.errors;
-    return !!(startDateHasError || endDateHasError);
+    const startDateHasError = this.ctlStartDate?.errors
+      ? Object.keys(this.ctlStartDate.errors).some(key => key !== 'matDatepickerParse' && key !== 'matEndDateInvalid')
+      : false;
+    const endDateHasError = this.ctlEndDate?.errors
+      ? Object.keys(this.ctlEndDate.errors).some(key => key !== 'matDatepickerParse' && key !== 'matEndDateInvalid')
+      : false;
+
+    // 確保對 dirty 或 touched 和 hasError 的條件處理不會返回 undefined
+    return !!((this.ctlStartDate?.dirty || this.ctlStartDate?.touched) && startDateHasError) ||
+           !!((this.ctlEndDate?.dirty || this.ctlEndDate?.touched) && endDateHasError);
   }
 
   getFirstError(): string {
     const startDateErrors = this.ctlStartDate?.errors;
     const endDateErrors = this.ctlEndDate?.errors;
-    // console.info('startDateErrors',startDateErrors)
-    // console.info('endDateErrors',endDateErrors)
-    if (this.form.errors?.['dateErrMsg']) {
-      return this.form.errors['dateErrMsg']; // 父層驗證
-    }
-
-    if (this.form.errors?.['endDateBeforeToday']) {
-      return this.form.errors['endDateBeforeToday']; // 父層驗證
-    }
-
-    // 檢查起始日期錯誤，並排除 'required' 錯誤
     if (startDateErrors) {
-      // 移除 'required' 錯誤
-      delete startDateErrors['required'];
-      if (Object.keys(startDateErrors).length > 0) {
-        return this.titleStart + ' ' + Object.values(startDateErrors)[0];
-      }
+      const filteredErrors = Object.entries(startDateErrors)
+        .filter(([key]) => key !== 'required' && key !== 'matDatepickerParse' && key !== 'matEndDateInvalid')
+        .map(([_, value]) => value as string); // 只取錯誤訊息
+
+      // 取最後一個錯誤訊息
+      return filteredErrors.length > 0 ? this.titleStart + filteredErrors[filteredErrors.length - 1] : ''
     }
 
-    // 檢查結束日期錯誤，並排除 'required' 錯誤
     if (endDateErrors) {
-      // 移除 'required' 錯誤
-      delete endDateErrors['required'];
-      if (Object.keys(endDateErrors).length > 0) {
-        // 若有其他錯誤，顯示其他錯誤
-        return this.titleEnd + ' ' + Object.values(endDateErrors)[0];
-      }
+      const filteredErrors = Object.entries(endDateErrors)
+        .filter(([key]) => key !== 'required' && key !== 'matDatepickerParse' && key !== 'matEndDateInvalid')
+        .map(([_, value]) => value as string); // 只取錯誤訊息
+
+      // 取最後一個錯誤訊息
+      return filteredErrors.length > 0 ? this.titleEnd + filteredErrors[filteredErrors.length - 1] : ''
     }
 
     return ''; // 如果沒有其他錯誤，則回傳空字串
   }
-
-
-
 
 }

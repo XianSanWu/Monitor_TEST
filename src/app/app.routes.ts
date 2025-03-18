@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './page/login-manage/login/login.component';
+import { LoginVerifyComponent } from './page/login-manage/login-verify/login-verify.component';
 import { AuthGuard } from './common/guard/auth.guard';
 import { Test1Component } from './page/test-manage/test1/test1.component';
 import { Test2Component } from './page/test-manage/test2/test2.component';
@@ -9,7 +9,7 @@ import { HomeComponent } from './page/home/home.component';
 export const routes: Routes = [
   {
     path: 'login',
-    component: LoginComponent,  // 登入頁面
+    component: LoginVerifyComponent,  // 登入頁面
   },
   {
     path: '',
