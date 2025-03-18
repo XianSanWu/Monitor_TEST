@@ -1,6 +1,6 @@
 <div
   class="fieldGroup"
-  [ngClass]="customClass || 'col-12'"
+  [ngClass]="'col-12'"
   [ngClass]="{ error: hasError(), essential: required }"
   [formGroup]="form"
 >
@@ -25,7 +25,7 @@
         [multiple]="isMultiple === true"
         (selectionChange)="valueChangeFn($event.value)"
         [id]="ctlName"
-        [ngClass]="customClass || 'col-12'"
+        [ngClass]="'col-12'"
       >
         <mat-option *ngIf="!!showPlaceholder" [value]="null">{{
           showPlaceholder

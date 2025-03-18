@@ -1,1 +1,47 @@
-<p>date-range works!</p>
+<div
+  class="fieldGroup"
+  [ngClass]="'col-12'"
+  [ngClass]="{ error: hasError(), essential: required, disabled: disabled }"
+  [formGroup]="form"
+>
+  <label>{{ title }}</label>
+
+  <mat-form-field [ngClass]="'col-12'">
+    <mat-label>{{ title }}</mat-label>
+    <mat-date-range-input [rangePicker]="picker" [disabled]="disabled">
+      <input
+        matStartDate
+        [placeholder]="titleStart"
+        formControlName="startDate"
+        maxlength="10"
+      />
+      <input
+        matEndDate
+        [placeholder]="titleEnd"
+        formControlName="endDate"
+        maxlength="10"
+      />
+    </mat-date-range-input>
+    <mat-hint>YYYY/MM/DD - YYYY/MM/DD</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+  </mat-form-field>
+
+  <!-- 錯誤訊息 -->
+  <div class="note errorText" *ngIf="hasError()">
+    <p *ngIf="getFirstError(); else otherErr">
+      <span>{{ getFirstError() }}</span>
+    </p>
+    <ng-template #otherErr>
+      <span *ngIf="ctlStartDate?.errors?.['required'] && !ctlStartDate?.value"
+        >此{{ titleStart }}為必填欄位
+      </span>
+      <span *ngIf="ctlEndDate?.errors?.['required'] && !ctlEndDate?.value"
+        >此{{ titleEnd }}為必填欄位
+      </span>
+    </ng-template>
+  </div>
+
+  <!-- 預留錯誤訊息的空間，即使錯誤訊息未顯示 -->
+  <div class="errorPlaceholder" *ngIf="!hasError()"></div>
+</div>

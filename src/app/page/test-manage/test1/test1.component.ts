@@ -2,15 +2,13 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoadingService } from '../../../core/services/loading.service';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSelectModule } from '@angular/material/select';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { DropdownComponent } from '../../../component/form/dropdown/dropdown.component';
 import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
 import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { ConfirmDialogOption } from '../../../core/models/common/dialog.model';
 import { DialogService } from '../../../core/services/dialog.service';
+import { DateRangeComponent } from "../../../component/form/date-range/date-range.component";
+import { DateComponent } from '../../../component/form/date/date.component';
 
 @Component({
   selector: 'test1',
@@ -18,12 +16,10 @@ import { DialogService } from '../../../core/services/dialog.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatIconModule,
-    MatTooltipModule,
     DropdownComponent,
-    BasicInputComponent
+    BasicInputComponent,
+    DateComponent,
+    DateRangeComponent
   ],
   providers: [LoadingService],
   templateUrl: './test1.component.html',
@@ -38,8 +34,11 @@ export class Test1Component {
     // 初始化表單
     this.form = new FormGroup({
       username: new FormControl('', [Validators.required, ValidatorsUtil.blank, ValidatorsUtil.intSymbolsEnglishNumbers]),
-      testControl: new FormControl('', [Validators.required,])
-    });
+      testControl: new FormControl('', [Validators.required,]),
+      date: new FormControl('', [Validators.required, ValidatorsUtil.dateFmt, ValidatorsUtil.dateNotBeforeToday]),
+      startDate: new FormControl('', [Validators.required, ValidatorsUtil.dateFmt]),
+      endDate: new FormControl('', [Validators.required, ValidatorsUtil.dateFmt])
+    }, { validators: ValidatorsUtil.dateRangeValidator });
   }
 
   form: FormGroup;

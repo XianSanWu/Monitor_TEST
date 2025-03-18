@@ -39,7 +39,6 @@ export class DropdownComponent implements OnInit {
   ctl!: FormControl;
   enumList = new Map();
   enumKey: string = '';
-  customClass = '';
 
   get required() {
     return this.ctl?.validator?.({} as AbstractControl)?.['required'] !== undefined;

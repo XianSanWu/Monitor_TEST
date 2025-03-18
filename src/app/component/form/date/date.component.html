@@ -1,0 +1,37 @@
+<div
+  class="fieldGroup"
+  [ngClass]="'col-12'"
+  [ngClass]="{ error: hasError(), essential: required, disabled: disabled }"
+  [formGroup]="form"
+>
+  <label [for]="ctlName">{{ title }}</label>
+  <mat-form-field [ngClass]="'col-12'">
+    <mat-label>{{ title }}</mat-label>
+    <input
+      matInput
+      [matDatepicker]="picker"
+      formControlName="date"
+      [disabled]="disabled"
+      placeholder="YYYY/MM/DD"
+      maxlength="10"
+    />
+    <mat-hint>YYYY/MM/DD</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <!-- 錯誤訊息 -->
+  <div class="note errorText" *ngIf="hasError()">
+    <p *ngIf="getFirstError(); else otherErr">
+      <span>{{ getFirstError() }}</span>
+    </p>
+    <ng-template #otherErr>
+      <span *ngIf="ctlDate?.errors?.['required'] && !ctlDate?.value"
+        >此為必填欄位
+      </span>
+    </ng-template>
+  </div>
+
+  <!-- 預留錯誤訊息的空間，即使錯誤訊息未顯示 -->
+  <div class="errorPlaceholder" *ngIf="!hasError()"></div>
+</div>

@@ -2,27 +2,35 @@
   <h2>【使用元件範例】</h2>
 </div>
 <div class="row">
-  <div class="col-6">
-    <basic-input
-      title="輸入框範例"
-      [form]="form"
-      ctlName="username"
-      placeholder="請輸入帳號"
-      [maxlength]="30"
-    ></basic-input>
-  </div>
-  <div class="col-6">
-    <dropdown
-      title="下拉選單範例"
-      [form]="form"
-      ctlName="testControl"
-      [selectList]="selectList"
-      [disabledSelectList]="disabledSelectList"
-      (valueChange)="onValueChange($event)"
-    ></dropdown>
-  </div>
+  <basic-input
+    title="輸入框範例"
+    class="col-6"
+    [form]="form"
+    ctlName="username"
+    placeholder="請輸入帳號"
+    [maxlength]="30"
+  ></basic-input>
+  <dropdown
+    title="下拉選單範例"
+    [form]="form"
+    ctlName="testControl"
+    [selectList]="selectList"
+    [disabledSelectList]="disabledSelectList"
+    class="col-6"
+    (valueChange)="onValueChange($event)"
+  ></dropdown>
 </div>
+
+<div class="row">
+  <date class="col-6" title="單一日期" ctlName="date" [form]="form"></date>
+  <date-range
+    class="col-6"
+    titleStart="起日"
+    titleEnd="迄日"
+    [form]="form"
+  ></date-range>
+</div>
+
 <div class="row">
   <button nbButton (click)="openConfirmDialog()">開啟確認對話框</button>
 </div>
-

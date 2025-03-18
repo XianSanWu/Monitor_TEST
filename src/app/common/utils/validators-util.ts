@@ -13,13 +13,12 @@ export const ValidatorsUtil = {
       return null; // 不存在，不進行驗證
     }
 
-    const startDate = startCtl.value as Date;
-    const endDate = endCtl.value as Date;
-
+    const startDate = startCtl.value ? new Date(startCtl.value) : null;
+    const endDate = endCtl.value ? new Date(endCtl.value) : null;
     if (startDate && endDate) {
-      // 直接比對 YYYY-MM-DD 字串，避免時區問題
-      if (endDate.toDateString() < startDate.toDateString()) {
-        return { dateErrMsg: '結束日期不得早於起始日期' };
+      // 確保日期格式正確，並比對日期大小
+      if (endDate < startDate) {
+        return { 'dateErrMsg': '結束日期不得早於起始日期' };
       }
     }
 
@@ -31,19 +30,19 @@ export const ValidatorsUtil = {
     if (v instanceof Date) {
       return null
     } else if ((ctl.dirty || ctl.touched) && !RegExpUtil.dateFmt1.test(v)) {
-      return { 'format': '日期格式錯誤' };
+      return { 'format': '日期格式錯誤，請輸入有效的日期格式' };
     } else {
       return null;
     }
   },
-  endDateNotBeforeToday: (ctl: AbstractControl) => {
+  dateNotBeforeToday: (ctl: AbstractControl) => {
     const endDate = new Date(ctl.value);
     const today = new Date();
 
     today.setHours(0, 0, 0, 0);
 
     if ((ctl.dirty || ctl.touched) && endDate < today) {
-      return { 'endDateBeforeToday': '迄日不可小於今日' };
+      return { 'dateBeforeToday': '不可小於今日' };
     }
     return null;
   },

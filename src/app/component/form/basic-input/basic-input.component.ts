@@ -14,14 +14,13 @@ import { MatInputModule } from '@angular/material/input';
 export class BasicInputComponent implements OnInit {
 
   @Input() title: string = '';
-  @Input() form: FormGroup = new FormGroup({});
+  @Input() form!: FormGroup;
   @Input() ctlName: string = '';
   @Input() type: 'text' | 'password' | 'number' = 'text';
   @Input() placeholder: string = '請輸入';
   @Input() maxlength: number = 10;
   @Input() disabled: boolean = false;
   @Input() popupText: string = '';
-  @Input() customClass = '';
 
   firstErr: string = '';
   ctl: FormControl | undefined;
