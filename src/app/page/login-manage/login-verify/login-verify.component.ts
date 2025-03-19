@@ -26,7 +26,7 @@ import { RestStatus } from '../../../common/enums/rest-enum';
   templateUrl: './login-verify.component.html',
   styleUrl: './login-verify.component.scss'
 })
-export class LoginVerifyComponent {
+export default class LoginVerifyComponent {
   validateForm!: FormGroup;
 
   constructor(

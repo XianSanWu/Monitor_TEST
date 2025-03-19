@@ -26,7 +26,7 @@ import { ColDef } from 'ag-grid-community';
   templateUrl: './test1.component.html',
   styleUrl: './test1.component.scss'
 })
-export class Test1Component {
+export default class Test1Component {
 
   constructor(
     // private dialog: MatDialog,

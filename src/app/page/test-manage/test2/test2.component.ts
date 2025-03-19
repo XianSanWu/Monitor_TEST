@@ -15,7 +15,7 @@ import { LoadingService } from '../../../core/services/loading.service';
   templateUrl: './test2.component.html',
   styleUrl: './test2.component.scss'
 })
-export class Test2Component {
+export default class Test2Component {
 
   constructor(
   ) {
