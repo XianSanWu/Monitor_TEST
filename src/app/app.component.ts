@@ -17,7 +17,7 @@ import { LoadingService } from './core/services/loading.service';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
-  title = 'Feib_Monitor';
+  title = 'Monitor';
   isLoggedIn = false;
 
   constructor(
