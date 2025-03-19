@@ -1,10 +1,10 @@
 import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { LoginManageService } from '../login-manage.service';
-import { catchError, filter, finalize, tap } from 'rxjs';
+import { catchError, filter, finalize, tap, of } from 'rxjs';
 import { LoadingService } from '../../../core/services/loading.service';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { LoginRequest } from '../../../core/models/requests/login.model';
@@ -12,14 +12,12 @@ import { BasicInputComponent } from '../../../component/form/basic-input/basic-i
 import { LoadingIndicatorComponent } from '../../../shared/loading-indicator/loading-indicator.component';
 import { DialogService } from '../../../core/services/dialog.service';
 import { RestStatus } from '../../../common/enums/rest-enum';
-// import { RestStatus } from '../../../common/enums/rest-enum';
 
 @Component({
   selector: 'login-verify',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     BasicInputComponent,
     LoadingIndicatorComponent,
@@ -29,7 +27,7 @@ import { RestStatus } from '../../../common/enums/rest-enum';
   styleUrl: './login-verify.component.scss'
 })
 export class LoginVerifyComponent {
-  validateForm: FormGroup;
+  validateForm!: FormGroup;
 
   constructor(
     private router: Router,
@@ -45,26 +43,32 @@ export class LoginVerifyComponent {
   }
 
   submit() {
-    let reqData: LoginRequest = this.validateForm.getRawValue();
+    const reqData: LoginRequest = this.validateForm.getRawValue();
+    if (this.validateForm.invalid) {
+      return; // Form is invalid, exit early.
+    }
+
     this.loadingService.show();
     this.loginManageService.loginVerify(reqData).pipe(
+      filter(res => res.Status?.toString() === RestStatus.SUCCESS), // Ensure `res.Status` exists and is a string
       catchError((err) => {
         this.localStorageService.clear();
         this.dialogService.openCustomSnackbar({
-          message: err.message
+          message: err.message || 'An error occurred during login.'
         });
-        throw new Error(err.message);
+        // Ensure we continue the observable stream so that `finalize` will still be called
+        return of(new Error(err.message));
       }),
-      filter(res => res.Status?.toString() === RestStatus.SUCCESS),
       tap(res => {
-        this.localStorageService.setItem('isLoggedIn', 'true');
-        this.router.navigate(['/home']);
+        if (res) {
+          this.localStorageService.setItem('isLoggedIn', 'true');
+          this.router.navigate(['/home']);
+        }
       }),
       finalize(() => {
         this.loadingService.hide();
       })
-    ).subscribe()
-
+    ).subscribe();
   }
 
   // 監聽 Enter 鍵
@@ -72,6 +76,4 @@ export class LoginVerifyComponent {
   onEnter(event: KeyboardEvent) {
     this.submit();
   }
-
 }
-

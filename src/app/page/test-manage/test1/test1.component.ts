@@ -9,7 +9,6 @@ import { ConfirmDialogOption } from '../../../core/models/common/dialog.model';
 import { DialogService } from '../../../core/services/dialog.service';
 import { DateRangeComponent } from "../../../component/form/date-range/date-range.component";
 import { DateComponent } from '../../../component/form/date/date.component';
-import { AgGridComponent } from '../../../component/grid/ag-grid/ag-grid.component';
 import { ColDef } from 'ag-grid-community';
 
 @Component({
@@ -22,7 +21,6 @@ import { ColDef } from 'ag-grid-community';
     BasicInputComponent,
     DateComponent,
     DateRangeComponent,
-    AgGridComponent
   ],
   providers: [LoadingService],
   templateUrl: './test1.component.html',

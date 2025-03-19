@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -20,11 +20,10 @@ export class BasicInputComponent implements OnInit {
   @Input() placeholder: string = '請輸入';
   @Input() maxlength: number = 10;
   @Input() disabled: boolean = false;
-  @Input() popupText: string = '';
   @Input() autocomplete: string = '';
 
   firstErr: string = '';
-  ctl: FormControl | undefined;
+  ctl!: FormControl;
 
   constructor() { }
 
@@ -33,17 +32,23 @@ export class BasicInputComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.autocomplete) {
+      this.autocomplete = this.ctlName;
+    }
+    // console.log('basic-input:', this.ctlName, this.form);
     this.updateControl();
+  }
+
+  private updateControl(): void {
+    if (this.form && this.ctlName) {
+      this.ctl = this.form.get(this.ctlName) as FormControl;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['ctlName'] || changes['form']) {
       this.updateControl();
     }
-  }
-
-  private updateControl(): void {
-    this.ctl = this.form?.get(this.ctlName) as FormControl;
   }
 
   ngDoCheck(): void {
@@ -53,7 +58,7 @@ export class BasicInputComponent implements OnInit {
   }
 
   hasError(): boolean {
-    return !!((this.ctl?.dirty || this.ctl?.touched) && this.ctl?.errors);
+    return this.ctl && (this.ctl.dirty || this.ctl.touched) && this.ctl.errors !== null;
   }
 
 }
