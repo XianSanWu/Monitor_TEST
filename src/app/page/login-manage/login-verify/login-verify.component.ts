@@ -4,13 +4,14 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Router } from '@angular/router';
 import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { LoginManageService } from '../login-manage.service';
-import { catchError, finalize, tap } from 'rxjs';
+import { catchError, filter, finalize, tap } from 'rxjs';
 import { LoadingService } from '../../../core/services/loading.service';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { LoginRequest } from '../../../core/models/requests/login.model';
 import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
 import { LoadingIndicatorComponent } from '../../../shared/loading-indicator/loading-indicator.component';
 import { DialogService } from '../../../core/services/dialog.service';
+import { RestStatus } from '../../../common/enums/rest-enum';
 // import { RestStatus } from '../../../common/enums/rest-enum';
 
 @Component({
@@ -54,7 +55,7 @@ export class LoginVerifyComponent {
         });
         throw new Error(err.message);
       }),
-      // filter(res => res.code === RestStatus.SUCCESS),
+      filter(res => res.Status?.toString() === RestStatus.SUCCESS),
       tap(res => {
         this.localStorageService.setItem('isLoggedIn', 'true');
         this.router.navigate(['/home']);

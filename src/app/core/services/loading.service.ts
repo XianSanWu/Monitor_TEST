@@ -9,12 +9,12 @@ export class LoadingService {
   loading$ = this.loadingSubject.asObservable();
 
   show() {
-    console.log("Showing Loading Spinner");
+    // console.log("Showing Loading Spinner");
     this.loadingSubject.next(true);  // 設定為 true
   }
 
   hide() {
-    console.log("Hiding Loading Spinner");
+    // console.log("Hiding Loading Spinner");
     this.loadingSubject.next(false);  // 設定為 false
   }
 }

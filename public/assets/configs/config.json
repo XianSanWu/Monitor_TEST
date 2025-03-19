@@ -1,4 +1,4 @@
 {
-    "SERVER_URL": "https://localhost:44325/",
+    "SERVER_URL": "https://localhost:7081/",
     "API_URL": "api/"
 }

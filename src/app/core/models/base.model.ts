@@ -1,5 +1,5 @@
 export class ResponseModel<T> {
-  code!: string;
-  message!: string;
-  result!: T;
+  Data!: T;
+  Message!: string;
+  Status!: string;
 }

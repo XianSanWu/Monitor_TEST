@@ -1,49 +1,49 @@
-<!-- <div class="pageTitle">
-  <h2>【帳號登入】</h2>
-</div> -->
 <loading-indicator></loading-indicator>
 
 <div class="pageContent">
   <div class="parent">
-    <div class="card" style="width: 50rem" [formGroup]="validateForm">
-      <div class="card-header">
-        <h2>請輸入帳號密碼</h2>
-      </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-12">
-            <basic-input
-              title="帳號"
-              [form]="validateForm"
-              ctlName="username"
-              placeholder="請輸入帳號"
-              [maxlength]="30"
-            ></basic-input>
-          </div>
-          <div class="col-12">
-            <basic-input
-              title="密碼"
-              [form]="validateForm"
-              ctlName="password"
-              placeholder="請輸入密碼"
-              type="password"
-              [maxlength]="30"
-            ></basic-input>
-          </div>
+    <div class="card" style="width: 50rem">
+      <form [formGroup]="validateForm">
+        <div class="card-header">
+          <h2>請輸入帳號密碼</h2>
         </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              <basic-input
+                title="帳號"
+                [form]="validateForm"
+                ctlName="username"
+                placeholder="請輸入帳號"
+                [maxlength]="30"
+              ></basic-input>
+            </div>
+            <div class="col-12">
+              <basic-input
+                title="密碼"
+                [form]="validateForm"
+                ctlName="password"
+                placeholder="請輸入密碼"
+                type="password"
+                [maxlength]="30"
+                autocomplete="current-password"
+              ></basic-input>
+            </div>
+          </div>
 
-        <button
-          nbButton
-          status="primary"
-          size="medium"
-          nbStepperNext
-          (click)="submit()"
-          [disabled]="validateForm.invalid"
-          class="col-12"
-        >
-          登 入
-        </button>
-      </div>
+          <button
+            nbButton
+            status="primary"
+            size="medium"
+            nbStepperNext
+            (click)="submit()"
+            [disabled]="validateForm.invalid"
+            class="col-12"
+          >
+            登 入
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

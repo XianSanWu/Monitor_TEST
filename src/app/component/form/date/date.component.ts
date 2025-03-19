@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'date',
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -57,8 +58,8 @@ export class DateComponent implements OnInit, AfterViewInit {
 
   getFirstError(): string {
     const errors = this.ctlDate?.errors;
-    console.log('this.ctlDate',this.ctlDate)
-    console.log('this.ctlDate?.errors',errors)
+    // console.log('this.ctlDate',this.ctlDate)
+    // console.log('this.ctlDate?.errors',errors)
     if (!errors) return '';
 
     // 過濾掉 'required' 和 'matDatepickerParse' 的錯誤

@@ -1,0 +1,10 @@
+<ag-grid-angular
+  class="ag-theme-alpine"
+  [columnDefs]="columnDefs"
+  [rowModelType]="'infinite'"
+  [pagination]="true"
+  [paginationPageSize]="paginationPageSize"
+  [cacheBlockSize]="paginationPageSize"
+  [domLayout]="'autoHeight'"
+  (gridReady)="onGridReady($event)">
+</ag-grid-angular>

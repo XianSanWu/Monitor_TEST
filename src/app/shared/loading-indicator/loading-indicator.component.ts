@@ -20,7 +20,7 @@ export class LoadingIndicatorComponent implements OnInit, OnDestroy {
     // 訂閱 loading$ 來監聽 loading 狀態變化
     this.loadingSubscription = this.loadingService.loading$.subscribe(
       (loadingStatus: boolean) => {
-        console.log("Loading status changed:", loadingStatus);  // 檢查 loading$ 的變化
+        // console.log("Loading status changed:", loadingStatus);  // 檢查 loading$ 的變化
         this.isLoading = loadingStatus;
       }
     );

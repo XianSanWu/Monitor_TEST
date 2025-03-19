@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, input, Input, OnInit, SimpleChanges } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -21,6 +21,7 @@ export class BasicInputComponent implements OnInit {
   @Input() maxlength: number = 10;
   @Input() disabled: boolean = false;
   @Input() popupText: string = '';
+  @Input() autocomplete: string = '';
 
   firstErr: string = '';
   ctl: FormControl | undefined;
