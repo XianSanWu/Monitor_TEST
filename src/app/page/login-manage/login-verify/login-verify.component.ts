@@ -61,7 +61,7 @@ export default class LoginVerifyComponent {
       }),
       tap(res => {
         if (res) {
-          this.localStorageService.setItem('isLoggedIn', 'true');
+          this.localStorageService.setItem('isLoggedIn', reqData.username);
           this.router.navigate(['/home']);
         }
       }),

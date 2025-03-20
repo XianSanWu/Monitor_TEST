@@ -1,6 +1,6 @@
 export interface MenuItem {
-  path: string | undefined;
-  title: string | undefined;
-  icon: string | undefined;
+  title: string;
+  icon: string;
+  link?: string;
   children?: MenuItem[];
 }

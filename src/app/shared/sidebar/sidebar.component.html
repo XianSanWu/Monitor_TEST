@@ -1,31 +1,39 @@
-<div class="sidebar">
-  <div class="sidebar-header">
-    <h4 class="sidebar-title">監控系統</h4>
-  </div>
-  <!-- <pre>{{ menuItems | json }}</pre> -->
-  <ul class="nav flex-column">
-    <ng-container *ngFor="let item of menuItems">
-      <!-- 主要分類目錄 (不可導航) -->
-      <li class="nav-item">
-        <a class="nav-link folder" (click)="toggleGroup(item)">
-          <i class="bi" [ngClass]="isGroupActive(item) ? 'bi-folder2-open' : 'bi-folder'"></i>
-          {{ item.title }}
-        </a>
-        <!-- 子選單 (可導航) -->
-        <ul class="submenu" *ngIf="isGroupActive(item)">
-          <li *ngFor="let child of item.children">
-            <a class="nav-link file" [routerLink]="child.path" routerLinkActive="active">
-              <i class="bi" [ngClass]="'bi-' + child.icon"></i> {{ child.title }}
-            </a>
-          </li>
-        </ul>
-      </li>
-    </ng-container>
-  </ul>
-  <div class="sidebar-footer">
-    <button class="nav-link btn btn-link" (click)="logout()">
-      <i class="bi bi-box-arrow-right"></i> 登出
-    </button>
-  </div>
-</div>
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav mode="side" opened class="sidenav">
+    <div class="sidebar-header">
+      <h4 class="sidebar-title">監控系統</h4>
+    </div>
 
+    <mat-nav-list>
+      <ng-container *ngFor="let item of menuItems">
+        <a
+          mat-list-item
+          [routerLink]="item.link"
+          *ngIf="item.children?.length === 0"
+          class="menu-item"
+        >
+          <i class="bi" [ngClass]="'bi-' + item.icon"></i>
+          <span>{{ item.title }}</span>
+        </a>
+
+        <mat-expansion-panel *ngIf="(item.children?.length || 0) > 0">
+          <mat-expansion-panel-header class="expansion-header">
+            <i class="bi" [ngClass]="'bi-' + item.icon"></i>
+            <span>{{ item.title }}</span>
+          </mat-expansion-panel-header>
+          <mat-nav-list>
+            <a
+              mat-list-item
+              *ngFor="let child of item.children"
+              [routerLink]="child.link"
+              class="submenu-item"
+            >
+              <i class="bi" [ngClass]="'bi-' + child.icon"></i>
+              <span>{{ child.title }}</span>
+            </a>
+          </mat-nav-list>
+        </mat-expansion-panel>
+      </ng-container>
+    </mat-nav-list>
+  </mat-sidenav>
+</mat-sidenav-container>

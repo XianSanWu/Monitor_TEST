@@ -17,6 +17,6 @@ export class AuthService {
 
   // 檢查用戶是否已登入
   isAuthenticated(): boolean {
-    return this.localStorageService.getItem('isLoggedIn') === 'true';
+    return ['admin', 'test', '123'].includes(this.localStorageService.getItem('isLoggedIn')?.toLocaleLowerCase() ?? '');
   }
 }

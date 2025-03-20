@@ -1,70 +1,69 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Router, RouterModule, Routes } from '@angular/router';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { LocalStorageService } from '../../core/services/local-storage.service';
 import { MenuItem } from '../../core/models/common/menu.model';
+
+//icon: "file-text-outline","lock-outline","settings-outline"
+
+export const AdminMenu: MenuItem[] = [
+  { title: "首頁管理", icon: "house-door", link: "/home", children: [] },
+  { title: "登入管理", icon: "lock", link: "/login", children: [] },
+  {
+    title: "測試管理", icon: "gear", link: '',
+    children: [
+      { title: "測試1", icon: "file-earmark-text", link: "/test/test1", children: [] },
+      { title: "測試2", icon: "file-earmark-text", link: "/test/test2", children: [] },
+    ]
+  }
+];
+
+
+export const OtherMenu: MenuItem[] = [
+  // { title: "首頁管理", icon: "house-door", link: "/home", children: [] },
+  { title: "登入管理", icon: "lock", link: "/login", children: [] },
+  {
+    title: "測試管理", icon: "gear", link: '',
+    children: [
+      { title: "測試1", icon: "file-earmark-text", link: "/test/test1", children: [] },
+      // { title: "測試2", icon: "file-earmark-text", link: "/test/test2", children: [] },
+    ]
+  }
+];
 
 @Component({
   selector: 'sidebar',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatSidenavModule,
+    MatListModule,
+    MatIconModule,
+    MatExpansionModule
+  ],
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  styleUrls: ['./sidebar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class SidebarComponent implements OnInit {
-  menuItems: MenuItem[] = [];
   activeGroups: Set<string> = new Set();
+  menuItems!: MenuItem[];
 
   constructor(
     private router: Router,
     private localStorageService: LocalStorageService,
-    private cdr: ChangeDetectorRef,
   ) { }
 
   ngOnInit() {
-    // 只在初始化時設置 menuItems
-    this.menuItems = this.getMenuItems(this.router.config);
-    // console.log('Initial Menu Items:', this.menuItems);
-    // this.cdr.detectChanges();
-  }
-
-  getMenuItems(routes: Routes): MenuItem[] {
-    let menuItems: MenuItem[] = [];
-
-    routes.forEach(route => {
-      if (route.children) {
-        route.children.forEach(rc => {
-          menuItems.push(this.createMenuItem(route, rc));
-        });
-      } else if (route.data) {
-        menuItems.push(this.createMenuItem(route));
-      }
-    });
-
-    return menuItems;
-  }
-
-  createMenuItem(route: any, rc?: any): MenuItem {
-    const parentPath = route.data?.['fullPath'] ? route.data?.['fullPath'] : route.path ? `/${route.path}` : '';  // 確保不會出現雙斜線
-    return {
-      path: rc ? `${parentPath}/${rc.path}` : parentPath,  // 確保 path 是完整的
-      title: rc ? rc.data?.['title'] : route.data?.['title'] || '',
-      icon: rc ? rc.data?.['icon'] : route.data?.['icon'] || '',
-      children: rc && rc.children ? this.getMenuItems(rc.children) : []
-    };
-  }
-
-  toggleGroup(item: MenuItem) {
-    if (this.activeGroups.has(item.title!)) {
-      this.activeGroups.delete(item.title!);
-    } else {
-      this.activeGroups.add(item.title!);
-    }
-  }
-
-  isGroupActive(item: MenuItem): boolean {
-    return this.activeGroups.has(item.title!);
+    const user = this.localStorageService.getItem('isLoggedIn')?.toLocaleLowerCase();
+    this.menuItems = (user === 'admin') ?
+      Object.values(AdminMenu) : Object.values(OtherMenu);
   }
 
   logout() {
