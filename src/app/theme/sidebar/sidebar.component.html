@@ -1,7 +1,7 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav
     #sidenav
-    mode="side"
+    [mode]="!isSmallScreen ? 'side' : 'over'"
     [opened]="opened"
     class="sidenav"
   >
