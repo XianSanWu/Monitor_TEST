@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { LoadingService } from '../../core/services/loading.service';
+import { LoadingService } from '../../../core/services/loading.service';
 
 @Component({
   selector: 'loading-indicator',

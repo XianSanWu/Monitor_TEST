@@ -9,7 +9,7 @@ import { LoadingService } from '../../../core/services/loading.service';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { LoginRequest } from '../../../core/models/requests/login.model';
 import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
-import { LoadingIndicatorComponent } from '../../../shared/loading-indicator/loading-indicator.component';
+import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
 import { DialogService } from '../../../core/services/dialog.service';
 import { RestStatus } from '../../../common/enums/rest-enum';
 

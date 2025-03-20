@@ -4,8 +4,10 @@
 
 .content-container {
   margin-left: 10px; /* 與選單分開 */
+  margin-top: 60px; /* 與選單分開 */
   padding: 20px;
   width: 100%;
+  overflow-y: auto; /* 使內容區域滾動 */
 }
 
 @media (max-width: 768px) {
@@ -15,5 +17,9 @@
 
   .content-container {
     margin-left: 0;
+  }
+
+  .sidebar{
+    margin-top: 0; /* 與選單分開 */
   }
 }

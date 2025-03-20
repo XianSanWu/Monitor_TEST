@@ -1,0 +1,36 @@
+.sidenav-container {
+  height: 100vh;
+  display: flex;
+  align-items: stretch;
+}
+
+.sidenav {
+  width: 250px;
+  // background-color: #2c3e50; /* 深色背景 */
+  color: white;
+  padding-top: 20px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); /* 為側邊選單添加陰影 */
+}
+
+/* 每一個大標題增加間距 */
+mat-expansion-panel {
+  margin-bottom: 10px; /* 可以根據需求調整間距 */
+}
+
+/* 小螢幕下，側邊選單在上方並且可滑動 */
+@media screen and (max-width: 768px) {
+  .sidenav {
+    width: 100%; /* 讓側邊選單在小螢幕下滿版展開 */
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1000; /* 確保它在其他內容上層 */
+  }
+
+  /* 滑動選單時的樣式 */
+  .mat-sidenav-content {
+    margin-left: 0 !important;
+  }
+}

@@ -1,8 +1,13 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav mode="side" opened class="sidenav">
-    <div class="sidebar-header">
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    [opened]="opened"
+    class="sidenav"
+  >
+    <!-- <div class="sidebar-header">
       <h4 class="sidebar-title">監控系統</h4>
-    </div>
+    </div> -->
 
     <mat-nav-list>
       <ng-container *ngFor="let item of menuItems">
@@ -11,6 +16,7 @@
           [routerLink]="item.link"
           *ngIf="item.children?.length === 0"
           class="menu-item"
+          (click)="onMenuItemClick()"
         >
           <i class="bi" [ngClass]="'bi-' + item.icon"></i>
           <span>{{ item.title }}</span>
@@ -27,6 +33,7 @@
               *ngFor="let child of item.children"
               [routerLink]="child.link"
               class="submenu-item"
+              (click)="onMenuItemClick()"
             >
               <i class="bi" [ngClass]="'bi-' + child.icon"></i>
               <span>{{ child.title }}</span>
