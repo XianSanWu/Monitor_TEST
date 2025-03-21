@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, HostListener, OnInit } from '@angul
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { HeaderComponent } from '../header/header.component';
+import { LoadingIndicatorComponent } from '../../component/loading/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'layout',
@@ -10,6 +11,7 @@ import { HeaderComponent } from '../header/header.component';
     RouterOutlet,
     HeaderComponent,
     SidebarComponent,
+    LoadingIndicatorComponent,
   ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss',
@@ -41,7 +43,7 @@ export class LayoutComponent implements OnInit {
   }
 
   onMenuItemClick() {
-    console.log('onMenuItemClick',this.isSmallScreen)
+    console.log('onMenuItemClick', this.isSmallScreen)
     if (this.isSmallScreen) {
       this.opened = false;
     }

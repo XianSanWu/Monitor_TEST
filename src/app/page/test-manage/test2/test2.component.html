@@ -1,4 +1,14 @@
 <div class="pageTitle">
-  <h2>【TEST22222222】</h2>
+  <h2>【檔案上傳/下載】</h2>
+  <div class="row">
+    <file-input
+      title="檔案上傳"
+      class="col-6"
+      [form]="form"
+      ctlName="fileName"
+      [maxlength]="30"
+      [accept]="'.png,.jpg'"
+      [onFileChange]="onFileSelected"
+    ></file-input>
+  </div>
 </div>
-

@@ -4,7 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { LoginManageService } from '../login-manage.service';
-import { catchError, filter, finalize, tap, of } from 'rxjs';
+import { catchError, filter, finalize, tap } from 'rxjs';
 import { LoadingService } from '../../../core/services/loading.service';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { LoginRequest } from '../../../core/models/requests/login.model';
@@ -56,8 +56,7 @@ export default class LoginVerifyComponent {
         this.dialogService.openCustomSnackbar({
           message: err.message || 'An error occurred during login.'
         });
-        // Ensure we continue the observable stream so that `finalize` will still be called
-        return of(new Error(err.message));
+        throw Error(err.message);
       }),
       tap(res => {
         if (res) {

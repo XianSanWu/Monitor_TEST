@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { ConfigService } from '../../core/services/config.service';
 import { ResponseModel } from '../../core/models/base.model';
 
 @Injectable({
@@ -10,14 +9,8 @@ import { ResponseModel } from '../../core/models/base.model';
 })
 
 export class ApiService {
-  private baseUrl: string = "";
 
-  constructor(private http: HttpClient, private configService: ConfigService) {
-    this.configService.configData$.subscribe(data => {
-      this.baseUrl = data?.SERVER_URL + data?.API_URL;
-    });
-
-  }
+  constructor(private http: HttpClient) {}
 
   // 預設 HTTP headers
   private defaultHeaders = new HttpHeaders({
@@ -37,7 +30,6 @@ export class ApiService {
     let requestHeaders = headers ? headers : this.defaultHeaders;
 
     let request: Observable<any>;
-    url = this.baseUrl + url;
     switch (method) {
       case 'get':
         request = this.http.get<ResponseModel<T>>(url, { headers: requestHeaders, params });
