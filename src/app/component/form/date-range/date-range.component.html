@@ -22,7 +22,8 @@
         maxlength="10"
       />
     </mat-date-range-input>
-    <mat-hint>YYYY/MM/DD - YYYY/MM/DD</mat-hint>
+    <mat-hint class="hint-large">YYYY/MM/DD - YYYY/MM/DD</mat-hint>
+    <mat-hint class="hint-small" style="display: none">YYYY/MM/DD</mat-hint>
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-date-range-picker #picker></mat-date-range-picker>
   </mat-form-field>

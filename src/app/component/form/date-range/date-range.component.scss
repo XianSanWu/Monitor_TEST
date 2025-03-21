@@ -48,4 +48,23 @@
     min-height: 20px; // 預留錯誤訊息的空間
     visibility: hidden;
   }
+
+  @media (max-width: 496px) {
+    .hint-large {
+      display: none;
+    }
+    .hint-small {
+      display: block !important;
+    }
+  }
+
+  @media (min-width: 497px) {
+    .hint-large {
+      display: block !important;
+    }
+    .hint-small {
+      display: none;
+    }
+  }
+
 }

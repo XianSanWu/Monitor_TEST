@@ -29,7 +29,7 @@ export class LayoutComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    const currentIsSmallScreen = window.innerWidth < 768;
+    const currentIsSmallScreen = window.innerWidth <= 768;
     if (currentIsSmallScreen !== this.isSmallScreen) {
       this.isSmallScreen = currentIsSmallScreen;
       this.opened = !this.isSmallScreen; // 小螢幕預設關閉，大螢幕保持開啟
