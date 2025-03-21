@@ -7,12 +7,14 @@ import { FileInputComponent } from '../../../component/form/file-input/file-inpu
 import { TestManageService } from '../test-manage.service';
 import { DialogService } from '../../../core/services/dialog.service';
 import { catchError, finalize, tap, throwError } from 'rxjs';
+import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'test2',
   standalone: true,
   imports: [
     FileInputComponent,
+    LoadingIndicatorComponent
   ],
   providers: [LoadingService, TestManageService],
   templateUrl: './test2.component.html',
