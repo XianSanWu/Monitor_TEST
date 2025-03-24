@@ -4,7 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { LoginManageService } from '../login-manage.service';
-import { catchError, filter, finalize, tap } from 'rxjs';
+import { catchError, filter, finalize, takeUntil, tap } from 'rxjs';
 import { LoadingService } from '../../../core/services/loading.service';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { LoginRequest } from '../../../core/models/requests/login.model';
@@ -12,6 +12,7 @@ import { BasicInputComponent } from '../../../component/form/basic-input/basic-i
 import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
 import { DialogService } from '../../../core/services/dialog.service';
 import { RestStatus } from '../../../common/enums/rest-enum';
+import { BaseComponent } from '../../base.component';
 
 @Component({
   selector: 'login-verify',
@@ -26,7 +27,7 @@ import { RestStatus } from '../../../common/enums/rest-enum';
   templateUrl: './login-verify.component.html',
   styleUrl: './login-verify.component.scss'
 })
-export default class LoginVerifyComponent {
+export default class LoginVerifyComponent extends BaseComponent {
   validateForm!: FormGroup;
 
   constructor(
@@ -36,6 +37,7 @@ export default class LoginVerifyComponent {
     private localStorageService: LocalStorageService,
     private dialogService: DialogService
   ) {
+    super();
     this.validateForm = new FormGroup({
       username: new FormControl('', [Validators.required, ValidatorsUtil.blank, ValidatorsUtil.intSymbolsEnglishNumbers]),
       password: new FormControl('', [Validators.required, ValidatorsUtil.blank, ValidatorsUtil.intSymbolsEnglishNumbers]),
@@ -64,6 +66,7 @@ export default class LoginVerifyComponent {
           this.router.navigate(['/home']);
         }
       }),
+      takeUntil(this.destroy$),
       finalize(() => {
         this.loadingService.hide();
       })
