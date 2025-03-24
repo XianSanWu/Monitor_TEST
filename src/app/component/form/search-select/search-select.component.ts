@@ -26,7 +26,6 @@ export class SearchSelectComponent implements OnInit {
   @Input() options: string[] = [];
   @Output() selected = new EventEmitter<string>();
 
-  searchControl = new FormControl('');
   filteredOptions!: Observable<string[]>;
 
 
@@ -46,7 +45,7 @@ export class SearchSelectComponent implements OnInit {
     // console.log('basic-input:', this.ctlName, this.form);
     this.updateControl();
 
-    this.filteredOptions = this.searchControl.valueChanges.pipe(
+    this.filteredOptions = this.ctl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || ''))
     );
@@ -65,7 +64,7 @@ export class SearchSelectComponent implements OnInit {
 
   selectOption(option: string) {
     // this.searchControl.setValue(option);
-    this.searchControl.setValue(option, { emitEvent: false });
+    this.ctl.setValue(option, { emitEvent: false });
     this.selected.emit(option);
   }
 
