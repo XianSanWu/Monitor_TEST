@@ -62,6 +62,11 @@ export class DateRangeComponent implements OnInit, AfterViewInit {
   }
 
   hasError(): boolean {
+    const startDateErrors = this.ctlStartDate?.errors;
+    const endDateErrors = this.ctlEndDate?.errors;
+    console.log('startDateErrors111', startDateErrors)
+    console.log('endDateErrors222', endDateErrors)
+
     const startDateHasError = this.ctlStartDate?.errors
       ? Object.keys(this.ctlStartDate.errors).some(key => key !== 'matDatepickerParse' && key !== 'matEndDateInvalid')
       : false;
@@ -71,12 +76,14 @@ export class DateRangeComponent implements OnInit, AfterViewInit {
 
     // 確保對 dirty 或 touched 和 hasError 的條件處理不會返回 undefined
     return !!((this.ctlStartDate?.dirty || this.ctlStartDate?.touched) && startDateHasError) ||
-           !!((this.ctlEndDate?.dirty || this.ctlEndDate?.touched) && endDateHasError);
+      !!((this.ctlEndDate?.dirty || this.ctlEndDate?.touched) && endDateHasError);
   }
 
   getFirstError(): string {
     const startDateErrors = this.ctlStartDate?.errors;
     const endDateErrors = this.ctlEndDate?.errors;
+    console.log('startDateErrors', startDateErrors)
+    console.log('endDateErrors', endDateErrors)
     if (startDateErrors) {
       const filteredErrors = Object.entries(startDateErrors)
         .filter(([key]) => key !== 'required' && key !== 'matDatepickerParse' && key !== 'matEndDateInvalid')

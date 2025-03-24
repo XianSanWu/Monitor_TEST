@@ -1,0 +1,51 @@
+<div
+  class="fieldGroup"
+  [ngClass]="'col-12'"
+  [ngClass]="{ error: hasError(), essential: required, disabled: disabled }"
+  [formGroup]="form"
+>
+  <label>
+    {{ title }}
+  </label>
+  <mat-form-field appearance="outline" [ngClass]="'col-12'">
+    <mat-label>{{ title }}</mat-label>
+    <input
+      matInput
+      type="text"
+      [placeholder]="placeholder"
+      [formControlName]="ctlName"
+      [maxlength]="maxlength"
+      [readonly]="disabled"
+      [autocomplete]="autocomplete"
+      [matAutocomplete]="auto"
+    />
+
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="selectOption($event.option.value)"
+    >
+      <mat-option
+        *ngFor="let option of filteredOptions | async"
+        [value]="option"
+      >
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+
+  </mat-form-field>
+
+  <!-- 錯誤訊息 -->
+  <div class="note errorText" *ngIf="hasError()">
+    <p
+      *ngIf="(ctl?.dirty || ctl?.touched) && ctl?.errors?.['required']; else otherErr"
+    >
+      此為必填欄位
+    </p>
+    <ng-template #otherErr>
+      <p>{{ firstErr }}</p>
+    </ng-template>
+  </div>
+
+  <!-- 預留錯誤訊息的空間 -->
+  <div class="errorPlaceholder" *ngIf="!hasError()"></div>
+</div>

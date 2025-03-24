@@ -43,3 +43,13 @@
   <div class="col-1"></div>
 </div>
 
+<div class="row">
+  <search-select
+  title="下拉收尋框範例"
+  class="col-6"
+  [form]="form"
+  ctlName="searchSelect"
+  placeholder="請輸入收尋"
+  [options]="items" (selected)="onItemSelected($event)">
+  </search-select>
+</div>

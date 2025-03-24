@@ -10,6 +10,7 @@ import { DialogService } from '../../../core/services/dialog.service';
 import { DateRangeComponent } from "../../../component/form/date-range/date-range.component";
 import { DateComponent } from '../../../component/form/date/date.component';
 import { ColDef } from 'ag-grid-community';
+import { SearchSelectComponent } from '../../../component/form/search-select/search-select.component';
 
 @Component({
   selector: 'test1',
@@ -21,6 +22,7 @@ import { ColDef } from 'ag-grid-community';
     BasicInputComponent,
     DateComponent,
     DateRangeComponent,
+    SearchSelectComponent,
   ],
   providers: [LoadingService],
   templateUrl: './test1.component.html',
@@ -38,7 +40,8 @@ export default class Test1Component {
       testControl: new FormControl('', [Validators.required,]),
       date: new FormControl('', [Validators.required, ValidatorsUtil.dateFmt, ValidatorsUtil.dateNotBeforeToday]),
       startDate: new FormControl('', [Validators.required, ValidatorsUtil.dateFmt]),
-      endDate: new FormControl('', [Validators.required, ValidatorsUtil.dateFmt])
+      endDate: new FormControl('', [Validators.required, ValidatorsUtil.dateFmt]),
+      searchSelect: new FormControl('', [Validators.required, ValidatorsUtil.blank, ValidatorsUtil.intSymbolsEnglishNumbers]),
     }, { validators: ValidatorsUtil.dateRangeValidator });
   }
 
@@ -101,6 +104,17 @@ export default class Test1Component {
     //Add 'implements OnInit' to the class.
     console.log('TEST_PAGE_11111')
   }
+
+
+  items = ['Apple', 'Banana', 'Cherry', 'Mango', 'Orange', 'Pineapple'];
+  selectedItem = '';
+
+  onItemSelected(value: string) {
+    this.selectedItem = value;
+    console.log('選中的值:', value);
+  }
+
+
 
 
   columnDefs: ColDef[] = [
