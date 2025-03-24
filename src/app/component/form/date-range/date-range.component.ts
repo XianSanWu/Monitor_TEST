@@ -62,11 +62,6 @@ export class DateRangeComponent implements OnInit, AfterViewInit {
   }
 
   hasError(): boolean {
-    const startDateErrors = this.ctlStartDate?.errors;
-    const endDateErrors = this.ctlEndDate?.errors;
-    console.log('startDateErrors111', startDateErrors)
-    console.log('endDateErrors222', endDateErrors)
-
     const startDateHasError = this.ctlStartDate?.errors
       ? Object.keys(this.ctlStartDate.errors).some(key => key !== 'matDatepickerParse' && key !== 'matEndDateInvalid')
       : false;
@@ -82,8 +77,7 @@ export class DateRangeComponent implements OnInit, AfterViewInit {
   getFirstError(): string {
     const startDateErrors = this.ctlStartDate?.errors;
     const endDateErrors = this.ctlEndDate?.errors;
-    console.log('startDateErrors', startDateErrors)
-    console.log('endDateErrors', endDateErrors)
+
     if (startDateErrors) {
       const filteredErrors = Object.entries(startDateErrors)
         .filter(([key]) => key !== 'required' && key !== 'matDatepickerParse' && key !== 'matEndDateInvalid')

@@ -35,7 +35,7 @@ export default class Test1Component {
     private dialogService: DialogService
   ) {
     // 初始化表單
-    this.form = new FormGroup({
+    this.validateForm = new FormGroup({
       username: new FormControl('', [Validators.required, ValidatorsUtil.blank, ValidatorsUtil.intSymbolsEnglishNumbers]),
       testControl: new FormControl('', [Validators.required,]),
       date: new FormControl('', [Validators.required, ValidatorsUtil.dateFmt, ValidatorsUtil.dateNotBeforeToday]),
@@ -45,7 +45,7 @@ export default class Test1Component {
     }, { validators: ValidatorsUtil.dateRangeValidator });
   }
 
-  form: FormGroup;
+  validateForm: FormGroup;
 
   // 假資料
   selectList = {

@@ -18,7 +18,17 @@ export const ValidatorsUtil = {
     if (startDate && endDate) {
       // 確保日期格式正確，並比對日期大小
       if (endDate < startDate) {
+        startCtl.setErrors({ dateErrMsg: '結束日期不得早於起始日期' });
+        endCtl.setErrors({ dateErrMsg: '結束日期不得早於起始日期' });
         return { 'dateErrMsg': '結束日期不得早於起始日期' };
+      } else {
+        // 若驗證通過，清除 `Ctl` 的錯誤
+        if (startCtl.hasError('dateErrMsg')) {
+          startCtl.setErrors(null);
+        }
+        if (endCtl.hasError('dateErrMsg')) {
+          endCtl.setErrors(null);
+        }
       }
     }
 
