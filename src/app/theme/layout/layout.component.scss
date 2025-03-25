@@ -7,19 +7,7 @@
   margin-top: 60px; /* 與選單分開 */
   padding: 20px;
   width: 100%;
+  height: auto;
+  min-height: 100vh;
   overflow-y: auto; /* 使內容區域滾動 */
-}
-
-@media (max-width: 768px) {
-  .layout-container {
-    flex-direction: column;
-  }
-
-  .content-container {
-    margin-left: 0;
-  }
-
-  .sidebar{
-    margin-top: 0; /* 與選單分開 */
-  }
 }

@@ -6,8 +6,9 @@ import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { FileInputComponent } from '../../../component/form/file-input/file-input.component';
 import { TestManageService } from '../test-manage.service';
 import { DialogService } from '../../../core/services/dialog.service';
-import { catchError, finalize, tap, throwError } from 'rxjs';
+import { catchError, finalize, takeUntil, tap, throwError } from 'rxjs';
 import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
+import { BaseComponent } from '../../base.component';
 
 @Component({
   selector: 'test2',
@@ -20,7 +21,7 @@ import { LoadingIndicatorComponent } from '../../../component/loading/loading-in
   templateUrl: './test2.component.html',
   styleUrl: './test2.component.scss'
 })
-export default class Test2Component {
+export default class Test2Component extends BaseComponent{
 
   form: FormGroup;
 
@@ -29,6 +30,7 @@ export default class Test2Component {
     private loadingService: LoadingService,
     private testManageService: TestManageService
   ) {
+    super();
     // this.onFileSelected = this.onFileSelected.bind(this)
     // 初始化表單
     this.form = new FormGroup({
@@ -66,6 +68,7 @@ export default class Test2Component {
             console.log('檔案上傳成功', event);
           }
         }),
+        takeUntil(this.destroy$),
         finalize(() => {
           this.loadingService.hide();
         })

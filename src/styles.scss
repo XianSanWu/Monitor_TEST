@@ -4,7 +4,11 @@
 }
 
 body {
-  overflow: hidden;
+  overflow: auto;
+}
+
+ag-grid-angular {
+  z-index: 0 !important;
 }
 
 .parent {

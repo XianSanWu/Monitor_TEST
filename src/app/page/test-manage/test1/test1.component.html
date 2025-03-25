@@ -23,7 +23,12 @@
   </div>
 
   <div class="row">
-    <date class="col-6" title="單一日期" ctlName="date" [form]="validateForm"></date>
+    <date
+      class="col-6"
+      title="單一日期"
+      ctlName="date"
+      [form]="validateForm"
+    ></date>
     <date-range
       class="col-6"
       titleStart="起日"
@@ -46,12 +51,36 @@
 
   <div class="row">
     <search-select
-    title="下拉收尋框範例"
-    class="col-6"
-    [form]="validateForm"
-    ctlName="searchSelect"
-    placeholder="請輸入收尋"
-    [options]="items" (selected)="onItemSelected($event)">
+      title="下拉收尋框範例"
+      class="col-6"
+      [form]="validateForm"
+      ctlName="searchSelect"
+      placeholder="請輸入收尋"
+      [options]="items"
+      (selected)="onItemSelected($event)"
+    >
     </search-select>
   </div>
+
+  <div class="row">
+    <ag-grid-angular
+      #agGrid
+      style="width: 100%; height: 500px;"
+      class="ag-theme-alpine"
+      [rowData]="rowData"
+      [columnDefs]="columnDefs"
+      [pagination]="true"
+      [animateRows]="true"
+      (sortChanged)="onSortChanged()"
+      (filterChanged)="onFilterChanged()">
+    </ag-grid-angular>
+
+    <div>
+      <button (click)="onPageChange(1)">First Page</button>
+      <button (click)="onPageChange(currentPage - 1)">Previous Page</button>
+      <button (click)="onPageChange(currentPage + 1)">Next Page</button>
+      <button (click)="onPageChange(totalPages)">Last Page</button>
+    </div>
+  </div>
+
 </div>

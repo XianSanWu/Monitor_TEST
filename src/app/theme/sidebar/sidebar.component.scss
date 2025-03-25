@@ -4,6 +4,13 @@ mat-expansion-panel {
 }
 
 @media screen and (min-width: 769px) {
+  .mat-sidenav-content {
+    flex: 1;
+    overflow-y: auto; /* 讓主內容可滾動 */
+    height: 100vh; /* 讓內容填滿剩餘高度 */
+    padding: 16px;
+  }
+
   .sidenav-container {
     height: 100vh;
     display: flex;
@@ -13,8 +20,9 @@ mat-expansion-panel {
   .sidenav {
     width: 250px;
     // background-color: #2c3e50; /* 深色背景 */
+    position: fixed; /* 讓側邊欄固定 */
     color: white;
-    padding-top: 20px;
+    padding-top: 60px;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); /* 為側邊選單添加陰影 */
   }
 }
@@ -22,17 +30,15 @@ mat-expansion-panel {
 /* 小螢幕下，側邊選單在上方並且可滑動 */
 @media screen and (max-width: 768px) {
   .sidenav {
-    width: 100%; /* 讓側邊選單在小螢幕下滿版展開 */
-    background-color: white;
+    width: 100vw; /* 讓側邊選單佔滿整個畫面寬度 */
     position: fixed;
+    padding-top: 60px;
     top: 0;
     left: 0;
-    bottom: 0;
-    z-index: 1000; /* 確保它在其他內容上層 */
+    background-color: white;
+    z-index: 999 !important; /* 確保它在最上層 */
   }
 
-  /* 滑動選單時的樣式 */
   .mat-sidenav-content {
-    margin-left: 0 !important;
   }
 }

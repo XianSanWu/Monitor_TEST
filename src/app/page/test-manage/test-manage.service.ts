@@ -19,6 +19,12 @@ export class TestManageService {
     });
   }
 
+
+
+  getList(){
+
+  }
+
   uploadFile(selectedFile: File) {
     return this.fileApiService.uploadFile(this.baseUrl + this.uploadFunc, selectedFile);
   }

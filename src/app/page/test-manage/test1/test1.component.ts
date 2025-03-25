@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoadingService } from '../../../core/services/loading.service';
@@ -9,8 +9,9 @@ import { ConfirmDialogOption } from '../../../core/models/common/dialog.model';
 import { DialogService } from '../../../core/services/dialog.service';
 import { DateRangeComponent } from "../../../component/form/date-range/date-range.component";
 import { DateComponent } from '../../../component/form/date/date.component';
-import { ColDef } from 'ag-grid-community';
 import { SearchSelectComponent } from '../../../component/form/search-select/search-select.component';
+import { ColDef, GridApi } from 'ag-grid-community';
+import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
 
 @Component({
   selector: 'test1',
@@ -23,6 +24,7 @@ import { SearchSelectComponent } from '../../../component/form/search-select/sea
     DateComponent,
     DateRangeComponent,
     SearchSelectComponent,
+    AgGridModule,
   ],
   providers: [LoadingService],
   templateUrl: './test1.component.html',
@@ -114,9 +116,13 @@ export default class Test1Component {
     console.log('選中的值:', value);
   }
 
-
-
-
+  @ViewChild('agGrid') agGrid!: AgGridAngular;
+  rowData: any[] = [];
+  currentPage: number = 1;
+  totalPages: number = 1;
+  pageSize: number = 10;
+  totalCount: number = 0;
+  gridApi!: GridApi;
   columnDefs: ColDef[] = [
     {
       headerName: "Active Type",
@@ -184,6 +190,44 @@ export default class Test1Component {
     }
   ];
 
+  loadData() {
+    const sortModel = this.gridApi.onSortChanged();
+    const filterModel = this.agGrid.api.getFilterModel();
+
+    // // 取得排序欄位和排序方式
+    // const sortField = sortModel.length > 0 ? sortModel[0].colId : '';
+    // const sortOrder = sortModel.length > 0 ? sortModel[0].sort : '';
+
+    // // 篩選條件
+    // const filter: any = {};
+    // for (const field in filterModel) {
+    //   if (filterModel.hasOwnProperty(field)) {
+    //     filter[field] = filterModel[field].filter;
+    //   }
+    // }
+
+    // this.apiService.getUsers(this.pageSize, this.currentPage - 1, sortField, sortOrder, filter).subscribe((data) => {
+    //   this.rowData = data.items;  // 假設後端回傳資料格式 { items: [], totalCount: 0 }
+    //   this.totalCount = data.totalCount;
+    //   this.totalPages = Math.ceil(this.totalCount / this.pageSize);
+    // });
+  }
+
+  /** 當排序變更時，重新載入資料 */
+  onSortChanged() {
+    this.loadData();
+  }
+
+  /** 當篩選條件變更時，重新載入資料 */
+  onFilterChanged() {
+    this.loadData();
+  }
+
+  /** 換頁 */
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.loadData();
+  }
 
 }
 

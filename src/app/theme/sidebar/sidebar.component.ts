@@ -66,12 +66,12 @@ export class SidebarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('SSSS.isSmallScreen', this.isSmallScreen);
-    console.log('SSSS.opened', this.opened);
+    // console.log('SSSS.isSmallScreen', this.isSmallScreen);
+    // console.log('SSSS.opened', this.opened);
     const user = this.localStorageService.getItem('isLoggedIn')?.toLocaleLowerCase();
     this.menuItems = (user === 'admin') ? Object.values(AdminMenu) : Object.values(OtherMenu);
-    console.log('SSSS.user', user);
-    console.log('SSSS.menuItems', this.menuItems);
+    // console.log('SSSS.user', user);
+    // console.log('SSSS.menuItems', this.menuItems);
     this.cd.detectChanges();
   }
 
