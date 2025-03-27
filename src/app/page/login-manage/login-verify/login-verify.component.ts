@@ -52,7 +52,6 @@ export default class LoginVerifyComponent extends BaseComponent {
 
     this.loadingService.show();
     this.loginManageService.loginVerify(reqData).pipe(
-      filter(res => res.Status?.toString() === RestStatus.SUCCESS), // Ensure `res.Status` exists and is a string
       catchError((err) => {
         this.localStorageService.clear();
         this.dialogService.openCustomSnackbar({
@@ -61,6 +60,13 @@ export default class LoginVerifyComponent extends BaseComponent {
         throw Error(err.message);
       }),
       tap(res => {
+        if(res.Status?.toString() !== RestStatus.SUCCESS){
+          this.dialogService.openCustomSnackbar({
+            message: res.Message
+          });
+          return;
+        }
+
         if (res) {
           this.localStorageService.setItem('isLoggedIn', reqData.username);
           this.router.navigate(['/home']);

@@ -10,7 +10,7 @@ export class TestManageService {
   readonly downloadFunc = 'download/';
 
   constructor(
-    private service: ApiService,
+    private apiService: ApiService,
     private configService: ConfigService,
     private fileApiService: FileApiService
   ) {

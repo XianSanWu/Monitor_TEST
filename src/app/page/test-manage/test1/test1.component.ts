@@ -104,6 +104,8 @@ export default class Test1Component {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
+    this.loadData();
+
     console.log('TEST_PAGE_11111')
   }
 
@@ -116,118 +118,79 @@ export default class Test1Component {
     console.log('選中的值:', value);
   }
 
-  @ViewChild('agGrid') agGrid!: AgGridAngular;
-  rowData: any[] = [];
-  currentPage: number = 1;
-  totalPages: number = 1;
-  pageSize: number = 10;
-  totalCount: number = 0;
+
+
+  @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
+
   gridApi!: GridApi;
-  columnDefs: ColDef[] = [
-    {
-      headerName: "Active Type",
-      field: "ActiveType",
-      sortable: true,
-      filter: true,
-      width: 150
-    },
-    {
-      headerName: "Journey Name",
-      field: "JourneyName",
-      sortable: true,
-      filter: true,
-      width: 200
-    },
-    {
-      headerName: "Node Name",
-      field: "NodeName",
-      sortable: true,
-      filter: true,
-      width: 150
-    },
-    {
-      headerName: "Channel",
-      field: "Channel",
-      sortable: true,
-      filter: true,
-      width: 150
-    },
-    {
-      headerName: "Status",
-      field: "Status",
-      sortable: true,
-      filter: true,
-      width: 120
-    },
-    {
-      headerName: "Message",
-      field: "Message",
-      sortable: false,
-      filter: true,
-      width: 200
-    },
-    {
-      headerName: "Start At",
-      field: "StartAt",
-      sortable: true,
-      filter: 'agDateColumnFilter',
-      width: 180,
-      valueFormatter: (params) => {
-        // 格式化日期
-        return params.value ? new Date(params.value).toLocaleString() : '';
-      }
-    },
-    {
-      headerName: "Stop At",
-      field: "StopAt",
-      sortable: true,
-      filter: 'agDateColumnFilter',
-      width: 180,
-      valueFormatter: (params) => {
-        // 格式化日期
-        return params.value ? new Date(params.value).toLocaleString() : '';
-      }
-    }
+  rowData: any[] = [];
+  columnDefs = [
+    { field: 'id', headerName: 'ID', sortable: true, filter: true },
+    { field: 'name', headerName: 'Name', sortable: true, filter: true },
+    { field: 'email', headerName: 'Email', sortable: true, filter: true }
   ];
 
+  // 分頁相關
+  pageSize = 10; // 每頁顯示筆數
+  currentPage = 1; // 當前頁數
+  totalPages = 1; // 總頁數
+  totalCount = 0; // 總筆數
+  onGridReady(params: any) {
+    this.gridApi = params.api;
+    this.loadData();
+  }
+
+  // 🚀 **呼叫後端 API 載入資料**
   loadData() {
-    const sortModel = this.gridApi.onSortChanged();
-    const filterModel = this.agGrid.api.getFilterModel();
-
-    // // 取得排序欄位和排序方式
+    // 取得 ag-Grid 的排序資訊
+    // const sortModel = this.gridApi?.getSortModel() || [];
     // const sortField = sortModel.length > 0 ? sortModel[0].colId : '';
-    // const sortOrder = sortModel.length > 0 ? sortModel[0].sort : '';
+    // const sortOrder = sortModel.length > 0 ? sortModel[0].sort.toUpperCase() : '';
 
-    // // 篩選條件
-    // const filter: any = {};
-    // for (const field in filterModel) {
-    //   if (filterModel.hasOwnProperty(field)) {
-    //     filter[field] = filterModel[field].filter;
-    //   }
-    // }
+    // // 取得 ag-Grid 的篩選條件
+    // const filterModel = this.gridApi?.getFilterModel() || {};
+    // const filterField = Object.keys(filterModel)[0] || ''; // 取第一個篩選的欄位
+    // const filterValue = filterField ? filterModel[filterField].filter : '';
 
-    // this.apiService.getUsers(this.pageSize, this.currentPage - 1, sortField, sortOrder, filter).subscribe((data) => {
-    //   this.rowData = data.items;  // 假設後端回傳資料格式 { items: [], totalCount: 0 }
-    //   this.totalCount = data.totalCount;
+    // // 組裝請求資料
+    // const requestData = {
+    //   Page: {
+    //     PageSize: this.pageSize,
+    //     PageIndex: this.currentPage,
+    //     TotalCount: this.totalCount
+    //   },
+    //   field: filterField || sortField, // 先篩選再排序
+    //   Sort: sortOrder || '',
+    //   filter: filterValue || ''
+    // };
+
+    // this.apiService.postUsers(requestData).subscribe((response) => {
+    //   this.rowData = response.items;
+    //   this.totalCount = response.totalCount;
     //   this.totalPages = Math.ceil(this.totalCount / this.pageSize);
     // });
   }
 
-  /** 當排序變更時，重新載入資料 */
-  onSortChanged() {
-    this.loadData();
-  }
-
-  /** 當篩選條件變更時，重新載入資料 */
-  onFilterChanged() {
-    this.loadData();
-  }
-
-  /** 換頁 */
+  // 🚀 **處理分頁按鈕點擊**
   onPageChange(page: number) {
+    if (page < 1 || page > this.totalPages) return; // 避免超過範圍
     this.currentPage = page;
     this.loadData();
   }
+
+  // 🚀 **處理排序改變**
+  onSortChanged() {
+    this.currentPage = 1; // 重新排序時回到第一頁
+    this.loadData();
+  }
+
+  // 🚀 **處理篩選改變**
+  onFilterChanged() {
+    this.currentPage = 1; // 重新篩選時回到第一頁
+    this.loadData();
+  }
+
+
 
 }
 
