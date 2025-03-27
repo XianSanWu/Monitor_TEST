@@ -1,14 +1,14 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './common/guard/auth.guard';
 import { LayoutComponent } from './theme/layout/layout.component';
-// import LoginVerifyComponent from './page/login-manage/login-verify/login-verify.component';
+// import LoginComponent from './page/login-manage/login-verify/login-verify.component';
 
 export const routes: Routes = [
   // component: LayoutComponent,  // 主要佈局頁面
   // canActivate: [AuthGuard],  // 使用 AuthGuard 進行授權檢查
   {
     path: 'login',
-    loadChildren: () => import('./page/login-manage/login-manage.routes').then(m => m.routes),
+    loadChildren: () => import('./page/auth-manage/auth-manage.routes').then(m => m.routes),
   },
   {
     path: 'test',

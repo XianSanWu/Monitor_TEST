@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidatorsUtil } from '../../../common/utils/validators-util';
-import { LoginManageService } from '../login-manage.service';
-import { catchError, filter, finalize, takeUntil, tap } from 'rxjs';
+import { AuthManageService } from '../auth-manage.service';
+import { catchError, finalize, takeUntil, tap } from 'rxjs';
 import { LoadingService } from '../../../core/services/loading.service';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { LoginRequest } from '../../../core/models/requests/login.model';
@@ -23,16 +23,16 @@ import { BaseComponent } from '../../base.component';
     BasicInputComponent,
     LoadingIndicatorComponent,
   ],
-  providers: [LoadingService, LoginManageService],
-  templateUrl: './login-verify.component.html',
-  styleUrl: './login-verify.component.scss'
+  providers: [LoadingService, AuthManageService],
+  templateUrl: './auth-login-verify.component.html',
+  styleUrl: './auth-login-verify.component.scss'
 })
-export default class LoginVerifyComponent extends BaseComponent {
+export default class LoginComponent extends BaseComponent {
   validateForm!: FormGroup;
 
   constructor(
     private router: Router,
-    private loginManageService: LoginManageService,
+    private AuthManageService: AuthManageService,
     private loadingService: LoadingService,
     private localStorageService: LocalStorageService,
     private dialogService: DialogService
@@ -51,7 +51,7 @@ export default class LoginVerifyComponent extends BaseComponent {
     }
 
     this.loadingService.show();
-    this.loginManageService.loginVerify(reqData).pipe(
+    this.AuthManageService.login(reqData).pipe(
       catchError((err) => {
         this.localStorageService.clear();
         this.dialogService.openCustomSnackbar({

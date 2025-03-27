@@ -6,8 +6,9 @@ import { LoginRequest } from "../../core/models/requests/login.model";
 import { ConfigService } from "../../core/services/config.service";
 
 @Injectable()
-export class LoginManageService {
+export class AuthManageService {
   private baseUrl: string = "";
+  readonly authFunc = 'Auth/';
   readonly loginFunc = 'Login/';
 
   constructor(
@@ -19,7 +20,7 @@ export class LoginManageService {
     });
   }
 
-  loginVerify(data: LoginRequest): Observable<ResponseModel<any>> {
-    return this.service.doSend('post', this.baseUrl + this.loginFunc + 'Verify', data);
+  login(data: LoginRequest): Observable<ResponseModel<any>> {
+    return this.service.doSend('post', this.baseUrl + this.authFunc + this.loginFunc, data);
   }
 }

@@ -3,6 +3,6 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./login-verify/login-verify.component'),
+    loadComponent: () => import('./auth-login-verify/auth-login-verify.component'),
   }
 ];
