@@ -1,3 +1,4 @@
+import { catchError, finalize, takeUntil, tap } from 'rxjs';
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -12,6 +13,11 @@ import { DateComponent } from '../../../component/form/date/date.component';
 import { SearchSelectComponent } from '../../../component/form/search-select/search-select.component';
 import { ColDef, GridApi } from 'ag-grid-community';
 import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
+import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/custom-filter.component';
+import { Option } from '../../../core/models/common/base.model';
+import { TestManageService } from '../test-manage.service';
+import { RestStatus } from '../../../common/enums/rest-enum';
+import { BaseComponent } from '../../base.component';
 
 @Component({
   selector: 'test1',
@@ -26,16 +32,18 @@ import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
     SearchSelectComponent,
     AgGridModule,
   ],
-  providers: [LoadingService],
+  providers: [LoadingService, TestManageService],
   templateUrl: './test1.component.html',
   styleUrl: './test1.component.scss'
 })
-export default class Test1Component {
+export default class Test1Component extends BaseComponent {
 
   constructor(
     // private dialog: MatDialog,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private testManageService: TestManageService
   ) {
+    super();
     // 初始化表單
     this.validateForm = new FormGroup({
       username: new FormControl('', [Validators.required, ValidatorsUtil.blank, ValidatorsUtil.intSymbolsEnglishNumbers]),
@@ -104,8 +112,6 @@ export default class Test1Component {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.loadData();
-
     console.log('TEST_PAGE_11111')
   }
 
@@ -124,11 +130,33 @@ export default class Test1Component {
 
   gridApi!: GridApi;
   rowData: any[] = [];
+  defaultColDef = {
+    sortable: true,
+    filter: CustomFilterComponent
+  };
+
   columnDefs = [
-    { field: 'id', headerName: 'ID', sortable: true, filter: true },
-    { field: 'name', headerName: 'Name', sortable: true, filter: true },
-    { field: 'email', headerName: 'Email', sortable: true, filter: true }
+    { headerName: 'SN', field: 'SN' },
+    { headerName: 'WorkflowUuid', field: 'WorkflowUuid' },
+    { headerName: 'SendUuid', field: 'SendUuid' },
+    { headerName: 'BatchId', field: 'BatchId' },
+    { headerName: 'JourneyId', field: 'JourneyId' },
+    { headerName: 'JourneyName', field: 'JourneyName' },
+    { headerName: 'JourneyStatus', field: 'JourneyStatus' },
+    { headerName: 'NodeId', field: 'NodeId' },
+    { headerName: 'NodeName', field: 'NodeName' },
+    { headerName: 'Channel', field: 'Channel' },
+    { headerName: 'ChannelType', field: 'ChannelType' },
+    { headerName: 'UploadFileName', field: 'UploadFileName' },
+    { headerName: 'Status', field: 'Status' },
+    { headerName: 'CreateAt', field: 'CreateAt' },
+    { headerName: 'UpdateAt', field: 'UpdateAt' },
+    { headerName: 'JourneyCreateAt', field: 'JourneyCreateAt' },
+    { headerName: 'JourneyUpdateAt', field: 'JourneyUpdateAt' },
+    { headerName: 'GroupSendCreateAt', field: 'GroupSendCreateAt' },
+    { headerName: 'GroupSendUpdateAt', field: 'GroupSendUpdateAt' },
   ];
+
 
   // 分頁相關
   pageSize = 10; // 每頁顯示筆數
@@ -143,32 +171,76 @@ export default class Test1Component {
   // 🚀 **呼叫後端 API 載入資料**
   loadData() {
     // 取得 ag-Grid 的排序資訊
-    // const sortModel = this.gridApi?.getSortModel() || [];
-    // const sortField = sortModel.length > 0 ? sortModel[0].colId : '';
-    // const sortOrder = sortModel.length > 0 ? sortModel[0].sort.toUpperCase() : '';
+    const columnModel = this.gridApi?.getColumnState() || [];
+    // console.log('columnModel', columnModel)
+    const gridSortModel = columnModel?.filter(f => f.sort)?.[0];
+    let sortModel: Option | null = null;
+    const sortField = gridSortModel?.colId ?? '';
+    const sortOrder = gridSortModel?.sort ?? '';
+    sortModel = new Option({
+      key: sortField,
+      value: sortOrder,
+    })
 
-    // // 取得 ag-Grid 的篩選條件
-    // const filterModel = this.gridApi?.getFilterModel() || {};
-    // const filterField = Object.keys(filterModel)[0] || ''; // 取第一個篩選的欄位
-    // const filterValue = filterField ? filterModel[filterField].filter : '';
+    // 取得 ag-Grid 的篩選條件
+    const gridFilterModel = this.gridApi?.getFilterModel() || {};
+    let filterModel: Array<Option> = new Array<Option>();
 
-    // // 組裝請求資料
-    // const requestData = {
-    //   Page: {
-    //     PageSize: this.pageSize,
-    //     PageIndex: this.currentPage,
-    //     TotalCount: this.totalCount
-    //   },
-    //   field: filterField || sortField, // 先篩選再排序
-    //   Sort: sortOrder || '',
-    //   filter: filterValue || ''
-    // };
+    // 檢查 gridFilterModel 是否為非空物件
+    if (Object.keys(gridFilterModel).length > 0) {
+      // 使用 Object.entries() 來遍歷物件的鍵值對
+      Object.entries(gridFilterModel).forEach(([key, f]) => {
+        filterModel.push(
+          new Option({
+            key: key,
+            value: f.value,
+          })
+        );
+      });
+    }
 
-    // this.apiService.postUsers(requestData).subscribe((response) => {
-    //   this.rowData = response.items;
-    //   this.totalCount = response.totalCount;
-    //   this.totalPages = Math.ceil(this.totalCount / this.pageSize);
-    // });
+    // console.log('gridFilterModel', gridFilterModel)
+    // console.log('filterModel', filterModel)
+
+    // 組裝請求資料
+    const reqData = {
+      Page: {
+        PageSize: this.pageSize,
+        PageIndex: this.currentPage,
+        TotalCount: this.totalCount
+      },
+      sortModel: sortModel,
+      filterModel: filterModel
+    };
+
+    console.log('requestData', reqData)
+
+    this.testManageService.getSearchList(reqData)
+      .pipe(
+        catchError((err) => {
+          this.dialogService.openCustomSnackbar({
+            message: err.message || 'An error occurred during login.'
+          });
+          throw Error(err.message);
+        }),
+        tap(res => {
+          if (res.Status?.toString() !== RestStatus.SUCCESS) {
+            this.dialogService.openCustomSnackbar({
+              message: res.Message
+            });
+            return;
+          }
+
+          if (res) {
+            this.rowData = res.Data.SearchItem;
+            this.totalCount = res.Data.Page.TotalCount;
+            this.totalPages = Math.ceil(this.totalCount / this.pageSize);
+          }
+        }),
+        takeUntil(this.destroy$),
+        finalize(() => {
+        })
+      ).subscribe();
   }
 
   // 🚀 **處理分頁按鈕點擊**

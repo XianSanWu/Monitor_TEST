@@ -64,26 +64,43 @@
 
   <div class="row">
     <ag-grid-angular
-  #agGrid
-  style="width: 100%; height: 500px;"
-  class="ag-theme-alpine"
-  [rowData]="rowData"
-  [columnDefs]="columnDefs"
-  [pagination]="false"  
-  [animateRows]="true"
-  (gridReady)="onGridReady($event)"
-  (sortChanged)="onSortChanged()"
-  (filterChanged)="onFilterChanged()">
-</ag-grid-angular>
+      #agGrid
+      style="width: 100%; height: 500px"
+      class="ag-theme-alpine"
+      [rowData]="rowData"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [pagination]="false"
+      [animateRows]="true"
+      (gridReady)="onGridReady($event)"
+      (sortChanged)="onSortChanged()"
+      (filterChanged)="onFilterChanged()"
+    >
+    </ag-grid-angular>
 
-<div style="margin-top: 10px;">
-  <button (click)="onPageChange(1)" [disabled]="currentPage === 1">First Page</button>
-  <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
-  <span>Page {{ currentPage }} / {{ totalPages }}</span>
-  <button (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
-  <button (click)="onPageChange(totalPages)" [disabled]="currentPage === totalPages">Last Page</button>
-</div>
-
+    <div style="margin-top: 10px">
+      <button (click)="onPageChange(1)" [disabled]="currentPage === 1">
+        First Page
+      </button>
+      <button
+        (click)="onPageChange(currentPage - 1)"
+        [disabled]="currentPage === 1"
+      >
+        Previous
+      </button>
+      <span>Page {{ currentPage }} / {{ totalPages }}</span>
+      <button
+        (click)="onPageChange(currentPage + 1)"
+        [disabled]="currentPage === totalPages"
+      >
+        Next
+      </button>
+      <button
+        (click)="onPageChange(totalPages)"
+        [disabled]="currentPage === totalPages"
+      >
+        Last Page
+      </button>
+    </div>
   </div>
-
 </div>

@@ -7,9 +7,56 @@ body {
   overflow: auto;
 }
 
+
 ag-grid-angular {
   z-index: 0 !important;
 }
+
+.custom-filter-wrapper {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  border-radius: 5px;
+  padding: 15px;
+  width: 250px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+}
+
+.filter-header {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.filter-body {
+  display: flex;
+  justify-content: center;
+}
+
+.filter-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.filter-input:focus {
+  border-color: #5c9ded;
+}
+
+.filter-input::placeholder {
+  color: #aaa;
+}
+
+.filter-input:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
 
 .parent {
   display: flex;
