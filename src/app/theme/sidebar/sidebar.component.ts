@@ -18,10 +18,10 @@ export const AdminMenu: MenuItem[] = [
     ]
   },
   {
-    title: "測試管理", icon: "gear", link: '',
+    title: "CDP工作流程管理", icon: "gear", link: '',
     children: [
-      { title: "測試1", icon: "file-earmark-text", link: "/test/test1", children: [] },
-      { title: "測試2", icon: "file-earmark-text", link: "/test/test2", children: [] },
+      { title: "EDM", icon: "file-earmark-text", link: "/cdp/edm", children: [] },
+      { title: "SMS", icon: "file-earmark-text", link: "/cdp/sms", children: [] },
     ]
   }
 ];

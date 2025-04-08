@@ -1,0 +1,70 @@
+<div class="pageTitle">
+  <h2>【EDM 工作進度查詢】</h2>
+</div>
+<div [formGroup]="validateForm">
+  <div class="row">
+    <basic-input
+      title="工作進度查詢"
+      class="col-2"
+      [form]="validateForm"
+      [disabled]="true"
+      [isHidden]="true"
+      ctlName="channel"
+      placeholder="請輸入"
+      [maxlength]="30"
+    ></basic-input>
+  </div>
+
+</div>
+
+<div class="row">
+  <ag-grid-angular
+    #agGrid
+    style="width: 100%; height: 500px"
+    class="ag-theme-alpine"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [pagination]="false"
+    [animateRows]="true"
+    (gridReady)="onGridReady($event)"
+    (sortChanged)="onSortChanged()"
+    (filterChanged)="onFilterChanged()"
+  >
+  </ag-grid-angular>
+
+  <div
+    style="margin-top: 10px"
+    class="d-flex justify-content-center align-items-center gap-2"
+  >
+    <button
+      class="btn btn-primary"
+      (click)="onPageChange(1)"
+      [disabled]="currentPage === 1"
+    >
+      First Page
+    </button>
+    <button
+      class="btn btn-secondary"
+      (click)="onPageChange(currentPage - 1)"
+      [disabled]="currentPage === 1"
+    >
+      Previous
+    </button>
+    <span class="mx-2">Page {{ currentPage }} / {{ totalPages }}</span>
+    <button
+      class="btn btn-secondary"
+      (click)="onPageChange(currentPage + 1)"
+      [disabled]="currentPage === totalPages"
+    >
+      Next
+    </button>
+    <button
+      class="btn btn-primary"
+      (click)="onPageChange(totalPages)"
+      [disabled]="currentPage === totalPages"
+    >
+      Last Page
+    </button>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 import { catchError, finalize, takeUntil, tap } from 'rxjs';
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoadingService } from '../../../core/services/loading.service';
 import { DropdownComponent } from '../../../component/form/dropdown/dropdown.component';
 import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
@@ -31,7 +31,6 @@ import { BaseComponent } from '../../base.component';
     DateRangeComponent,
     SearchSelectComponent,
     AgGridModule,
-    FormsModule,
   ],
   providers: [LoadingService, TestManageService],
   templateUrl: './test1.component.html',
@@ -136,7 +135,7 @@ export default class Test1Component extends BaseComponent {
     filter: CustomFilterComponent
   };
 
-  columnDefs = [
+  columnDefs: ColDef[] = [
     { headerName: 'SN', field: 'SN' },
     { headerName: 'WorkflowUuid', field: 'WorkflowUuid' },
     { headerName: 'SendUuid', field: 'SendUuid' },
@@ -169,7 +168,7 @@ export default class Test1Component extends BaseComponent {
     this.loadData();
   }
 
-  // 🚀 **呼叫後端 API 載入資料**
+  //  **呼叫後端 API 載入資料**
   loadData() {
     // 取得 ag-Grid 的排序資訊
     const columnModel = this.gridApi?.getColumnState() || [];
@@ -212,7 +211,7 @@ export default class Test1Component extends BaseComponent {
 
     // 組裝請求資料
     const reqData = {
-      Page: pageBase,
+      page: pageBase,
       sortModel: sortModel,
       filterModel: filterModel
     };
@@ -247,21 +246,21 @@ export default class Test1Component extends BaseComponent {
       ).subscribe();
   }
 
-  // 🚀 **處理分頁按鈕點擊**
+  //  **處理分頁按鈕點擊**
   onPageChange(page: number) {
-    console.log('page',page)
+    console.log('page', page)
     if (page < 1 || page > this.totalPages) return; // 避免超過範圍
     this.currentPage = page;
     this.loadData();
   }
 
-  // 🚀 **處理排序改變**
+  //  **處理排序改變**
   onSortChanged() {
     this.currentPage = 1; // 重新排序時回到第一頁
     this.loadData();
   }
 
-  // 🚀 **處理篩選改變**
+  //  **處理篩選改變**
   onFilterChanged() {
     this.currentPage = 1; // 重新篩選時回到第一頁
     this.loadData();

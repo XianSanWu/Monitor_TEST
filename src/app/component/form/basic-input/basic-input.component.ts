@@ -21,6 +21,7 @@ export class BasicInputComponent implements OnInit {
   @Input() maxlength: number = 10;
   @Input() disabled: boolean = false;
   @Input() autocomplete: string = '';
+  @Input() isHidden: boolean = false;
 
   firstErr: string = '';
   ctl!: FormControl;

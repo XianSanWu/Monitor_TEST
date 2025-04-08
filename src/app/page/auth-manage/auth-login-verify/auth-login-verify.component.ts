@@ -13,6 +13,7 @@ import { LoadingIndicatorComponent } from '../../../component/loading/loading-in
 import { DialogService } from '../../../core/services/dialog.service';
 import { RestStatus } from '../../../common/enums/rest-enum';
 import { BaseComponent } from '../../base.component';
+import { Base64Util } from '../../../common/utils/base64-util';
 
 @Component({
   selector: 'login-verify',
@@ -45,10 +46,11 @@ export default class LoginComponent extends BaseComponent {
   }
 
   submit() {
-    const reqData: LoginRequest = this.validateForm.getRawValue();
+    let reqData: LoginRequest = this.validateForm.getRawValue();
     if (this.validateForm.invalid) {
       return; // Form is invalid, exit early.
     }
+    reqData.password = Base64Util.encode(reqData.password);
 
     this.loadingService.show();
     this.AuthManageService.login(reqData).pipe(

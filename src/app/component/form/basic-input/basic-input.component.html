@@ -1,7 +1,12 @@
 <div
   class="fieldGroup"
-  [ngClass]="'col-12'"
-  [ngClass]="{ error: hasError(), essential: required, disabled: disabled }"
+  [ngClass]="{
+    'col-12': true,
+    'error': hasError(),
+    'essential': required,
+    'disabled': disabled,
+  }"
+  [ngStyle]="{'display': isHidden ? 'none' : 'block'}"
   [formGroup]="form"
 >
   <label>

@@ -10,6 +10,9 @@ mat-expansion-panel {
     height: 100vh; /* 讓內容填滿剩餘高度 */
     padding: 16px;
   }
+  .mdc-list-item {
+    padding-left: 22px;
+  }
 
   .sidenav-container {
     height: 100vh;
@@ -39,6 +42,4 @@ mat-expansion-panel {
     z-index: 999 !important; /* 確保它在最上層 */
   }
 
-  .mat-sidenav-content {
-  }
 }
