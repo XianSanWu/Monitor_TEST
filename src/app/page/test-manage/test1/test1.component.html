@@ -78,24 +78,31 @@
     >
     </ag-grid-angular>
 
-    <div style="margin-top: 10px">
-      <button (click)="onPageChange(1)" [disabled]="currentPage === 1">
+    <div style="margin-top: 10px" class="d-flex justify-content-center align-items-center gap-2">
+      <button
+        class="btn btn-primary"
+        (click)="onPageChange(1)"
+        [disabled]="currentPage === 1"
+      >
         First Page
       </button>
       <button
+        class="btn btn-secondary"
         (click)="onPageChange(currentPage - 1)"
         [disabled]="currentPage === 1"
       >
         Previous
       </button>
-      <span>Page {{ currentPage }} / {{ totalPages }}</span>
+      <span class="mx-2">Page {{ currentPage }} / {{ totalPages }}</span>
       <button
+        class="btn btn-secondary"
         (click)="onPageChange(currentPage + 1)"
         [disabled]="currentPage === totalPages"
       >
         Next
       </button>
       <button
+        class="btn btn-primary"
         (click)="onPageChange(totalPages)"
         [disabled]="currentPage === totalPages"
       >

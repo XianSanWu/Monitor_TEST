@@ -1,7 +1,7 @@
 import { catchError, finalize, takeUntil, tap } from 'rxjs';
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoadingService } from '../../../core/services/loading.service';
 import { DropdownComponent } from '../../../component/form/dropdown/dropdown.component';
 import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
@@ -14,7 +14,7 @@ import { SearchSelectComponent } from '../../../component/form/search-select/sea
 import { ColDef, GridApi } from 'ag-grid-community';
 import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
 import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/custom-filter.component';
-import { Option } from '../../../core/models/common/base.model';
+import { Option, PageBase } from '../../../core/models/common/base.model';
 import { TestManageService } from '../test-manage.service';
 import { RestStatus } from '../../../common/enums/rest-enum';
 import { BaseComponent } from '../../base.component';
@@ -31,6 +31,7 @@ import { BaseComponent } from '../../base.component';
     DateRangeComponent,
     SearchSelectComponent,
     AgGridModule,
+    FormsModule,
   ],
   providers: [LoadingService, TestManageService],
   templateUrl: './test1.component.html',
@@ -201,14 +202,17 @@ export default class Test1Component extends BaseComponent {
 
     // console.log('gridFilterModel', gridFilterModel)
     // console.log('filterModel', filterModel)
+    const pageBase = new PageBase(
+      {
+        pageSize: this.pageSize,
+        pageIndex: this.currentPage,
+        totalCount: this.totalCount
+      }
+    )
 
     // 組裝請求資料
     const reqData = {
-      Page: {
-        PageSize: this.pageSize,
-        PageIndex: this.currentPage,
-        TotalCount: this.totalCount
-      },
+      Page: pageBase,
       sortModel: sortModel,
       filterModel: filterModel
     };
@@ -245,6 +249,7 @@ export default class Test1Component extends BaseComponent {
 
   // 🚀 **處理分頁按鈕點擊**
   onPageChange(page: number) {
+    console.log('page',page)
     if (page < 1 || page > this.totalPages) return; // 避免超過範圍
     this.currentPage = page;
     this.loadData();
