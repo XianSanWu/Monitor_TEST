@@ -7,10 +7,11 @@ import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
 import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
 import { GridApi, ColDef } from 'ag-grid-community';
 import { catchError, tap, takeUntil, finalize } from 'rxjs';
-import { RestStatus } from '../../../common/enums/rest-enum';
 import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/custom-filter.component';
 import { Option, PageBase } from '../../../core/models/common/base.model';
 import { DialogService } from '../../../core/services/dialog.service';
+import { AttoProgressComponent } from '../../../component/form/atto-progress/atto-progress.component';
+import { ConfigService } from '../../../core/services/config.service';
 
 @Component({
   selector: 'edm',
@@ -20,6 +21,7 @@ import { DialogService } from '../../../core/services/dialog.service';
     ReactiveFormsModule,
     BasicInputComponent,
     AgGridModule,
+    AttoProgressComponent,
   ],
   providers: [CdpManageService],
   templateUrl: './edm.component.html',
@@ -29,14 +31,20 @@ export default class EdmComponent extends BaseComponent {
   constructor(
     // private dialog: MatDialog,
     private dialogService: DialogService,
-    private cdpManageService: CdpManageService
+    private cdpManageService: CdpManageService,
+    private configService: ConfigService
   ) {
     super();
     // 初始化表單
     this.validateForm = new FormGroup({
       channel: new FormControl('EDM', []),
     });
+
+    this.configService.configData$.subscribe(data => {
+      this.edmAttoProgress = data?.EDM_ATTO_PROGRESS;
+    });
   }
+  edmAttoProgress = new Array<string>();
 
   validateForm: FormGroup;
 
@@ -55,14 +63,14 @@ export default class EdmComponent extends BaseComponent {
     // { headerName: 'WorkflowUuid', field: 'WorkflowUuid' },
     { headerName: '愛酷 SendUuid', field: 'SendUuid' },
     { headerName: '愛酷 BatchId', field: 'BatchId' },
-    // { headerName: 'JourneyId', field: 'JourneyId' },
+    // { headerName: 'ActivityId', field: 'ActivityId' },
     { headerName: '進度狀態', field: 'Status' },
-    { headerName: '旅程名稱', field: 'JourneyName' },
-    { headerName: '旅程狀態', field: 'JourneyStatus' },
-    // { headerName: 'NodeId', field: 'NodeId' },
-    { headerName: '節點名稱', field: 'NodeName' },
     { headerName: '來源', field: 'Channel' },
     { headerName: '旅程/群發', field: 'ChannelType' },
+    { headerName: '旅程/群發名稱', field: 'ActivityName' },
+    { headerName: '旅程/群發狀態', field: 'ActivityStatus' },
+    // { headerName: 'NodeId', field: 'NodeId' },
+    { headerName: '節點名稱', field: 'NodeName' },
     // { headerName: 'FTP檔案名稱', field: 'UploadFileName' },
     { headerName: '建立時間', field: 'CreateAt' },
     { headerName: '更新時間', field: 'UpdateAt' },
@@ -145,9 +153,9 @@ export default class EdmComponent extends BaseComponent {
           throw Error(err.message);
         }),
         tap(res => {
-            this.rowData = res.Data.SearchItem;
-            this.totalCount = res.Data.Page.TotalCount;
-            this.totalPages = Math.ceil(this.totalCount / this.pageSize);
+          this.rowData = res.Data.SearchItem;
+          this.totalCount = res.Data.Page.TotalCount;
+          this.totalPages = Math.ceil(this.totalCount / this.pageSize);
         }),
         takeUntil(this.destroy$),
         finalize(() => {

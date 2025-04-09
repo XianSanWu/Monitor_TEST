@@ -2,6 +2,12 @@
   <h2>【EDM 工作進度查詢】</h2>
 </div>
 <div [formGroup]="validateForm">
+  <div>
+    <atto-progress
+    [items]="edmAttoProgress"
+    >
+    </atto-progress>
+  </div>
   <div class="row">
     <basic-input
       title="工作進度查詢"

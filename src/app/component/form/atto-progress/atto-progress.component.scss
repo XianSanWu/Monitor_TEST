@@ -1,0 +1,54 @@
+.text-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 20px;
+}
+
+.circle-container {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* 增加間距，使元素不會太擠 */
+}
+
+.circle-wrapper {
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease; /* 增加滑動效果 */
+}
+
+.circle-wrapper:hover {
+  transform: scale(1.1); /* 鼠標懸停時放大 */
+}
+
+.item-text-container {
+  margin-right: 10px;
+}
+
+.item-text {
+  font-size: 18px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 10px 20px;
+  border: 2px solid #ccc;
+  border-radius: 25px;
+  background-color: #f0f0f0;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.item-text.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #0056b3;
+}
+
+.arrow {
+  font-size: 30px;
+  margin-left: 10px;
+  color: #555;
+  transition: color 0.3s ease;
+}
+
+.arrow:hover {
+  color: #007bff; /* 當鼠標懸停在箭頭上時，顏色變為藍色 */
+}

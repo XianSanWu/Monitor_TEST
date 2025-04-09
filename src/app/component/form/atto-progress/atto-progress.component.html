@@ -1,0 +1,11 @@
+<div class="text-center">
+  <div class="circle-container">
+    <div *ngFor="let item of items; let i = index" class="circle-wrapper">
+      <div class="item-text-container">
+        <div class="item-text" [class.active]="i === currentIndex()">{{ item }}</div>
+      </div>
+      <!-- 顯示箭頭 -->
+      <div *ngIf="i < items.length - 1" class="arrow"> >> </div>
+    </div>
+  </div>
+</div>

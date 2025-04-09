@@ -10,8 +10,8 @@ export interface SearchResponse {
 }
 
 export interface SearchItem {
-  JourneyId: string;
-  JourneyName: string;
+  ActivityId: string;
+  ActivityName: string;
   NodeId: string;
   NodeName: string;
   Channel: string;

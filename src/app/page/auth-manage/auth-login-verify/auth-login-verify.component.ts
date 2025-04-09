@@ -11,7 +11,6 @@ import { LoginRequest } from '../../../core/models/requests/login.model';
 import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
 import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
 import { DialogService } from '../../../core/services/dialog.service';
-import { RestStatus } from '../../../common/enums/rest-enum';
 import { BaseComponent } from '../../base.component';
 import { Base64Util } from '../../../common/utils/base64-util';
 
@@ -62,8 +61,15 @@ export default class LoginComponent extends BaseComponent {
         throw Error(err.message);
       }),
       tap(res => {
-          this.localStorageService.setItem('isLoggedIn', reqData.username);
-          this.router.navigate(['/home']);
+        if (!res?.Data) {
+          this.dialogService.openCustomSnackbar({
+            message: '驗證失敗，請輸入正確帳號密碼'
+          });
+          return;
+        }
+
+        this.localStorageService.setItem('isLoggedIn', reqData.username);
+        this.router.navigate(['/home']);
       }),
       takeUntil(this.destroy$),
       finalize(() => {
