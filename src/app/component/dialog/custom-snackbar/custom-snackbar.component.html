@@ -1,5 +1,5 @@
 <div class="custom-snackbar" (click)="close()">
   <h3>{{ data?.title || '錯誤訊息' }}</h3> <!-- || '錯誤訊息標題' -->
-  <p>{{ data?.message }}</p> <!-- || '這是錯誤訊息的詳細內容。' -->
+  <p style="white-space: pre-line;">{{ data?.message }}</p> <!-- || '這是錯誤訊息的詳細內容。' -->
   <!-- <button mat-button (click)="close()">關閉</button> -->
 </div>

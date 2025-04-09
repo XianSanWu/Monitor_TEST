@@ -7,6 +7,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { LocalStorageService } from '../../core/services/local-storage.service';
 import { MenuItem } from '../../core/models/common/menu.model';
+
+export const OtherMenu: MenuItem[] = [
+  {
+    title: "CDP工作流程管理", icon: "gear", link: '',
+    children: [
+      { title: "EDM", icon: "file-earmark-text", link: "/cdp/edm", children: [] },
+      { title: "SMS", icon: "file-earmark-text", link: "/cdp/sms", children: [] },
+    ]
+  }
+];
+
 export const AdminMenu: MenuItem[] = [
   { title: "首頁管理", icon: "house-door", link: "/home", children: [] },
   { title: "登入管理", icon: "lock", link: "/login", children: [] },
@@ -17,26 +28,7 @@ export const AdminMenu: MenuItem[] = [
       { title: "測試2", icon: "file-earmark-text", link: "/test/test2", children: [] },
     ]
   },
-  {
-    title: "CDP工作流程管理", icon: "gear", link: '',
-    children: [
-      { title: "EDM", icon: "file-earmark-text", link: "/cdp/edm", children: [] },
-      { title: "SMS", icon: "file-earmark-text", link: "/cdp/sms", children: [] },
-    ]
-  }
-];
-
-
-export const OtherMenu: MenuItem[] = [
-  // { title: "首頁管理", icon: "house-door", link: "/home", children: [] },
-  { title: "登入管理", icon: "lock", link: "/login", children: [] },
-  {
-    title: "測試管理", icon: "gear", link: '',
-    children: [
-      { title: "測試1", icon: "file-earmark-text", link: "/test/test1", children: [] },
-      // { title: "測試2", icon: "file-earmark-text", link: "/test/test2", children: [] },
-    ]
-  }
+  ...OtherMenu
 ];
 
 @Component({

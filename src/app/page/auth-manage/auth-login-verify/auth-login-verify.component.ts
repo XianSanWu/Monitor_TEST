@@ -57,22 +57,13 @@ export default class LoginComponent extends BaseComponent {
       catchError((err) => {
         this.localStorageService.clear();
         this.dialogService.openCustomSnackbar({
-          message: err.message || 'An error occurred during login.'
+          message: err.message || '登入時發生錯誤'
         });
         throw Error(err.message);
       }),
       tap(res => {
-        if(res.Status?.toString() !== RestStatus.SUCCESS){
-          this.dialogService.openCustomSnackbar({
-            message: res.Message
-          });
-          return;
-        }
-
-        if (res) {
           this.localStorageService.setItem('isLoggedIn', reqData.username);
           this.router.navigate(['/home']);
-        }
       }),
       takeUntil(this.destroy$),
       finalize(() => {
@@ -80,6 +71,7 @@ export default class LoginComponent extends BaseComponent {
       })
     ).subscribe();
   }
+
 
   // 監聽 Enter 鍵
   @HostListener('document:keydown.enter', ['$event'])

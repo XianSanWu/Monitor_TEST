@@ -145,18 +145,9 @@ export default class EdmComponent extends BaseComponent {
           throw Error(err.message);
         }),
         tap(res => {
-          if (res.Status?.toString() !== RestStatus.SUCCESS) {
-            this.dialogService.openCustomSnackbar({
-              message: res.Message
-            });
-            return;
-          }
-
-          if (res) {
             this.rowData = res.Data.SearchItem;
             this.totalCount = res.Data.Page.TotalCount;
             this.totalPages = Math.ceil(this.totalCount / this.pageSize);
-          }
         }),
         takeUntil(this.destroy$),
         finalize(() => {
