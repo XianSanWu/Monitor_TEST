@@ -1,14 +1,18 @@
 <loading-indicator></loading-indicator>
 
 <div class="pageTitle">
-  <h2>【EDM 工作進度查詢】</h2>
+  <h2>
+    <i class="bi bi-list-task"></i>
+    EDM 工作進度查詢
+  </h2>
 </div>
+
 
 <!-- 狀態流程顯示 -->
 <collapsible-section title="🧭 狀態流程顯示">
-<div style="display: flex; justify-content: flex-start">
-  <atto-progress [items]="edmAttoProgress"> </atto-progress>
-</div>
+  <div style="display: flex; justify-content: flex-start">
+    <atto-progress [items]="edmAttoProgress"> </atto-progress>
+  </div>
 </collapsible-section>
 
 <!-- 自訂表單 -->
@@ -84,55 +88,55 @@
 
 <!-- ag-grid表單 -->
 <collapsible-section title="📋 EDM 查詢列表">
-<div class="row">
-  <ag-grid-angular
-    #agGrid
-    style="width: 100%; height: 500px"
-    class="ag-theme-alpine"
-    [rowData]="rowData"
-    [columnDefs]="columnDefs"
-    [defaultColDef]="defaultColDef"
-    [pagination]="false"
-    [animateRows]="true"
-    (gridReady)="onGridReady($event)"
-    (sortChanged)="onSortChanged()"
-    (filterChanged)="onFilterChanged()"
-  >
-  </ag-grid-angular>
+  <div class="row">
+    <ag-grid-angular
+      #agGrid
+      style="width: 100%; height: 500px"
+      class="ag-theme-alpine"
+      [rowData]="rowData"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [pagination]="false"
+      [animateRows]="true"
+      (gridReady)="onGridReady($event)"
+      (sortChanged)="onSortChanged()"
+      (filterChanged)="onFilterChanged()"
+    >
+    </ag-grid-angular>
 
-  <div
-    style="margin-top: 10px"
-    class="d-flex justify-content-center align-items-center gap-2"
-  >
-    <button
-      class="btn btn-primary"
-      (click)="onPageChange(1)"
-      [disabled]="currentPage === 1"
+    <div
+      style="margin-top: 10px"
+      class="d-flex justify-content-center align-items-center gap-2"
     >
-      First Page
-    </button>
-    <button
-      class="btn btn-secondary"
-      (click)="onPageChange(currentPage - 1)"
-      [disabled]="currentPage === 1"
-    >
-      Previous
-    </button>
-    <span class="mx-2">Page {{ currentPage }} / {{ totalPages }}</span>
-    <button
-      class="btn btn-secondary"
-      (click)="onPageChange(currentPage + 1)"
-      [disabled]="currentPage === totalPages"
-    >
-      Next
-    </button>
-    <button
-      class="btn btn-primary"
-      (click)="onPageChange(totalPages)"
-      [disabled]="currentPage === totalPages"
-    >
-      Last Page
-    </button>
+      <button
+        class="btn btn-primary"
+        (click)="onPageChange(1)"
+        [disabled]="currentPage === 1"
+      >
+        First Page
+      </button>
+      <button
+        class="btn btn-secondary"
+        (click)="onPageChange(currentPage - 1)"
+        [disabled]="currentPage === 1"
+      >
+        Previous
+      </button>
+      <span class="mx-2">Page {{ currentPage }} / {{ totalPages }}</span>
+      <button
+        class="btn btn-secondary"
+        (click)="onPageChange(currentPage + 1)"
+        [disabled]="currentPage === totalPages"
+      >
+        Next
+      </button>
+      <button
+        class="btn btn-primary"
+        (click)="onPageChange(totalPages)"
+        [disabled]="currentPage === totalPages"
+      >
+        Last Page
+      </button>
+    </div>
   </div>
-</div>
 </collapsible-section>
