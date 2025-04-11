@@ -1,13 +1,19 @@
+<loading-indicator></loading-indicator>
+
 <div class="pageTitle">
   <h2>【EDM 工作進度查詢】</h2>
 </div>
+
+<!-- 狀態流程顯示 -->
+<div>
+  <atto-progress
+  [items]="edmAttoProgress"
+  >
+  </atto-progress>
+</div>
+
+<!-- 自訂表單 -->
 <div [formGroup]="validateForm">
-  <div>
-    <atto-progress
-    [items]="edmAttoProgress"
-    >
-    </atto-progress>
-  </div>
   <div class="row">
     <basic-input
       title="工作進度查詢"
@@ -20,9 +26,44 @@
       [maxlength]="30"
     ></basic-input>
   </div>
-
 </div>
 
+<!-- 卡夫卡工作量 -->
+<div *ngIf="(respData1?.PartitionLags?.length ?? 0) > 0">
+  <h5 class="mt-3">📊 Kafka Partition Lag (卡夫卡工作量)</h5>
+  <div class="row g-3 mt-2">
+    <div class="col-md-6 col-lg-4" *ngFor="let item of respData1?.PartitionLags">
+      <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+          🧩 Partition {{ item.Partition }}
+        </div>
+        <div class="card-body">
+          <p class="mb-1"><strong>Committed Offset:</strong> {{ item.CommittedOffset }}</p>
+          <p class="mb-1"><strong>High Watermark:</strong> {{ item.HighWatermark }}</p>
+          <p class="mb-0">
+            <strong>Lag:</strong>
+            <span
+              [ngClass]="{
+                'text-success fw-bold': item.Lag <= 5,
+                'text-warning fw-bold': item.Lag > 5 && item.Lag <= 10,
+                'text-danger fw-bold': item.Lag > 10
+              }"
+            >
+              {{ item.Lag }}
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-info mt-4 text-end">
+    <strong>Total Lag: </strong> {{ respData1?.TotalLag }}
+  </div>
+</div>
+
+
+<!-- ag-grid表單 -->
 <div class="row">
   <ag-grid-angular
     #agGrid

@@ -29,11 +29,12 @@ export const httpRequestInterceptor: HttpInterceptorFn = (req: HttpRequest<any>,
       if (error instanceof TimeoutError) {
         errorMessage = '⏳ 請求逾時，請稍後再試！';
       } else if (error instanceof HttpErrorResponse) {
-        errorMessage = `❌錯誤代碼: ${error.status}，${error.message}`;
+        errorMessage = `❌錯誤代碼: ${error?.status}，${error?.message}`;
       }
 
+      // console.log('errorMessage', errorMessage)
       // 使用 DialogService 顯示錯誤訊息
-      dialogService.openCustomSnackbar(errorMessage);
+      dialogService.openCustomSnackbar({ message: errorMessage });
 
       return throwError(() => new Error(errorMessage));
     })

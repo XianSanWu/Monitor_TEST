@@ -4,15 +4,17 @@ import { ConfigService } from "../../core/services/config.service";
 import { FileApiService } from "../../api/services/file-api.service";
 import { Observable } from "rxjs";
 import { ResponseModel } from "../../core/models/base.model";
-import { SearchResponse } from "../../core/models/responses/test1.model";
+import { WorkflowStepsSearchResponse } from "../../core/models/responses/workflow-steps.model";
+import { HttpMethod } from "../../core/enums/http-method";
+import { WorkflowStepsSearchListRequest } from "../../core/models/requests/workflow-steps.model";
 
 @Injectable()
 export class TestManageService {
   private baseUrl: string = "";
   readonly uploadFunc = 'upload/';
   readonly downloadFunc = 'download/';
-  readonly workflowStepsFunc = 'workflowsteps/'
-  readonly searchListFunc = 'searchList/';
+  readonly workflowStepsFunc = 'WorkflowSteps/'
+  readonly searchListFunc = 'SearchList/';
 
   constructor(
     private apiService: ApiService,
@@ -26,8 +28,8 @@ export class TestManageService {
 
 
 
-  getSearchList(req: any): Observable<ResponseModel<SearchResponse>> {
-    return this.apiService.doSend("post", this.baseUrl + this.workflowStepsFunc + this.searchListFunc, req);
+  getSearchList(req: WorkflowStepsSearchListRequest): Observable<ResponseModel<WorkflowStepsSearchResponse>> {
+    return this.apiService.doSend(HttpMethod.POST, this.baseUrl + this.workflowStepsFunc + this.searchListFunc, req);
   }
 
   uploadFile(selectedFile: File) {

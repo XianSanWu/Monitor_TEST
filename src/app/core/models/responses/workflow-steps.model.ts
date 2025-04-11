@@ -1,5 +1,5 @@
 
-export interface SearchResponse {
+export interface WorkflowStepsSearchResponse {
   SearchItem: SearchItem[];
   Page: {
     PageSize: number;
@@ -23,4 +23,18 @@ export interface SearchItem {
   ActiveType: string | null;
   SN: string;
   SeqNo: number;
+}
+
+
+
+export interface WorkflowStepsKafkaResponse {
+  PartitionLags: KafkaLagInfo[];
+  TotalLag: number;
+}
+
+export interface KafkaLagInfo {
+  Partition: number;
+  CommittedOffset: number;
+  HighWatermark: number;
+  Lag: number;
 }

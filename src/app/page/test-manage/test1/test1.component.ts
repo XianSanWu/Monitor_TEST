@@ -16,8 +16,9 @@ import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
 import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/custom-filter.component';
 import { Option, PageBase } from '../../../core/models/common/base.model';
 import { TestManageService } from '../test-manage.service';
-import { RestStatus } from '../../../common/enums/rest-enum';
+import { RestStatus } from '../../../core/enums/rest-enum';
 import { BaseComponent } from '../../base.component';
+import { FieldModel, WorkflowStepsKafkaRequest, WorkflowStepsSearchListRequest } from '../../../core/models/requests/workflow-steps.model';
 
 @Component({
   selector: 'test1',
@@ -210,13 +211,14 @@ export default class Test1Component extends BaseComponent {
     )
 
     // 組裝請求資料
-    const reqData = {
+    const reqData : WorkflowStepsSearchListRequest = {
       page: pageBase,
       sortModel: sortModel,
-      filterModel: filterModel
+      filterModel: filterModel,
+      fieldModel: new FieldModel({channel:''})
     };
 
-    console.log('requestData', reqData)
+    // console.log('requestData', reqData)
 
     this.testManageService.getSearchList(reqData)
       .pipe(
@@ -248,7 +250,7 @@ export default class Test1Component extends BaseComponent {
 
   //  **處理分頁按鈕點擊**
   onPageChange(page: number) {
-    console.log('page', page)
+    // console.log('page', page)
     if (page < 1 || page > this.totalPages) return; // 避免超過範圍
     this.currentPage = page;
     this.loadData();

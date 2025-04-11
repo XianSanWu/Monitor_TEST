@@ -3,7 +3,8 @@ import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ResponseModel } from '../../core/models/base.model';
-import { RestStatus } from '../../common/enums/rest-enum';
+import { RestStatus } from '../../core/enums/rest-enum';
+import { HttpMethod } from '../../core/enums/http-method';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,7 @@ export class ApiService {
   });
 
   doSend<T>(
-    method: 'get' | 'post' | 'put' | 'delete',
+    method: HttpMethod.GET | HttpMethod.POST | HttpMethod.PUT | HttpMethod.DELETE,
     url: string,
     body?: any,
     params?: HttpParams,
@@ -34,16 +35,16 @@ export class ApiService {
     let errorMsg: { message: string } = { message: '' };  // 用對象包裝錯誤訊息
 
     switch (method) {
-      case 'get':
+      case HttpMethod.GET:
         request = this.http.get<ResponseModel<T>>(url, { headers: requestHeaders, params });
         break;
-      case 'post':
+      case HttpMethod.POST:
         request = this.http.post<ResponseModel<T>>(url, body, { headers: requestHeaders });
         break;
-      case 'put':
+      case HttpMethod.PUT:
         request = this.http.put<ResponseModel<T>>(url, body, { headers: requestHeaders });
         break;
-      case 'delete':
+      case HttpMethod.DELETE:
         request = this.http.delete<ResponseModel<T>>(url, { headers: requestHeaders, body });
         break;
       default:

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BaseComponent } from '../../base.component';
 import { CdpManageService } from '../cdp-manage.service';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -6,12 +6,16 @@ import { CommonModule } from '@angular/common';
 import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
 import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
 import { GridApi, ColDef } from 'ag-grid-community';
-import { catchError, tap, takeUntil, finalize } from 'rxjs';
+import { catchError, tap, takeUntil, finalize, forkJoin, of } from 'rxjs';
 import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/custom-filter.component';
 import { Option, PageBase } from '../../../core/models/common/base.model';
 import { DialogService } from '../../../core/services/dialog.service';
 import { AttoProgressComponent } from '../../../component/form/atto-progress/atto-progress.component';
 import { ConfigService } from '../../../core/services/config.service';
+import { WorkflowStepsKafkaRequest, WorkflowStepsSearchListRequest } from '../../../core/models/requests/workflow-steps.model';
+import { LoadingService } from '../../../core/services/loading.service';
+import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
+import { WorkflowStepsKafkaResponse } from '../../../core/models/responses/workflow-steps.model';
 
 @Component({
   selector: 'edm',
@@ -22,17 +26,20 @@ import { ConfigService } from '../../../core/services/config.service';
     BasicInputComponent,
     AgGridModule,
     AttoProgressComponent,
+    LoadingIndicatorComponent
   ],
-  providers: [CdpManageService],
+  providers: [LoadingService, CdpManageService],
   templateUrl: './edm.component.html',
   styleUrl: './edm.component.scss'
 })
-export default class EdmComponent extends BaseComponent {
+export default class EdmComponent extends BaseComponent implements OnInit {
   constructor(
     // private dialog: MatDialog,
     private dialogService: DialogService,
     private cdpManageService: CdpManageService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private loadingService: LoadingService,
+
   ) {
     super();
     // 初始化表單
@@ -44,9 +51,60 @@ export default class EdmComponent extends BaseComponent {
       this.edmAttoProgress = data?.EDM_ATTO_PROGRESS;
     });
   }
-  edmAttoProgress = new Array<string>();
 
+  edmAttoProgress = new Array<string>();
   validateForm: FormGroup;
+  respData1?: WorkflowStepsKafkaResponse;
+
+  ngOnInit(): void {
+    this.loadingService.show();
+    const list1_reqData = new WorkflowStepsKafkaRequest({
+      channel: this.validateForm.get('channel')?.value
+    })
+    // const list2_reqData = new WorkflowStepsKafkaRequest({
+    //   channel: ''
+    // })
+
+    forkJoin({
+      list1: this.cdpManageService.GetKafkaLag(list1_reqData).pipe(
+        catchError(err => {
+          this.dialogService.openCustomSnackbar({ message: '錯誤在API：GetKafkaLag。' + err.message || '錯誤在API：GetKafkaLag' });
+          console.error('[list1] 錯誤在API：GetKafkaLag。API error:', err);
+          return of(null); // 不要 throw，讓流程繼續
+        })
+      ),
+      // list2: this.cdpManageService.GetKafkaLag(list2_reqData).pipe(
+      //   catchError(err => {
+      //     this.dialogService.openCustomSnackbar({ message: 'Error on List2' });
+      //     console.error('[list2] API error:', err);
+      //     return of(null); // 不要 throw，讓流程繼續
+      //   })
+      // ),
+      // list3: this.cdpManageService.GetKafkaLag(list2_reqData).pipe(
+      //   catchError(err => {
+      //     this.dialogService.openCustomSnackbar({ message: 'Error on list3' });
+      //     console.error('[list3] API error:', err);
+      //     return of(null); // 不要 throw，讓流程繼續
+      //   })
+      // ),
+    })
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.loadingService.hide();
+        })
+      )
+      .subscribe(result => {
+        // 同時取得多個 API 的回傳結果
+        if (result.list1) {
+          this.respData1 = result.list1.Data;
+          console.log('list1 成功', this.respData1);
+        }
+      });
+
+  }
+
+
 
   //#region Ag-grid
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
@@ -93,6 +151,7 @@ export default class EdmComponent extends BaseComponent {
 
   //  **呼叫後端 API 載入資料**
   loadData() {
+    //#region 組裝請求資料
     // 取得 ag-Grid 的排序資訊
     const columnModel = this.gridApi?.getColumnState() || [];
     // console.log('columnModel', columnModel)
@@ -133,16 +192,13 @@ export default class EdmComponent extends BaseComponent {
     )
 
     // 組裝請求資料
-    const reqData = {
-      fieldModel: this.validateForm.getRawValue(),
+    const reqData: WorkflowStepsSearchListRequest = {
       page: pageBase,
       sortModel: sortModel,
-      filterModel: filterModel
+      filterModel: filterModel,
+      fieldModel: this.validateForm.getRawValue(),
     };
-    const reqData1 = this.validateForm.getRawValue();
-
-    console.log('requestData', reqData)
-    console.log('reqData1', reqData1)
+    //#endregion
 
     this.cdpManageService.getSearchList(reqData)
       .pipe(
@@ -165,7 +221,6 @@ export default class EdmComponent extends BaseComponent {
 
   //  **處理分頁按鈕點擊**
   onPageChange(page: number) {
-    console.log('page', page)
     if (page < 1 || page > this.totalPages) return; // 避免超過範圍
     this.currentPage = page;
     this.loadData();
