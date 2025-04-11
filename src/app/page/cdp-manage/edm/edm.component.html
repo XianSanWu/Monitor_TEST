@@ -5,12 +5,11 @@
 </div>
 
 <!-- 狀態流程顯示 -->
-<div>
-  <atto-progress
-  [items]="edmAttoProgress"
-  >
-  </atto-progress>
+<collapsible-section title="🧭 狀態流程顯示">
+<div style="display: flex; justify-content: flex-start">
+  <atto-progress [items]="edmAttoProgress"> </atto-progress>
 </div>
+</collapsible-section>
 
 <!-- 自訂表單 -->
 <div [formGroup]="validateForm">
@@ -29,41 +28,62 @@
 </div>
 
 <!-- 卡夫卡工作量 -->
-<div *ngIf="(respData1?.PartitionLags?.length ?? 0) > 0">
-  <h5 class="mt-3">📊 Kafka Partition Lag (卡夫卡工作量)</h5>
-  <div class="row g-3 mt-2">
-    <div class="col-md-6 col-lg-4" *ngFor="let item of respData1?.PartitionLags">
-      <div class="card shadow-sm">
-        <div class="card-header bg-dark text-white">
-          🧩 Partition {{ item.Partition }}
-        </div>
-        <div class="card-body">
-          <p class="mb-1"><strong>Committed Offset:</strong> {{ item.CommittedOffset }}</p>
-          <p class="mb-1"><strong>High Watermark:</strong> {{ item.HighWatermark }}</p>
-          <p class="mb-0">
-            <strong>Lag:</strong>
-            <span
-              [ngClass]="{
-                'text-success fw-bold': item.Lag <= 5,
-                'text-warning fw-bold': item.Lag > 5 && item.Lag <= 10,
-                'text-danger fw-bold': item.Lag > 10
-              }"
-            >
-              {{ item.Lag }}
-            </span>
-          </p>
+<collapsible-section title="📊 Kafka Partition Lag (卡夫卡工作量)">
+  <div *ngIf="(respData1?.PartitionLags?.length ?? 0) > 0">
+    <!-- <h5 class="mt-3">📊 Kafka Partition Lag (卡夫卡工作量)</h5> -->
+    <div class="row g-3 mt-2">
+      <div
+        class="col-md-6 col-lg-4"
+        *ngFor="let item of respData1?.PartitionLags"
+      >
+        <div class="card shadow-sm">
+          <div class="card-header bg-dark text-white">
+            🧩 Partition {{ item?.Partition }}
+          </div>
+          <div class="card-body">
+            <p class="mb-1">
+              <strong>Committed Offset:</strong> {{ item?.CommittedOffset }}
+            </p>
+            <p class="mb-1">
+              <strong>High Watermark:</strong> {{ item?.HighWatermark }}
+            </p>
+            <p class="mb-0">
+              <strong>Lag:</strong>
+              <span
+                [ngClass]="{
+                  'text-success fw-bold': (item?.Lag ?? 0) <= 10,
+                  'text-warning fw-bold':
+                    (item?.Lag ?? 0) > 10 && item.Lag <= 100,
+                  'text-danger fw-bold': (item?.Lag ?? 0) > 100
+                }"
+              >
+                {{ item.Lag }}
+              </span>
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="alert alert-info mt-4 text-end">
-    <strong>Total Lag: </strong> {{ respData1?.TotalLag }}
+    <div class="alert alert-info mt-4 text-end">
+      <strong>Total Lag: </strong>
+      <span
+        [ngClass]="{
+          'text-success fw-bold': (respData1?.TotalLag ?? 0) <= 10,
+          'text-warning fw-bold':
+            (respData1?.TotalLag ?? 0) > 10 &&
+            (respData1?.TotalLag ?? 0) <= 100,
+          'text-danger fw-bold': (respData1?.TotalLag ?? 0) > 100
+        }"
+      >
+        {{ respData1?.TotalLag }}
+      </span>
+    </div>
   </div>
-</div>
-
+</collapsible-section>
 
 <!-- ag-grid表單 -->
+<collapsible-section title="📋 EDM 查詢列表">
 <div class="row">
   <ag-grid-angular
     #agGrid
@@ -115,3 +135,4 @@
     </button>
   </div>
 </div>
+</collapsible-section>

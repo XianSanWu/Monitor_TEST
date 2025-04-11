@@ -16,6 +16,7 @@ import { WorkflowStepsKafkaRequest, WorkflowStepsSearchListRequest } from '../..
 import { LoadingService } from '../../../core/services/loading.service';
 import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
 import { WorkflowStepsKafkaResponse } from '../../../core/models/responses/workflow-steps.model';
+import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
 
 @Component({
   selector: 'edm',
@@ -26,7 +27,8 @@ import { WorkflowStepsKafkaResponse } from '../../../core/models/responses/workf
     BasicInputComponent,
     AgGridModule,
     AttoProgressComponent,
-    LoadingIndicatorComponent
+    LoadingIndicatorComponent,
+    CollapsibleSectionComponent
   ],
   providers: [LoadingService, CdpManageService],
   templateUrl: './edm.component.html',

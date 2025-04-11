@@ -1,0 +1,14 @@
+<div class="collapsible-section mb-3 border rounded shadow-sm">
+  <div
+    class="collapsible-header d-flex justify-content-between align-items-center px-3 py-2 bg-light"
+    (click)="toggle()"
+    role="button"
+  >
+    <h5 class="mb-0">{{ title }}</h5>
+    <i class="bi" [ngClass]="isOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+  </div>
+
+  <div *ngIf="isOpen" class="collapsible-content px-3 py-3 border-top bg-white">
+    <ng-content></ng-content>
+  </div>
+</div>
