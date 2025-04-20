@@ -16,4 +16,8 @@ export const CommonUtil = {
   isNotBlank(str: string): boolean {
     return !this.isBlank(str);
   },
+  /** 回傳加上樣式的 HTML span 字串 */
+  getColoredLabel(value: string, color: string, label: string): string {
+    return `<span style="color: ${color}; font-weight: bold;">${label}</span>`;
+  }
 }

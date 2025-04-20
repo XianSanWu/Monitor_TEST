@@ -5,7 +5,7 @@ import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
 import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
-import { GridApi, ColDef } from 'ag-grid-community';
+import { GridApi, ColDef, ICellRendererParams } from 'ag-grid-community';
 import { catchError, tap, takeUntil, finalize, forkJoin, of } from 'rxjs';
 import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/custom-filter.component';
 import { Option, PageBase } from '../../../core/models/common/base.model';
@@ -19,6 +19,7 @@ import { WorkflowStepsKafkaResponse } from '../../../core/models/responses/workf
 import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
 import { Channel } from '../../../core/enums/channel-enum';
 import { SelectFilterComponent } from '../../../component/ag-grid/select-filter/select-filter.component';
+import { CommonUtil } from '../../../common/utils/common-util';
 
 @Component({
   selector: 'edm',
@@ -129,21 +130,59 @@ export default class EdmComponent extends BaseComponent implements OnInit {
       filter: SelectFilterComponent,
       filterParams: {
         options: ['Journey', 'GroupSend'],
-        optionLabels: ['旅程', '群發']  // 添加顯示的中文標籤
+        optionLabels: ['旅程', '群發']
       },
-      valueFormatter: (params) => {
-        const value = params.value;
-        if (value === 'Journey') {
-          return '旅程'; // "旅程"
-        } else if (value === 'GroupSend') {
-          return '群發'; // "群發"
+      cellRenderer: (params: ICellRendererParams) => {
+        const value = (params.value || '').toLowerCase();
+        if (value === 'journey') {
+          return CommonUtil.getColoredLabel(value, '#8e44ad', '旅程'); // 紫色
+        } else if (value === 'groupsend') {
+          return CommonUtil.getColoredLabel(value, '#e67e22', '群發'); // 橘色
         }
-        return value; // 原始值
+        return params.value;
       }
     },
     { headerName: '旅程/群發名稱', field: 'ActivityName' },
-    { headerName: '旅程/群發狀態', field: 'ActivityStatus' },
-    { headerName: '進度狀態', field: 'ProgressStatus' },
+    {
+      headerName: '旅程/群發狀態', field: 'ActivityStatus',
+      filter: SelectFilterComponent,
+      filterParams: {
+        options: ['Completed', 'Progress'],
+        optionLabels: ['已完成', '進行中']
+      },
+      cellRenderer: (params: ICellRendererParams) => {
+        const value = (params.value || '').toLowerCase();
+        if (value === 'completed') {
+          return CommonUtil.getColoredLabel(value, '#28a745', '已完成'); // 綠
+        } else if (value === 'progress') {
+          return CommonUtil.getColoredLabel(value, '#ffc107', '進行中'); // 黃
+        }
+        return params.value;
+      }
+    },
+    {
+      headerName: '進度狀態', field: 'ProgressStatus',
+      filter: SelectFilterComponent,
+      filterParams: {
+        options: ['CDP', 'FTP', 'MailHunter', 'Completed'],
+        optionLabels: ['CDP', 'FTP', 'MailHunter', '完成']
+      },
+      cellRenderer: (params: ICellRendererParams): string => {
+        const raw = params.value || '';
+        const value = raw.toString().toLowerCase();
+
+        const wrapperStart = `<div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">`;
+        const wrapperEnd = `</div>`;
+
+        if (value === 'completed') {
+          const label = CommonUtil.getColoredLabel(value, '#28a745', '完成'); // 綠色
+          return `${wrapperStart}${label}${wrapperEnd}`;
+        } else {
+          const processing = CommonUtil.getColoredLabel(value, '#17a2b8', '處理中'); // 青色
+          return `${wrapperStart}<span>${raw}</span>${processing}${wrapperEnd}`;
+        }
+      }
+    },
     { headerName: '節點名稱', field: 'NodeName' },
     { headerName: '建立時間', field: 'CreateAt' },
     { headerName: '更新時間', field: 'UpdateAt' },
@@ -153,6 +192,7 @@ export default class EdmComponent extends BaseComponent implements OnInit {
     { headerName: '群發建立時間', field: 'GroupSendCreateAt' },
     { headerName: '群發更新時間', field: 'GroupSendUpdateAt' },
   ];
+
 
 
   // 分頁相關
