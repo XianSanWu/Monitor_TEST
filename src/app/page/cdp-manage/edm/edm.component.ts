@@ -117,13 +117,13 @@ export default class EdmComponent extends BaseComponent implements OnInit {
   rowData: any[] = [];
   defaultColDef = {
     sortable: true,
-    // filter: CustomFilterComponent
+    filter: CustomFilterComponent
   };
 
   columnDefs: ColDef[] = [
-    { headerName: '愛酷 SendUuid', field: 'SendUuid', filter: CustomFilterComponent },
-    { headerName: '愛酷 BatchId', field: 'BatchId', filter: CustomFilterComponent },
-    { headerName: '地端 CdpUuid', field: 'CdpUuid', filter: CustomFilterComponent },
+    { headerName: '愛酷 SendUuid', field: 'SendUuid' },
+    { headerName: '愛酷 BatchId', field: 'BatchId' },
+    { headerName: '地端 CdpUuid', field: 'CdpUuid' },
     {
       headerName: '旅程/群發', field: 'ChannelType',
       filter: SelectFilterComponent,
@@ -141,17 +141,17 @@ export default class EdmComponent extends BaseComponent implements OnInit {
         return value; // 原始值
       }
     },
-    { headerName: '旅程/群發名稱', field: 'ActivityName', filter: CustomFilterComponent },
-    { headerName: '旅程/群發狀態', field: 'ActivityStatus', filter: CustomFilterComponent },
-    { headerName: '進度狀態', field: 'ProgressStatus', filter: CustomFilterComponent },
-    { headerName: '節點名稱', field: 'NodeName', filter: CustomFilterComponent },
-    { headerName: '建立時間', field: 'CreateAt', filter: CustomFilterComponent },
-    { headerName: '更新時間', field: 'UpdateAt', filter: CustomFilterComponent },
-    { headerName: '旅程建立時間', field: 'JourneyCreateAt', filter: CustomFilterComponent },
-    { headerName: '旅程更新時間', field: 'JourneyUpdateAt', filter: CustomFilterComponent },
-    { headerName: '旅程完成時間', field: 'JourneyFinishAt', filter: CustomFilterComponent },
-    { headerName: '群發建立時間', field: 'GroupSendCreateAt', filter: CustomFilterComponent },
-    { headerName: '群發更新時間', field: 'GroupSendUpdateAt', filter: CustomFilterComponent },
+    { headerName: '旅程/群發名稱', field: 'ActivityName' },
+    { headerName: '旅程/群發狀態', field: 'ActivityStatus' },
+    { headerName: '進度狀態', field: 'ProgressStatus' },
+    { headerName: '節點名稱', field: 'NodeName' },
+    { headerName: '建立時間', field: 'CreateAt' },
+    { headerName: '更新時間', field: 'UpdateAt' },
+    { headerName: '旅程建立時間', field: 'JourneyCreateAt' },
+    { headerName: '旅程更新時間', field: 'JourneyUpdateAt' },
+    { headerName: '旅程完成時間', field: 'JourneyFinishAt' },
+    { headerName: '群發建立時間', field: 'GroupSendCreateAt' },
+    { headerName: '群發更新時間', field: 'GroupSendUpdateAt' },
   ];
 
 
