@@ -6,7 +6,8 @@ import {
 } from 'ag-grid-community';
 
 interface SelectFilterParams extends IFilterParams {
-  options: string[];
+  options: string[]; // 英文選項
+  optionLabels: string[]; // 中文顯示選項
 }
 
 export class SelectFilterComponent implements IFilterComp {
@@ -20,19 +21,27 @@ export class SelectFilterComponent implements IFilterComp {
     this.params = params as SelectFilterParams;
 
     const options = this.params.options ?? [];
-    this.createGui(options);
+    const optionLabels = this.params.optionLabels ?? [];
+
+    // 確保 options 和 optionLabels 長度一致
+    if (options.length !== optionLabels.length) {
+      console.error("options 和 optionLabels 必須長度相同");
+      return;
+    }
+
+    this.createGui(options, optionLabels);
   }
 
   // 建立下拉選單 GUI
-  private createGui(options: string[]): void {
+  private createGui(options: string[], optionLabels: string[]): void {
     this.gui = document.createElement('div');
     this.gui.innerHTML = `
     <div class="custom-filter-wrapper">
-    <div class="filter-header">請選擇搜尋條件</div>
+      <div class="filter-header">請選擇搜尋條件</div>
       <div class="filter-body">
         <select class="filter-select" id="filterSelect">
           <option value="">-- 全部 --</option>
-          ${options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+          ${options.map((opt, index) => `<option value="${opt}">${optionLabels[index]}</option>`).join('')}
         </select>
       </div>
     </div>

@@ -128,7 +128,17 @@ export default class EdmComponent extends BaseComponent implements OnInit {
       headerName: '旅程/群發', field: 'ChannelType',
       filter: SelectFilterComponent,
       filterParams: {
-        options: ['Journey', 'GroupSend']
+        options: ['Journey', 'GroupSend'],
+        optionLabels: ['旅程', '群發']  // 添加顯示的中文標籤
+      },
+      valueFormatter: (params) => {
+        const value = params.value;
+        if (value === 'Journey') {
+          return '旅程'; // "旅程"
+        } else if (value === 'GroupSend') {
+          return '群發'; // "群發"
+        }
+        return value; // 原始值
       }
     },
     { headerName: '旅程/群發名稱', field: 'ActivityName', filter: CustomFilterComponent },
