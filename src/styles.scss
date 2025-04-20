@@ -12,6 +12,7 @@ ag-grid-angular {
   z-index: 0 !important;
 }
 
+//AG-Grid
 .custom-filter-wrapper {
   font-family: 'Arial', sans-serif;
   background-color: #f4f4f4;
@@ -34,6 +35,7 @@ ag-grid-angular {
   justify-content: center;
 }
 
+//AG-Grid [input]
 .filter-input {
   width: 100%;
   padding: 10px;
@@ -53,6 +55,32 @@ ag-grid-angular {
 }
 
 .filter-input:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+//AG-Grid [select]
+.filter-select {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s ease-in-out;
+  background-color: #fff;
+  // appearance: none; /* 移除原生箭頭 */
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  cursor: pointer;
+}
+
+.filter-select:focus {
+  border-color: #5c9ded;
+}
+
+.filter-select:disabled {
   background-color: #f0f0f0;
   cursor: not-allowed;
 }
