@@ -17,6 +17,7 @@ import { LoadingService } from '../../../core/services/loading.service';
 import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
 import { WorkflowStepsKafkaResponse } from '../../../core/models/responses/workflow-steps.model';
 import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
+import { Channel } from '../../../core/enums/channel-enum';
 
 @Component({
   selector: 'edm',
@@ -46,7 +47,7 @@ export default class EdmComponent extends BaseComponent implements OnInit {
     super();
     // 初始化表單
     this.validateForm = new FormGroup({
-      channel: new FormControl('EDM', []),
+      channel: new FormControl(Channel.EDM, []),
     });
 
     this.configService.configData$.subscribe(data => {
@@ -100,7 +101,7 @@ export default class EdmComponent extends BaseComponent implements OnInit {
         // 同時取得多個 API 的回傳結果
         if (result.list1) {
           this.respData1 = result.list1.Data;
-          console.log('list1 成功', this.respData1);
+          // console.log('list1 成功', this.respData1);
         }
       });
 
@@ -119,23 +120,19 @@ export default class EdmComponent extends BaseComponent implements OnInit {
   };
 
   columnDefs: ColDef[] = [
-    // { headerName: 'SN', field: 'SN' },
-    // { headerName: 'WorkflowUuid', field: 'WorkflowUuid' },
     { headerName: '愛酷 SendUuid', field: 'SendUuid' },
     { headerName: '愛酷 BatchId', field: 'BatchId' },
-    // { headerName: 'ActivityId', field: 'ActivityId' },
-    { headerName: '進度狀態', field: 'Status' },
-    { headerName: '來源', field: 'Channel' },
+    { headerName: '地端 CdpUuid', field: 'CdpUuid' },
     { headerName: '旅程/群發', field: 'ChannelType' },
     { headerName: '旅程/群發名稱', field: 'ActivityName' },
     { headerName: '旅程/群發狀態', field: 'ActivityStatus' },
-    // { headerName: 'NodeId', field: 'NodeId' },
+    { headerName: '進度狀態', field: 'ProgressStatus' },
     { headerName: '節點名稱', field: 'NodeName' },
-    // { headerName: 'FTP檔案名稱', field: 'UploadFileName' },
     { headerName: '建立時間', field: 'CreateAt' },
     { headerName: '更新時間', field: 'UpdateAt' },
     { headerName: '旅程建立時間', field: 'JourneyCreateAt' },
     { headerName: '旅程更新時間', field: 'JourneyUpdateAt' },
+    { headerName: '旅程完成時間', field: 'JourneyFinishAt' },
     { headerName: '群發建立時間', field: 'GroupSendCreateAt' },
     { headerName: '群發更新時間', field: 'GroupSendUpdateAt' },
   ];
