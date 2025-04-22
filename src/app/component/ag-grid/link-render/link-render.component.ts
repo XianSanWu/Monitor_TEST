@@ -27,7 +27,7 @@ export class LinkRenderComponent implements ICellRendererAngularComp {
     this.routeParams = params?.routeParams || {};
 
     this.fullLink = this.buildLink(this.basePath, this.routeParams, this.value);
-    console.log('fullLink:', this.fullLink); // 最終路徑
+    // console.log('fullLink:', this.fullLink); // 最終路徑
   }
 
   // 動態組合路徑和參數

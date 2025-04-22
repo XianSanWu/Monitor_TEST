@@ -13,7 +13,7 @@ import { AttoProgressComponent } from '../../../../component/form/atto-progress/
 import { BasicInputComponent } from '../../../../component/form/basic-input/basic-input.component';
 import { CollapsibleSectionComponent } from '../../../../component/form/collapsible-section/collapsible-section.component';
 import { LoadingIndicatorComponent } from '../../../../component/loading/loading-indicator/loading-indicator.component';
-import { Option,PageBase } from '../../../../core/models/common/base.model';
+import { Option, PageBase } from '../../../../core/models/common/base.model';
 import { WorkflowStepsKafkaRequest, WorkflowStepsSearchListRequest } from '../../../../core/models/requests/workflow-steps.model';
 import { WorkflowStepsKafkaResponse } from '../../../../core/models/responses/workflow-steps.model';
 import { ConfigService } from '../../../../core/services/config.service';
@@ -39,7 +39,7 @@ import { Channel } from '../../../../core/enums/channel-enum';
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
-export default class EdmComponent extends BaseComponent implements OnInit {
+export default class MainComponent extends BaseComponent implements OnInit {
   constructor(
     // private dialog: MatDialog,
     private dialogService: DialogService,
@@ -133,12 +133,22 @@ export default class EdmComponent extends BaseComponent implements OnInit {
         // routeParams: {  }  // 動態參數部分
       }
     },
-    { headerName: '愛酷 SendUuid 排序', field: 'SendUuidSort' },//, maxWidth:40
-    { headerName: '愛酷 BatchId', field: 'BatchId' },
-    { headerName: '地端 CdpUuid', field: 'CdpUuid' },
+    {
+      headerName: '批號', field: 'SendUuidSort',
+      maxWidth: 90,
+      cellClass: 'centered-cell',
+      headerClass: 'centered-header',
+      filter: false // 關掉這一欄的 filter
+    },
+    {
+      headerName: '愛酷 BatchId', field: 'BatchId',
+      maxWidth: 160
+    },
+    // { headerName: '地端 CdpUuid', field: 'CdpUuid' },
     {
       headerName: '旅程/群發', field: 'ChannelType',
       filter: SelectFilterComponent,
+      maxWidth: 140,
       filterParams: {
         options: ['Journey', 'GroupSend'],
         optionLabels: ['旅程', '群發']
@@ -154,6 +164,7 @@ export default class EdmComponent extends BaseComponent implements OnInit {
       }
     },
     { headerName: '旅程/群發名稱', field: 'ActivityName' },
+    { headerName: '節點名稱', field: 'NodeName' },
     {
       headerName: '旅程/群發狀態', field: 'ActivityStatus',
       filter: SelectFilterComponent,
@@ -194,14 +205,35 @@ export default class EdmComponent extends BaseComponent implements OnInit {
         }
       }
     },
-    { headerName: '節點名稱', field: 'NodeName' },
-    { headerName: '建立時間', field: 'CreateAt' },
-    { headerName: '更新時間', field: 'UpdateAt' },
-    { headerName: '旅程建立時間', field: 'JourneyCreateAt' },
-    { headerName: '旅程更新時間', field: 'JourneyUpdateAt' },
-    { headerName: '旅程完成時間', field: 'JourneyFinishAt' },
-    { headerName: '群發建立時間', field: 'GroupSendCreateAt' },
-    { headerName: '群發更新時間', field: 'GroupSendUpdateAt' },
+    {
+      headerName: '建立時間', field: 'CreateAt',
+      maxWidth: 170,
+      cellRenderer: (params: ICellRendererParams) => {
+        const rawValue = params.value || '';
+        if (rawValue === '0001-01-01 00:00:00') {
+          return '';
+        }
+
+        return  rawValue;
+      }
+    },
+    {
+      headerName: '更新時間', field: 'UpdateAt',
+      maxWidth: 170,
+      cellRenderer: (params: ICellRendererParams) => {
+        const rawValue = params.value || '';
+        if (rawValue === '0001-01-01 00:00:00') {
+          return '';
+        }
+
+        return  rawValue;
+      }
+    },
+    // { headerName: '旅程建立時間', field: 'JourneyCreateAt' },
+    // { headerName: '旅程更新時間', field: 'JourneyUpdateAt' },
+    // { headerName: '旅程完成時間', field: 'JourneyFinishAt' },
+    // { headerName: '群發建立時間', field: 'GroupSendCreateAt' },
+    // { headerName: '群發更新時間', field: 'GroupSendUpdateAt' },
   ];
 
   //強制Ag-grid資料複製 (因複製功能為企業板才可以用)
@@ -317,4 +349,5 @@ export default class EdmComponent extends BaseComponent implements OnInit {
     this.loadData();
   }
   //#endregion
+
 }

@@ -8,8 +8,24 @@ body {
 }
 
 
+//AG-Grid
 ag-grid-angular {
   z-index: 0 !important;
+}
+
+//AG-Grid
+/* 內容置中 */
+.centered-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+//AG-Grid
+/* 標題置中 */
+.centered-header .ag-header-cell-label {
+  justify-content: center !important;
 }
 
 //AG-Grid
