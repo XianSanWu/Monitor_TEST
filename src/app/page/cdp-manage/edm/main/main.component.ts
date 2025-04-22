@@ -1,28 +1,30 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { BaseComponent } from '../../base.component';
-import { CdpManageService } from '../cdp-manage.service';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+
 import { CommonModule } from '@angular/common';
-import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
-import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
-import { GridApi, ColDef, ICellRendererParams } from 'ag-grid-community';
-import { catchError, tap, takeUntil, finalize, forkJoin, of } from 'rxjs';
-import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/custom-filter.component';
-import { Option, PageBase } from '../../../core/models/common/base.model';
-import { DialogService } from '../../../core/services/dialog.service';
-import { AttoProgressComponent } from '../../../component/form/atto-progress/atto-progress.component';
-import { ConfigService } from '../../../core/services/config.service';
-import { WorkflowStepsKafkaRequest, WorkflowStepsSearchListRequest } from '../../../core/models/requests/workflow-steps.model';
-import { LoadingService } from '../../../core/services/loading.service';
-import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
-import { WorkflowStepsKafkaResponse } from '../../../core/models/responses/workflow-steps.model';
-import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
-import { Channel } from '../../../core/enums/channel-enum';
-import { SelectFilterComponent } from '../../../component/ag-grid/select-filter/select-filter.component';
-import { CommonUtil } from '../../../common/utils/common-util';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { AgGridModule, AgGridAngular } from 'ag-grid-angular';
+import { GridApi, ColDef, ICellRendererParams, CellDoubleClickedEvent } from 'ag-grid-community';
+import { forkJoin, catchError, of, takeUntil, finalize, tap } from 'rxjs';
+import { CommonUtil } from '../../../../common/utils/common-util';
+import { CustomFilterComponent } from '../../../../component/ag-grid/custom-filter/custom-filter.component';
+import { LinkRenderComponent } from '../../../../component/ag-grid/link-render/link-render.component';
+import { SelectFilterComponent } from '../../../../component/ag-grid/select-filter/select-filter.component';
+import { AttoProgressComponent } from '../../../../component/form/atto-progress/atto-progress.component';
+import { BasicInputComponent } from '../../../../component/form/basic-input/basic-input.component';
+import { CollapsibleSectionComponent } from '../../../../component/form/collapsible-section/collapsible-section.component';
+import { LoadingIndicatorComponent } from '../../../../component/loading/loading-indicator/loading-indicator.component';
+import { Option,PageBase } from '../../../../core/models/common/base.model';
+import { WorkflowStepsKafkaRequest, WorkflowStepsSearchListRequest } from '../../../../core/models/requests/workflow-steps.model';
+import { WorkflowStepsKafkaResponse } from '../../../../core/models/responses/workflow-steps.model';
+import { ConfigService } from '../../../../core/services/config.service';
+import { DialogService } from '../../../../core/services/dialog.service';
+import { LoadingService } from '../../../../core/services/loading.service';
+import { BaseComponent } from '../../../base.component';
+import { CdpManageService } from '../../cdp-manage.service';
+import { Channel } from '../../../../core/enums/channel-enum';
 
 @Component({
-  selector: 'edm',
+  selector: 'edm-main',
   standalone: true,
   imports: [
     CommonModule,
@@ -34,8 +36,8 @@ import { CommonUtil } from '../../../common/utils/common-util';
     CollapsibleSectionComponent
   ],
   providers: [LoadingService, CdpManageService],
-  templateUrl: './edm.component.html',
-  styleUrl: './edm.component.scss'
+  templateUrl: './main.component.html',
+  styleUrl: './main.component.scss'
 })
 export default class EdmComponent extends BaseComponent implements OnInit {
   constructor(
@@ -116,13 +118,22 @@ export default class EdmComponent extends BaseComponent implements OnInit {
 
   gridApi!: GridApi;
   rowData: any[] = [];
+
   defaultColDef = {
     sortable: true,
-    filter: CustomFilterComponent
+    filter: CustomFilterComponent,
   };
 
   columnDefs: ColDef[] = [
-    { headerName: '愛酷 SendUuid', field: 'SendUuid' },
+    {
+      headerName: '愛酷 SendUuid', field: 'SendUuid',
+      cellRenderer: LinkRenderComponent,
+      cellRendererParams: {
+        basePath: 'cdp/edm_senduuid_detail',  // 固定路徑部分
+        // routeParams: {  }  // 動態參數部分
+      }
+    },
+    { headerName: '愛酷 SendUuid 排序', field: 'SendUuidSort' },//, maxWidth:40
     { headerName: '愛酷 BatchId', field: 'BatchId' },
     { headerName: '地端 CdpUuid', field: 'CdpUuid' },
     {
@@ -193,7 +204,19 @@ export default class EdmComponent extends BaseComponent implements OnInit {
     { headerName: '群發更新時間', field: 'GroupSendUpdateAt' },
   ];
 
-
+  //強制Ag-grid資料複製 (因複製功能為企業板才可以用)
+  onCellDoubleClicked(event: CellDoubleClickedEvent) {
+    const value = event.value;
+    if (value !== null && value !== undefined) {
+      navigator.clipboard.writeText(value?.toString()?.trim())
+        .then(() => {
+          this.dialogService.openCustomSnackbar({ title: '提示訊息', message: '複製成功：' + value || '複製失敗' });
+        })
+        .catch(err => {
+          this.dialogService.openCustomSnackbar({ title: '提示訊息', message: '複製失敗：' + err.message || '複製失敗' });
+        });
+    }
+  }
 
   // 分頁相關
   pageSize = 10; // 每頁顯示筆數
@@ -256,7 +279,7 @@ export default class EdmComponent extends BaseComponent implements OnInit {
     };
     //#endregion
 
-    this.cdpManageService.getSearchList(reqData)
+    this.cdpManageService.getSearchListList(reqData)
       .pipe(
         catchError((err) => {
           this.dialogService.openCustomSnackbar({

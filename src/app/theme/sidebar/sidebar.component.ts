@@ -12,8 +12,8 @@ export const OtherMenu: MenuItem[] = [
   {
     title: "CDP工作流程管理", icon: "gear", link: '',
     children: [
-      { title: "EDM", icon: "file-earmark-text", link: "/cdp/edm", children: [] },
-      { title: "SMS", icon: "file-earmark-text", link: "/cdp/sms", children: [] },
+      { title: "EDM", icon: "file-earmark-text", link: "/cdp/edm_main", children: [] },
+      // { title: "SMS", icon: "file-earmark-text", link: "/cdp/sms_main", children: [] },
     ]
   }
 ];

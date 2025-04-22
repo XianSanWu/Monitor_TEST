@@ -4,7 +4,21 @@
     (click)="toggle()"
     role="button"
   >
-    <h5 class="mb-0">{{ title }}</h5>
+    <div class="d-flex align-items-center">
+      <h5 class="mb-0 me-2">{{ title }}</h5>
+
+      <!-- 顯示 tooltip 問號 -->
+      <span
+        *ngIf="tooltipText"
+        class="tooltip-container"
+        (click)="$event.stopPropagation()"
+      >
+        <i class="bi bi-question-circle" (click)="tooltipToggle()"></i>
+        <span *ngIf="isTooltipOpen" class="tooltip-box">{{ tooltipText }}</span>
+      </span>
+    </div>
+
+    <!-- 顯示 收合 -->
     <i class="bi" [ngClass]="isOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
   </div>
 

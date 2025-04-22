@@ -2,11 +2,15 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'edm',
-    loadComponent: () => import('./edm/edm.component'),
+    path: 'edm_main',
+    loadComponent: () => import('./edm/main/main.component'),
   },
   {
-    path: 'sms',
-    loadComponent: () => import('./sms/sms.component'),
-  }
+    path: 'edm_senduuid_detail/:SendUuid',
+    loadComponent: () => import('./edm/senduuid-detail/senduuid-detail.component'),
+  },
+  // {
+  //   path: 'sms',
+  //   loadComponent: () => import('./sms/sms.component'),
+  // }
 ];

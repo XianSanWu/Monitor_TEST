@@ -87,7 +87,7 @@
 </collapsible-section>
 
 <!-- ag-grid表單 -->
-<collapsible-section title="📋 EDM 查詢列表">
+<collapsible-section title="📋 EDM 查詢列表" tooltipText="點擊欄位兩下，可以複製該欄位資料，單擊可跳轉超連結（若為網址）">
   <div class="row">
     <ag-grid-angular
       #agGrid
@@ -101,6 +101,7 @@
       (gridReady)="onGridReady($event)"
       (sortChanged)="onSortChanged()"
       (filterChanged)="onFilterChanged()"
+      (cellDoubleClicked)="onCellDoubleClicked($event)"
     >
     </ag-grid-angular>
 

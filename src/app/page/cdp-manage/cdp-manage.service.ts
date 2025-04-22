@@ -11,6 +11,7 @@ import { HttpMethod } from "../../core/enums/http-method";
 export class CdpManageService {
   private baseUrl: string = "";
   readonly workflowStepsFunc = 'WorkflowSteps/'
+  readonly searchLastListFunc = 'SearchLastList/';
   readonly searchListFunc = 'SearchList/';
   readonly getKafkaLagFunc = 'GetKafkaLag/';
 
@@ -21,6 +22,11 @@ export class CdpManageService {
     this.configService.configData$.subscribe(data => {
       this.baseUrl = data?.SERVER_URL + data?.API_URL;
     });
+  }
+
+  //查詢工作流程管理 (最後一筆)
+  getSearchListList(req: WorkflowStepsSearchListRequest): Observable<ResponseModel<WorkflowStepsSearchResponse>> {
+    return this.apiService.doSend(HttpMethod.POST, this.baseUrl + this.workflowStepsFunc + this.searchLastListFunc, req);
   }
 
   //查詢工作流程管理
