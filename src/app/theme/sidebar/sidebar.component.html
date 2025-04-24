@@ -19,13 +19,13 @@
           (click)="onMenuItemClick()"
         >
           <i class="bi" [ngClass]="'bi-' + item.icon"></i>
-          <span>{{ item.title }}</span>
+          <span><strong>&nbsp;{{ item.title }}</strong></span>
         </a>
 
         <mat-expansion-panel *ngIf="(item.children?.length || 0) > 0">
           <mat-expansion-panel-header class="expansion-header">
             <i class="bi" [ngClass]="'bi-' + item.icon"></i>
-            <span>{{ item.title }}</span>
+            <span><strong>&nbsp;{{ item.title }}</strong></span>
           </mat-expansion-panel-header>
           <mat-nav-list>
             <a
@@ -36,7 +36,7 @@
               (click)="onMenuItemClick()"
             >
               <i class="bi" [ngClass]="'bi-' + child.icon"></i>
-              <span>{{ child.title }}</span>
+              <span>&nbsp;{{ child.title }}</span>
             </a>
           </mat-nav-list>
         </mat-expansion-panel>

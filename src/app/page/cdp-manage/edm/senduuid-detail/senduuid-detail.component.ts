@@ -6,7 +6,7 @@ import { BasicInputComponent } from '../../../../component/form/basic-input/basi
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Channel } from '../../../../core/enums/channel-enum';
 import { BaseComponent } from '../../../base.component';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { LoadingService } from '../../../../core/services/loading.service';
 import { CdpManageService } from '../../cdp-manage.service';
 import { DialogService } from '../../../../core/services/dialog.service';
@@ -30,7 +30,7 @@ import { Option, PageBase } from '../../../../core/models/common/base.model';
     AgGridModule,
     CollapsibleSectionComponent
   ],
-  providers: [LoadingService, CdpManageService, DatePipe],
+  providers: [LoadingService, CdpManageService],
   templateUrl: './senduuid-detail.component.html',
   styleUrl: './senduuid-detail.component.scss'
 })
@@ -44,7 +44,7 @@ export default class SenduuidDetailComponent extends BaseComponent implements On
     private cdpManageService: CdpManageService,
     private loadingService: LoadingService,
     private route: ActivatedRoute,
-    private datePipe: DatePipe,
+    // private router: Router,
   ) {
     super();
     // 用 snapshot 拿參數（靜態抓一次）
@@ -61,8 +61,10 @@ export default class SenduuidDetailComponent extends BaseComponent implements On
       sendUuid: new FormControl(this.sendUuid, []),
     });
   }
+
   ngOnInit(): void {
     //如有要Call API
+
   }
 
   //#region Ag-grid
@@ -161,7 +163,7 @@ export default class SenduuidDetailComponent extends BaseComponent implements On
           return '';
         }
 
-        return  rawValue;
+        return rawValue;
       }
     },
     {
@@ -173,7 +175,7 @@ export default class SenduuidDetailComponent extends BaseComponent implements On
           return '';
         }
 
-        return  rawValue;
+        return rawValue;
       }
     },
     {
@@ -185,7 +187,7 @@ export default class SenduuidDetailComponent extends BaseComponent implements On
           return '';
         }
 
-        return  rawValue;
+        return rawValue;
       }
     },
     {
@@ -197,7 +199,7 @@ export default class SenduuidDetailComponent extends BaseComponent implements On
           return '';
         }
 
-        return  rawValue;
+        return rawValue;
       }
     },
     {
@@ -209,7 +211,7 @@ export default class SenduuidDetailComponent extends BaseComponent implements On
           return '';
         }
 
-        return  rawValue;
+        return rawValue;
       }
     },
     {
@@ -221,7 +223,7 @@ export default class SenduuidDetailComponent extends BaseComponent implements On
           return '';
         }
 
-        return  rawValue;
+        return rawValue;
       }
     },
     {
@@ -233,7 +235,7 @@ export default class SenduuidDetailComponent extends BaseComponent implements On
           return '';
         }
 
-        return  rawValue;
+        return rawValue;
       }
     },
   ];
@@ -322,7 +324,7 @@ export default class SenduuidDetailComponent extends BaseComponent implements On
       .pipe(
         catchError((err) => {
           this.dialogService.openCustomSnackbar({
-            message: err.message || 'An error occurred during login.'
+            message: err.message || '查詢列表失敗'
           });
           throw Error(err.message);
         }),
@@ -357,6 +359,5 @@ export default class SenduuidDetailComponent extends BaseComponent implements On
     this.loadData();
   }
   //#endregion
-
 
 }

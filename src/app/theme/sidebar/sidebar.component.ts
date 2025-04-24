@@ -10,25 +10,41 @@ import { MenuItem } from '../../core/models/common/menu.model';
 
 export const OtherMenu: MenuItem[] = [
   {
-    title: "CDP工作流程管理", icon: "gear", link: '',
+    title: "CDP工作流程管理", icon: "list", link: '',
     children: [
-      { title: "EDM", icon: "file-earmark-text", link: "/cdp/edm_main", children: [] },
-      // { title: "SMS", icon: "file-earmark-text", link: "/cdp/sms_main", children: [] },
+      { title: "EDM", icon: "envelope-open-fill", link: "/cdp/edm_main", children: [] },
+      { title: "SMS", icon: "chat-fill", link: "/cdp/sms_main", children: [] },
+      { title: "APP_PUSH", icon: "bell-fill", link: "/cdp/app_push_main", children: [] },
     ]
-  }
+  },
+  {
+    title: "MSMQ", icon: "list", link: '',//Microsoft Message Queuing
+    children: [
+      { title: "訊息佇列系統", icon: "gear", link: "/msmq/queue", children: [] },
+    ]
+  },
+
 ];
 
 export const AdminMenu: MenuItem[] = [
   { title: "首頁管理", icon: "house-door", link: "/home", children: [] },
-  { title: "登入管理", icon: "lock", link: "/login", children: [] },
+  //#region 測試
+  // { title: "登入管理", icon: "lock", link: "/login", children: [] },
+  // {
+  //   title: "測試管理", icon: "gear", link: '',
+  //   children: [
+  //     { title: "測試1", icon: "file-earmark-text", link: "/test/test1", children: [] },
+  //     { title: "測試2", icon: "file-earmark-text", link: "/test/test2", children: [] },
+  //   ]
+  // },
+  //#endregion
+  ...OtherMenu,
   {
-    title: "測試管理", icon: "gear", link: '',
+    title: "Mail Hunter 報表", icon: "list", link: '',
     children: [
-      { title: "測試1", icon: "file-earmark-text", link: "/test/test1", children: [] },
-      { title: "測試2", icon: "file-earmark-text", link: "/test/test2", children: [] },
+      { title: "年度統計報表", icon: "file-earmark-text-fill", link: "/mailhunter/project_mail_count", children: [] },
     ]
   },
-  ...OtherMenu
 ];
 
 @Component({

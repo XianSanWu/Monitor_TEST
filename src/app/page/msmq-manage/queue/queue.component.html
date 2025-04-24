@@ -1,0 +1,72 @@
+<loading-indicator></loading-indicator>
+
+<div class="pageTitle">
+  <h2>
+    <i class="bi bi-search"></i>
+    佇列查詢
+  </h2>
+</div>
+
+<collapsible-section title="🔍 查詢條件" tooltipText="請輸入對應條件查詢。(Enter 可直接查詢)">
+  <!-- 自訂表單 -->
+  <div [formGroup]="validateForm">
+    <div class="row">
+      <basic-input
+        title="佇列名稱"
+        class="col-lg-6 col-sm-12 col-xs-12"
+        [form]="validateForm"
+        ctlName="queueName"
+        placeholder="請輸入佇列名稱"
+        [maxlength]="100"
+      ></basic-input>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <button (click)="Search()" class="btn btn-primary" type="button">
+          <i class="bi bi-search"></i> 搜尋
+        </button>
+      </div>
+    </div>
+
+  </div>
+</collapsible-section>
+
+<collapsible-section
+  title="📋 及時查看"
+>
+  <div class="">
+    <h5 class="text-primary">佇列總數：
+      <span *ngIf="!!respData1?.Count">{{ respData1.Count }}</span>
+      <span *ngIf="!respData1?.Count">0</span>
+    </h5>
+
+    <div class="row">
+      <div class="col-12 mb-4" *ngFor="let queue of respData1?.Value">
+        <div class="border rounded p-3 bg-light">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="text-primary mb-0">
+              <i class="bi bi-inboxes"></i> {{ queue.QueueName }}
+            </h5>
+            <small class="text-muted">
+              <i class="bi bi-hdd-network"></i> {{ queue.PSComputerName }}
+            </small>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <p class="mb-1"><strong>訊息數：</strong> {{ queue.MessagesInQueue }}</p>
+              <p class="mb-1"><strong>佇列大小：</strong> {{ queue.BytesInQueue }} Bytes</p>
+            </div>
+            <div class="col-sm-6">
+              <p class="mb-1"><strong>日誌大小：</strong> {{ queue.BytesInJournalQueue }} Bytes</p>
+              <p class="mb-1"><strong>日誌訊息數：</strong> {{ queue.MessagesInJournalQueue }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</collapsible-section>

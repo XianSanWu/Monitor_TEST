@@ -23,6 +23,18 @@ export const routes: Routes = [
     loadChildren: () => import('./page/cdp-manage/cdp-manage.routes').then(m => m.routes),
   },
   {
+    path: 'mailhunter',
+    component: LayoutComponent,  // 主要佈局頁面
+    canActivate: [AuthGuard],    // 使用 AuthGuard 進行授權檢查
+    loadChildren: () => import('./page/mail-hunter-manage/mail-hunter-manage.routes').then(m => m.routes),
+  },
+  {
+    path: 'msmq',
+    component: LayoutComponent,  // 主要佈局頁面
+    canActivate: [AuthGuard],    // 使用 AuthGuard 進行授權檢查
+    loadChildren: () => import('./page/msmq-manage/msmq-manage.routes').then(m => m.routes),
+  },
+  {
     path: 'home',
     component: LayoutComponent,  // 主要佈局頁面
     canActivate: [AuthGuard],    // 使用 AuthGuard 進行授權檢查

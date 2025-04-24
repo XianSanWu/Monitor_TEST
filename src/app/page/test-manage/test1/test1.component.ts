@@ -18,7 +18,7 @@ import { Option, PageBase } from '../../../core/models/common/base.model';
 import { TestManageService } from '../test-manage.service';
 import { RestStatus } from '../../../core/enums/rest-enum';
 import { BaseComponent } from '../../base.component';
-import { FieldModel, WorkflowStepsKafkaRequest, WorkflowStepsSearchListRequest } from '../../../core/models/requests/workflow-steps.model';
+import { FieldModel, WorkflowStepsSearchListRequest } from '../../../core/models/requests/workflow-steps.model';
 
 @Component({
   selector: 'test1',
@@ -211,11 +211,11 @@ export default class Test1Component extends BaseComponent {
     )
 
     // 組裝請求資料
-    const reqData : WorkflowStepsSearchListRequest = {
+    const reqData: WorkflowStepsSearchListRequest = {
       page: pageBase,
       sortModel: sortModel,
       filterModel: filterModel,
-      fieldModel: new FieldModel({channel:''})
+      fieldModel: new FieldModel({ channel: '' })
     };
 
     // console.log('requestData', reqData)
@@ -224,7 +224,7 @@ export default class Test1Component extends BaseComponent {
       .pipe(
         catchError((err) => {
           this.dialogService.openCustomSnackbar({
-            message: err.message || 'An error occurred during login.'
+            message: err.message || '查詢列表失敗'
           });
           throw Error(err.message);
         }),

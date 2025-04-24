@@ -97,17 +97,18 @@ export default class MainComponent extends BaseComponent implements OnInit {
     })
       .pipe(
         takeUntil(this.destroy$),
+        tap(result => {
+          // 同時取得多個 API 的回傳結果
+          if (result.list1) {
+            this.respData1 = result.list1.Data;
+            // console.log('list1 成功', this.respData1);
+          }
+        }),
         finalize(() => {
           this.loadingService.hide();
         })
       )
-      .subscribe(result => {
-        // 同時取得多個 API 的回傳結果
-        if (result.list1) {
-          this.respData1 = result.list1.Data;
-          // console.log('list1 成功', this.respData1);
-        }
-      });
+      .subscribe();
 
   }
 
@@ -214,7 +215,7 @@ export default class MainComponent extends BaseComponent implements OnInit {
           return '';
         }
 
-        return  rawValue;
+        return rawValue;
       }
     },
     {
@@ -226,7 +227,7 @@ export default class MainComponent extends BaseComponent implements OnInit {
           return '';
         }
 
-        return  rawValue;
+        return rawValue;
       }
     },
     // { headerName: '旅程建立時間', field: 'JourneyCreateAt' },
@@ -315,7 +316,7 @@ export default class MainComponent extends BaseComponent implements OnInit {
       .pipe(
         catchError((err) => {
           this.dialogService.openCustomSnackbar({
-            message: err.message || 'An error occurred during login.'
+            message: err.message || '查詢列表失敗'
           });
           throw Error(err.message);
         }),

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, take } from 'rxjs/operators';
 import { ResponseModel } from '../../core/models/base.model';
 import { RestStatus } from '../../core/enums/rest-enum';
 import { HttpMethod } from '../../core/enums/http-method';
@@ -53,6 +53,7 @@ export class ApiService {
 
     // 處理回應並進行錯誤處理
     return request.pipe(
+      take(1),
       map((res: ResponseModel<T>) => {
         if (!this.handleApiResponse(res, errorMsg)) {
           throw new Error(errorMsg.message);  // 使用對象的 message 屬性

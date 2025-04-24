@@ -1,0 +1,99 @@
+<loading-indicator></loading-indicator>
+
+<div class="pageTitle">
+  <h2>
+    <i class="bi bi-search"></i>
+    專案寄件數查詢
+  </h2>
+</div>
+<collapsible-section
+  title="🔍 查詢條件"
+  tooltipText="請輸入對應條件查詢"
+>
+  <!-- 自訂表單 -->
+  <div [formGroup]="validateForm">
+    <div class="row">
+      <search-select
+        title="部門"
+        class="col-lg-6 col-sm-12 col-xs-12"
+        [form]="validateForm"
+        ctlName="department"
+        placeholder="請輸入收尋"
+        [options]="departmentList"
+        (selected)="onItemSelected($event)"
+      >
+      </search-select>
+      <date-range
+        class="col-lg-6 col-sm-12 col-xs-12"
+        titleStart="起日"
+        titleEnd="迄日"
+        [form]="validateForm"
+      ></date-range>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <button class="btn btn-primary" type="button">
+          <i class="bi bi-search"></i> 搜尋
+        </button>
+      </div>
+    </div>
+
+  </div>
+</collapsible-section>
+
+<!-- ag-grid表單 -->
+<collapsible-section title="📋 及時查看" tooltipText="點擊欄位兩下，可以複製該欄位資料">
+  <div class="row">
+    <ag-grid-angular
+      #agGrid
+      style="width: 100%; height: 500px"
+      class="ag-theme-alpine"
+      [rowData]="rowData"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [pagination]="false"
+      [animateRows]="true"
+      (gridReady)="onGridReady($event)"
+      (sortChanged)="onSortChanged()"
+      (filterChanged)="onFilterChanged()"
+      (cellDoubleClicked)="onCellDoubleClicked($event)"
+    >
+    </ag-grid-angular>
+
+    <div
+      style="margin-top: 10px"
+      class="d-flex justify-content-center align-items-center gap-2"
+    >
+      <button
+        class="btn btn-primary"
+        (click)="onPageChange(1)"
+        [disabled]="currentPage === 1"
+      >
+        First Page
+      </button>
+      <button
+        class="btn btn-secondary"
+        (click)="onPageChange(currentPage - 1)"
+        [disabled]="currentPage === 1"
+      >
+        Previous
+      </button>
+      <span class="mx-2">Page {{ currentPage }} / {{ totalPages }}</span>
+      <button
+        class="btn btn-secondary"
+        (click)="onPageChange(currentPage + 1)"
+        [disabled]="currentPage === totalPages"
+      >
+        Next
+      </button>
+      <button
+        class="btn btn-primary"
+        (click)="onPageChange(totalPages)"
+        [disabled]="currentPage === totalPages"
+      >
+        Last Page
+      </button>
+    </div>
+  </div>
+</collapsible-section>
