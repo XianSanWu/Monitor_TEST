@@ -118,6 +118,15 @@ export default class Test1Component extends BaseComponent {
 
 
   items = ['Apple', 'Banana', 'Cherry', 'Mango', 'Orange', 'Pineapple'];
+  options: Option[] = [
+    { key: '1', value: 'Apple' },
+    { key: '2', value: 'Banana' },
+    { key: '3', value: 'Cherry' },
+    { key: '4', value: 'Date' },
+    { key: '5', value: 'Elderberry' },
+  ];
+
+
   selectedItem = '';
 
   onItemSelected(value: string) {

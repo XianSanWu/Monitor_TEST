@@ -2,6 +2,7 @@ import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angu
 import { ValidateUtil } from './validate-util';
 import { RegExpUtil } from './reg-exp-util';
 import { CommonUtil } from './common-util';
+import { Option } from '../../core/models/common/base.model';
 
 export const ValidatorsUtil = {
   /** 日期區間 */
@@ -209,6 +210,16 @@ export const ValidatorsUtil = {
     var count = 0;
     array.filter((v, i, arr) => arr[i] === target).forEach(() => count++);
     return count;
+  },
+  checkOptionValue(options: Option[]): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const v: string = control.value;
+      if (!v?.trim()) {
+        return { blank: '不可為空' };
+      }
+      const option = options.find(o => o.value?.toLowerCase() === v?.toLowerCase());
+      return option ? null : { noOption: '查無資料' };
+    };
   },
   /** 至少有一個欄位為必填 */
   requireAtLeastOneField(fields: string[]) {

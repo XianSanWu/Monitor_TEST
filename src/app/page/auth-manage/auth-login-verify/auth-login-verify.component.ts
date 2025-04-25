@@ -29,6 +29,7 @@ import { Base64Util } from '../../../common/utils/base64-util';
 })
 export default class LoginComponent extends BaseComponent {
   validateForm!: FormGroup;
+  isApiFinish: boolean = true;
 
   constructor(
     private router: Router,
@@ -45,6 +46,11 @@ export default class LoginComponent extends BaseComponent {
   }
 
   submit() {
+    if (!this.isApiFinish) {
+      return;
+    }
+    this.isApiFinish = false;
+
     let reqData: LoginRequest = this.validateForm.getRawValue();
     if (this.validateForm.invalid) {
       return; // Form is invalid, exit early.
@@ -73,6 +79,7 @@ export default class LoginComponent extends BaseComponent {
       }),
       takeUntil(this.destroy$),
       finalize(() => {
+        this.isApiFinish = true;
         this.loadingService.hide();
       })
     ).subscribe();

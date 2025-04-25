@@ -29,14 +29,14 @@ export const OtherMenu: MenuItem[] = [
 export const AdminMenu: MenuItem[] = [
   { title: "首頁管理", icon: "house-door", link: "/home", children: [] },
   //#region 測試
-  // { title: "登入管理", icon: "lock", link: "/login", children: [] },
-  // {
-  //   title: "測試管理", icon: "gear", link: '',
-  //   children: [
-  //     { title: "測試1", icon: "file-earmark-text", link: "/test/test1", children: [] },
-  //     { title: "測試2", icon: "file-earmark-text", link: "/test/test2", children: [] },
-  //   ]
-  // },
+  { title: "登入管理", icon: "lock", link: "/login", children: [] },
+  {
+    title: "測試管理", icon: "gear", link: '',
+    children: [
+      { title: "測試1", icon: "file-earmark-text", link: "/test/test1", children: [] },
+      { title: "測試2", icon: "file-earmark-text", link: "/test/test2", children: [] },
+    ]
+  },
   //#endregion
   ...OtherMenu,
   {

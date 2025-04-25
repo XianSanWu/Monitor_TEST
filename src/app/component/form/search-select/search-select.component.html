@@ -26,12 +26,11 @@
     >
       <mat-option
         *ngFor="let option of filteredOptions | async"
-        [value]="option"
+        [value]="option.key"
       >
-        {{ option }}
+        {{ option.value }}
       </mat-option>
     </mat-autocomplete>
-
   </mat-form-field>
 
   <!-- 錯誤訊息 -->

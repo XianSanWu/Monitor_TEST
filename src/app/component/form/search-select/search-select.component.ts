@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
+import { Option } from '../../../core/models/common/base.model';
 
 @Component({
   selector: 'search-select',
@@ -14,7 +15,6 @@ import { map, Observable, startWith } from 'rxjs';
   styleUrl: './search-select.component.scss'
 })
 export class SearchSelectComponent implements OnInit {
-
   @Input() title: string = '';
   @Input() form!: FormGroup;
   @Input() ctlName: string = '';
@@ -23,11 +23,10 @@ export class SearchSelectComponent implements OnInit {
   @Input() disabled: boolean = false;
   @Input() autocomplete: string = '';
 
-  @Input() options: string[] = [];
+  @Input() options: Option[] = [];
   @Output() selected = new EventEmitter<string>();
 
-  filteredOptions!: Observable<string[]>;
-
+  filteredOptions!: Observable<Option[]>;
 
   firstErr: string = '';
   ctl!: FormControl;
@@ -42,7 +41,6 @@ export class SearchSelectComponent implements OnInit {
     if (!this.autocomplete) {
       this.autocomplete = this.ctlName;
     }
-    // console.log('basic-input:', this.ctlName, this.form);
     this.updateControl();
 
     this.filteredOptions = this.ctl.valueChanges.pipe(
@@ -57,15 +55,17 @@ export class SearchSelectComponent implements OnInit {
     }
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+  private _filter(value: string): Option[] {
+    const filterValue = value?.toLowerCase();
+    return this.options.filter(option => option.value?.toLowerCase()?.includes(filterValue));
   }
 
-  selectOption(option: string) {
-    // this.searchControl.setValue(option);
-    this.ctl.setValue(option, { emitEvent: false });
-    this.selected.emit(option);
+  selectOption(key: string) {
+    const option = this.options.find(option => option.key?.toLowerCase() === key?.toLowerCase());
+    if (option) {
+      this.ctl.setValue(option.value, { emitEvent: false });
+      this.selected.emit(key);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {

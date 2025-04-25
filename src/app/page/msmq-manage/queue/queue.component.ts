@@ -29,6 +29,7 @@ import { MsmqQueueDetailsResponse } from '../../../core/models/responses/msmq.mo
 export default class QueueComponent extends BaseComponent implements OnInit {
   validateForm: FormGroup;
   respData1!: MsmqQueueDetailsResponse;
+  isApiFinish: boolean = false;
 
   constructor(
     private dialogService: DialogService,
@@ -53,7 +54,12 @@ export default class QueueComponent extends BaseComponent implements OnInit {
     this.Search();
   }
 
-  Search():void{
+  Search(): void {
+    if (!this.isApiFinish) {
+      return;
+    }
+    this.isApiFinish = false;
+
     this.loadingService.show();
     const list1_reqData = new MsmqQueueInfoRequest({
       queueName: this.validateForm.get('queueName')?.value
@@ -78,7 +84,8 @@ export default class QueueComponent extends BaseComponent implements OnInit {
           }
         }),
         finalize(() => {
-            this.loadingService.hide();
+          this.isApiFinish = false;
+          this.loadingService.hide();
         })
       )
       .subscribe();
