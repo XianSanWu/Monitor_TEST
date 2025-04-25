@@ -89,6 +89,10 @@ export default class LoginComponent extends BaseComponent {
   // 監聽 Enter 鍵
   @HostListener('document:keydown.enter', ['$event'])
   onEnter(event: KeyboardEvent) {
+    if (this.validateForm.invalid) {
+      return;
+    }
+
     this.submit();
   }
 }

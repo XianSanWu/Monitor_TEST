@@ -64,6 +64,10 @@ export default class ProjectMailCountComponent extends BaseComponent {
   // 使用 HostListener 監聽 Enter 鍵
   @HostListener('document:keydown.enter', ['$event'])
   onEnter(event: KeyboardEvent) {
+    if (this.validateForm.invalid) {
+      return;
+    }
+
     this.Search();
   }
 
@@ -199,7 +203,7 @@ export default class ProjectMailCountComponent extends BaseComponent {
         }),
         takeUntil(this.destroy$),
         finalize(() => {
-          this.isApiFinish = false;
+          this.isApiFinish = true;
         })
       ).subscribe();
   }

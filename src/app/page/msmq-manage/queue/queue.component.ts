@@ -11,6 +11,7 @@ import { forkJoin, catchError, of, takeUntil, finalize, tap } from 'rxjs';
 import { MsmqManageService } from '../msmq-manage.service';
 import { MsmqQueueInfoRequest } from '../../../core/models/requests/msmq.model';
 import { MsmqQueueDetailsResponse } from '../../../core/models/responses/msmq.model';
+import { ValidatorsUtil } from '../../../common/utils/validators-util';
 
 @Component({
   selector: 'queue',
@@ -39,7 +40,7 @@ export default class QueueComponent extends BaseComponent implements OnInit {
     super();
 
     this.validateForm = new FormGroup({
-      queueName: new FormControl('', []),
+      queueName: new FormControl('', [ValidatorsUtil.blank]),
     });
   }
 
@@ -51,6 +52,10 @@ export default class QueueComponent extends BaseComponent implements OnInit {
   // 使用 HostListener 監聽 Enter 鍵
   @HostListener('document:keydown.enter', ['$event'])
   onEnter(event: KeyboardEvent) {
+    if (this.validateForm.invalid) {
+      return;
+    }
+
     this.Search();
   }
 
@@ -84,7 +89,7 @@ export default class QueueComponent extends BaseComponent implements OnInit {
           }
         }),
         finalize(() => {
-          this.isApiFinish = false;
+          this.isApiFinish = true;
           this.loadingService.hide();
         })
       )
