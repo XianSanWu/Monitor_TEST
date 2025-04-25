@@ -7,7 +7,11 @@
   </h2>
 </div>
 
-<collapsible-section title="🔍 查詢條件" tooltipText="請輸入對應條件查詢。(Enter 可直接查詢)">
+<collapsible-section
+  [isOpen]="false"
+  title="🔍 查詢條件"
+  tooltipText="請輸入對應條件查詢。(Enter 可直接查詢)"
+>
   <!-- 自訂表單 -->
   <div [formGroup]="validateForm">
     <div class="row">
@@ -23,20 +27,23 @@
 
     <div class="row">
       <div class="col-12">
-        <button (click)="Search()" class="btn btn-primary" type="button">
+        <button
+          [disabled]="validateForm.invalid"
+          (click)="Search()"
+          class="btn btn-primary"
+          type="button"
+        >
           <i class="bi bi-search"></i> 搜尋
         </button>
       </div>
     </div>
-
   </div>
 </collapsible-section>
 
-<collapsible-section
-  title="📋 及時查看"
->
+<collapsible-section title="📋 及時查看">
   <div class="">
-    <h5 class="text-primary">佇列總數：
+    <h5 class="text-primary">
+      佇列總數：
       <span *ngIf="!!respData1?.Count">{{ respData1.Count }}</span>
       <span *ngIf="!respData1?.Count">0</span>
     </h5>
@@ -55,18 +62,25 @@
 
           <div class="row">
             <div class="col-sm-6">
-              <p class="mb-1"><strong>訊息數：</strong> {{ queue.MessagesInQueue }}</p>
-              <p class="mb-1"><strong>佇列大小：</strong> {{ queue.BytesInQueue }} Bytes</p>
+              <p class="mb-1">
+                <strong>訊息數：</strong> {{ queue.MessagesInQueue }}
+              </p>
+              <p class="mb-1">
+                <strong>佇列大小：</strong> {{ queue.BytesInQueue }} Bytes
+              </p>
             </div>
             <div class="col-sm-6">
-              <p class="mb-1"><strong>日誌大小：</strong> {{ queue.BytesInJournalQueue }} Bytes</p>
-              <p class="mb-1"><strong>日誌訊息數：</strong> {{ queue.MessagesInJournalQueue }}</p>
+              <p class="mb-1">
+                <strong>日誌大小：</strong>
+                {{ queue.BytesInJournalQueue }} Bytes
+              </p>
+              <p class="mb-1">
+                <strong>日誌訊息數：</strong> {{ queue.MessagesInJournalQueue }}
+              </p>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-
   </div>
 </collapsible-section>

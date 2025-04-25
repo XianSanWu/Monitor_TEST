@@ -11,8 +11,8 @@ import { Component, Input } from '@angular/core';
 export class CollapsibleSectionComponent {
   @Input() title: string = '區塊標題';
   @Input() tooltipText?: string;
-  isOpen: boolean = true;
-  isTooltipOpen: boolean = false;
+  @Input() isOpen: boolean = true;
+  @Input() isTooltipOpen: boolean = false;
 
   toggle() {
     this.isOpen = !this.isOpen;

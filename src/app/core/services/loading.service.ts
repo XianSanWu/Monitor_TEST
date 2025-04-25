@@ -15,6 +15,8 @@ export class LoadingService {
 
   hide() {
     // console.log("Hiding Loading Spinner");
-    this.loadingSubject.next(false);  // 設定為 false
+    setTimeout(() => {
+      this.loadingSubject.next(false);  // 設定為 false
+    }, 300);
   }
 }

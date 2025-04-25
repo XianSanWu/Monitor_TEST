@@ -240,7 +240,7 @@ export default class SenduuidDetailComponent extends BaseComponent implements On
     },
   ];
 
-  //強制Ag-grid資料複製 (因複製功能為企業板才可以用)
+  //強制Ag-grid資料複製 (因複製功能為企業版才可以用)
   onCellDoubleClicked(event: CellDoubleClickedEvent) {
     const value = event.value;
     if (value !== null && value !== undefined) {

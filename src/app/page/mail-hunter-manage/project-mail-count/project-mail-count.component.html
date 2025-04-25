@@ -20,7 +20,6 @@
         ctlName="department"
         placeholder="請輸入收尋"
         [options]="departmentList"
-        (selected)="onItemSelected($event)"
       >
       </search-select>
       <date-range
@@ -33,7 +32,7 @@
 
     <div class="row">
       <div class="col-12">
-        <button (click)="Search()" class="btn btn-primary" type="button">
+        <button [disabled]="validateForm.invalid" (click)="Search()" class="btn btn-primary" type="button">
           <i class="bi bi-search"></i> 搜尋
         </button>
       </div>
@@ -43,7 +42,7 @@
 </collapsible-section>
 
 <!-- ag-grid表單 -->
-<collapsible-section title="📋 及時查看" tooltipText="點擊欄位兩下，可以複製該欄位資料">
+<collapsible-section [isOpen]="isOpenSearch" title="📋 及時查看" tooltipText="點擊欄位兩下，可以複製該欄位資料">
   <div class="row">
     <ag-grid-angular
       #agGrid

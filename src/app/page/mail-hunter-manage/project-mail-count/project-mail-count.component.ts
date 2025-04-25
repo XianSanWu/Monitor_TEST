@@ -16,6 +16,8 @@ import { Option, PageBase } from '../../../core/models/common/base.model';
 import { Department } from '../../../core/enums/department-enum';
 import { MailHunterSearchListRequest } from '../../../core/models/requests/mail-hunter.model';
 import { catchError, finalize, takeUntil, tap } from 'rxjs';
+import { CommonUtil } from '../../../common/utils/common-util';
+import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/custom-filter.component';
 
 @Component({
   selector: 'project-mail-count',
@@ -41,6 +43,7 @@ export default class ProjectMailCountComponent extends BaseComponent {
     { key: Department.AT001, value: '個金' },
   ];;
   isApiFinish: boolean = true;
+  isOpenSearch: boolean = false;
 
   constructor(
     private dialogService: DialogService,
@@ -76,24 +79,24 @@ export default class ProjectMailCountComponent extends BaseComponent {
       return;
     }
     this.isApiFinish = false;
+    this.isOpenSearch = true;
 
     const rawValue = this.validateForm.getRawValue();
-    console.log('rawValue', rawValue);
 
     const formattedData = {
       ...rawValue,
-      startDate: rawValue.startDate ? new Date(rawValue.startDate).toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' }) : null,
-      endDate: rawValue.endDate ? new Date(rawValue.endDate).toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' }) : null
+      department: rawValue.department ? this.departmentList.find(f => f.value === rawValue.department)?.key : "",
+      startDate: rawValue.startDate ? CommonUtil.formatDateTime(new Date(rawValue.startDate)) : null,
+      endDate: rawValue.endDate ? CommonUtil.formatDateTime(new Date(rawValue.endDate)) : null
     };
 
-    console.log('formattedData', formattedData);
     this.loadData(formattedData);
   }
 
-  onItemSelected(value: string) {
-    this.selectedItem = value;
-    console.log('選中的值:', value);
-  }
+  // onItemSelected(value: string) {
+  //   this.selectedItem = value;
+  //   console.log('選中的值:', value);
+  // }
 
   //#region Ag-grid
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
@@ -102,18 +105,19 @@ export default class ProjectMailCountComponent extends BaseComponent {
   rowData: any[] = [];
 
   defaultColDef = {
+    flex: 1,
     sortable: true,
-    filter: false,
+    filter: CustomFilterComponent,
   };
 
   columnDefs: ColDef[] = [
     { headerName: '專案發送的年份', field: 'Year' },
     { headerName: '專案發送的月份', field: 'Month' },
-    { headerName: '每月的專案數量', field: 'ProjectCount' },
-    { headerName: '每月專案涉及的用戶總數', field: 'ProjectOriginTotalUser' }
+    { headerName: '每月的專案數量', field: 'ProjectCount', filter: false },
+    { headerName: '每月專案涉及的用戶總數', field: 'ProjectOriginTotalUser', filter: false }
   ];
 
-  //強制Ag-grid資料複製 (因複製功能為企業板才可以用)
+  //強制Ag-grid資料複製 (因複製功能為企業版才可以用)
   onCellDoubleClicked(event: CellDoubleClickedEvent) {
     const value = event.value;
     if (value !== null && value !== undefined) {
@@ -139,6 +143,8 @@ export default class ProjectMailCountComponent extends BaseComponent {
 
   //  **呼叫後端 API 載入資料**
   loadData(fieldData: any) {
+    this.loadingService.show();
+    this.gridApi = this.agGrid.api;
     //#region 組裝請求資料
     // 取得 ag-Grid 的排序資訊
     const columnModel = this.gridApi?.getColumnState() || [];
@@ -204,6 +210,9 @@ export default class ProjectMailCountComponent extends BaseComponent {
         takeUntil(this.destroy$),
         finalize(() => {
           this.isApiFinish = true;
+          setTimeout(() => {
+            this.loadingService.hide();
+          }, 300);
         })
       ).subscribe();
   }
