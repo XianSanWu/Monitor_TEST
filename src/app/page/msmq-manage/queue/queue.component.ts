@@ -29,7 +29,7 @@ import { MsmqQueueDetailsResponse } from '../../../core/models/responses/msmq.mo
 export default class QueueComponent extends BaseComponent implements OnInit {
   validateForm: FormGroup;
   respData1!: MsmqQueueDetailsResponse;
-  isApiFinish: boolean = false;
+  isApiFinish: boolean = true;
 
   constructor(
     private dialogService: DialogService,
