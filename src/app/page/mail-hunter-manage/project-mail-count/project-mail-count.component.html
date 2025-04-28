@@ -32,17 +32,41 @@
 
     <div class="row">
       <div class="col-12">
-        <button [disabled]="validateForm.invalid" (click)="Search()" class="btn btn-primary" type="button">
+        <button
+          [disabled]="validateForm.invalid"
+          (click)="Search()"
+          class="btn btn-primary"
+          type="button"
+        >
           <i class="bi bi-search"></i> 搜尋
         </button>
       </div>
     </div>
-
   </div>
 </collapsible-section>
 
 <!-- ag-grid表單 -->
-<collapsible-section [isOpen]="isOpenSearch" title="📋 及時查看" tooltipText="點擊欄位兩下，可以複製該欄位資料">
+<collapsible-section
+  [isOpen]="isOpenSearch"
+  title="📋 及時查看"
+  tooltipText="點擊欄位兩下，可以複製該欄位資料"
+>
+  <div class="row">
+    <div
+      style="margin-bottom: 12px"
+      class="d-flex justify-content-end align-items-center gap-2"
+    >
+      <button
+        [disabled]="!rowData || rowData.length == 0"
+        (click)="DownloadCsv()"
+        class="btn btn-success"
+        type="button"
+      >
+        <i class="bi bi-file-earmark-arrow-up"></i> 匯出
+      </button>
+    </div>
+  </div>
+
   <div class="row">
     <ag-grid-angular
       #agGrid

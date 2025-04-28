@@ -6,7 +6,7 @@ import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { FileInputComponent } from '../../../component/form/file-input/file-input.component';
 import { TestManageService } from '../test-manage.service';
 import { DialogService } from '../../../core/services/dialog.service';
-import { catchError, finalize, takeUntil, tap, throwError } from 'rxjs';
+import { catchError, finalize, takeUntil, tap } from 'rxjs';
 import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
 import { BaseComponent } from '../../base.component';
 
@@ -79,38 +79,38 @@ export default class Test2Component extends BaseComponent{
 
 
   //#region 檔案下載
-  onDownload(fileName: string): void {
-    this.loadingService.show();
-    this.testManageService.downloadFile(fileName).pipe(
-      tap(blob => {
-        if (blob instanceof Blob) {
-          const objectUrl = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = objectUrl;
-          a.download = fileName;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(objectUrl);
+  // onDownload(fileName: string): void {
+  //   this.loadingService.show();
+  //   this.testManageService.downloadFile(fileName).pipe(
+  //     tap(blob => {
+  //       if (blob instanceof Blob) {
+  //         const objectUrl = URL.createObjectURL(blob);
+  //         const a = document.createElement('a');
+  //         a.href = objectUrl;
+  //         a.download = fileName;
+  //         document.body.appendChild(a);
+  //         a.click();
+  //         document.body.removeChild(a);
+  //         URL.revokeObjectURL(objectUrl);
 
-          this.dialogService.openCustomSnackbar({
-            message: '下載成功'
-          });
-        } else {
-          throw new Error('下載失敗，未能取得 Blob');
-        }
-      }),
-      catchError((err) => {
-        this.dialogService.openCustomSnackbar({
-          message: err.message || '下載錯誤'
-        });
-        return throwError(() => new Error(err.message));
-      }),
-      finalize(() => {
-        this.loadingService.hide();
-      })
-    ).subscribe();
-  }
+  //         this.dialogService.openCustomSnackbar({
+  //           message: '下載成功'
+  //         });
+  //       } else {
+  //         throw new Error('下載失敗，未能取得 Blob');
+  //       }
+  //     }),
+  //     catchError((err) => {
+  //       this.dialogService.openCustomSnackbar({
+  //         message: err.message || '下載錯誤'
+  //       });
+  //       return throwError(() => new Error(err.message));
+  //     }),
+  //     finalize(() => {
+  //       this.loadingService.hide();
+  //     })
+  //   ).subscribe();
+  // }
   //#endregion
 
 }

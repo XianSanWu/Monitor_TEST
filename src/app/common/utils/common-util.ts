@@ -29,6 +29,12 @@ export const CommonUtil = {
     const mm = String(date.getMinutes()).padStart(2, '0');
     const ss = String(date.getSeconds()).padStart(2, '0');
     return `${yyyy}-${MM}-${dd} ${HH}:${mm}:${ss}`;
+  },
+  // 格式化日期为 yyyy-MM-dd
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
-
 }

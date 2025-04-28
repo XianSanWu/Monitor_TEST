@@ -36,7 +36,7 @@ export class TestManageService {
     return this.fileApiService.uploadFile(this.baseUrl + this.uploadFunc, selectedFile);
   }
 
-  downloadFile(fileName: string) {
-    return this.fileApiService.downloadFile(this.baseUrl + this.downloadFunc + fileName);
-  }
+  // downloadFile(fileName: string) {
+  //   return this.fileApiService.downloadFile(this.baseUrl + this.downloadFunc + fileName);
+  // }
 }

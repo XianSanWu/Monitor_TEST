@@ -58,9 +58,22 @@ export default class ProjectMailCountComponent extends BaseComponent {
         ValidatorsUtil.blank,
         ValidatorsUtil.checkOptionValue(this.departmentList)
       ]),
-      startDate: new FormControl('', [Validators.required, ValidatorsUtil.dateFmt]),
-      endDate: new FormControl('', [Validators.required, ValidatorsUtil.dateFmt]),
+      startDate: new FormControl(this.getOneYearAgo(), [Validators.required, ValidatorsUtil.dateFmt]),
+      endDate: new FormControl(this.getToday(), [Validators.required, ValidatorsUtil.dateFmt]),
     }, { validators: ValidatorsUtil.dateRangeValidator });
+  }
+
+  // 一年前的日期（格式: yyyy-MM-dd）
+  getOneYearAgo(): string {
+    const today = new Date();
+    today.setFullYear(today.getFullYear() - 1);  // 一年前
+    return CommonUtil.formatDate(today);
+  }
+
+  // 今天的日期（格式: yyyy-MM-dd）
+  getToday(): string {
+    const today = new Date();
+    return CommonUtil.formatDate(today);
   }
 
 
@@ -91,6 +104,72 @@ export default class ProjectMailCountComponent extends BaseComponent {
     };
 
     this.loadData(formattedData);
+  }
+
+  DownloadCsv(): void {
+    this.loadingService.show();
+    const rawValue = this.validateForm.getRawValue();
+
+    const formattedData = {
+      ...rawValue,
+      department: rawValue.department ? this.departmentList.find(f => f.value === rawValue.department)?.key : "",
+      startDate: rawValue.startDate ? CommonUtil.formatDateTime(new Date(rawValue.startDate)) : null,
+      endDate: rawValue.endDate ? CommonUtil.formatDateTime(new Date(rawValue.endDate)) : null
+    };
+
+    const pageBase = new PageBase(
+      {
+        pageSize: 2147483647,
+        pageIndex: 1,
+        totalCount: this.totalCount
+      }
+    )
+
+    const sortModel = new Option({
+      key: '',
+      value: '',
+    })
+
+    let filterModel: Array<Option> = new Array<Option>();
+
+    // 組裝請求資料
+    const reqData: MailHunterSearchListRequest = {
+      page: pageBase,
+      sortModel: sortModel,
+      filterModel: filterModel,
+      fieldModel: formattedData,
+    };
+
+    let fileName;
+    const now = new Date();
+    const formattedDate = now.getUTCFullYear().toString() +
+      String(now.getUTCMonth() + 1).padStart(2, '0') +
+      String(now.getUTCDate()).padStart(2, '0') +
+      String(now.getUTCHours()).padStart(2, '0') +
+      String(now.getUTCMinutes()).padStart(2, '0') +
+      String(now.getUTCSeconds()).padStart(2, '0');
+    fileName = `專案寄件數_Export_${formattedDate}`
+
+    this.mailHunterManageService.ExportProjectMailCountCSV(reqData, fileName)
+      .pipe(
+        catchError((err) => {
+          console.error('下載失敗', err)
+          this.dialogService.openCustomSnackbar({
+            message: err.message || '下載失敗'
+          });
+
+          throw Error(err.message);
+        }),
+        tap(res => {
+          console.log('下載成功')
+        }),
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.loadingService.hide();
+        })
+      )
+      .subscribe();
+
   }
 
   // onItemSelected(value: string) {
@@ -210,9 +289,7 @@ export default class ProjectMailCountComponent extends BaseComponent {
         takeUntil(this.destroy$),
         finalize(() => {
           this.isApiFinish = true;
-          setTimeout(() => {
-            this.loadingService.hide();
-          }, 300);
+          this.loadingService.hide();
         })
       ).subscribe();
   }
