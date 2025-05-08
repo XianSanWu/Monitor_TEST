@@ -3,7 +3,7 @@
 <div class="pageTitle">
   <h2>
     <i class="bi bi-journals"></i>
-    EDM 愛酷SendUuid 列表 ({{sendUuid}})
+    EDM BatchId({{batchId}}) - 序號 ({{sendUuidSort}}) 列表
   </h2>
 </div>
 
@@ -21,12 +21,22 @@
       [maxlength]="30"
     ></basic-input>
     <basic-input
-      title="愛酷 SendUuid"
+      title="愛酷 BatchId"
       class="col-2"
       [form]="validateForm"
       [disabled]="true"
       [isHidden]="true"
-      ctlName="sendUuid"
+      ctlName="batchId"
+      placeholder="請輸入"
+      [maxlength]="100"
+    ></basic-input>
+    <basic-input
+      title="自訂一排序 SendUuidSort"
+      class="col-2"
+      [form]="validateForm"
+      [disabled]="true"
+      [isHidden]="true"
+      ctlName="sendUuidSort"
       placeholder="請輸入"
       [maxlength]="100"
     ></basic-input>

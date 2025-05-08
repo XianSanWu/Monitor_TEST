@@ -35,7 +35,8 @@ import { Option, PageBase } from '../../../../core/models/common/base.model';
   styleUrl: './senduuid-detail.component.scss'
 })
 export default class SenduuidDetailComponent extends BaseComponent implements OnInit {
-  sendUuid!: string;
+  batchId!: string;
+  sendUuidSort!: string;
   validateForm: FormGroup;
   firstInit!: boolean;
 
@@ -48,7 +49,8 @@ export default class SenduuidDetailComponent extends BaseComponent implements On
   ) {
     super();
     // 用 snapshot 拿參數（靜態抓一次）
-    this.sendUuid = this.route.snapshot.paramMap.get('SendUuid') ?? "";
+    this.batchId = this.route.snapshot.paramMap.get('BatchId') ?? "";
+    this.sendUuidSort = this.route.snapshot.paramMap.get('SendUuidSort') ?? "";
     this.firstInit = true;
     // 或動態監聽 route 參數變化（可選）
     // this.route.paramMap.subscribe(params => {
@@ -58,7 +60,8 @@ export default class SenduuidDetailComponent extends BaseComponent implements On
     // 初始化表單
     this.validateForm = new FormGroup({
       channel: new FormControl(Channel.EDM, []),
-      sendUuid: new FormControl(this.sendUuid, []),
+      batchId: new FormControl(this.batchId, []),
+      sendUuidSort: new FormControl(this.sendUuidSort, []),
     });
   }
 

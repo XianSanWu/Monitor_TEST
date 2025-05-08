@@ -10,7 +10,7 @@ import { Observable, throwError, TimeoutError } from 'rxjs';
 import { catchError, tap, timeout } from 'rxjs/operators';
 import { DialogService } from '../../core/services/dialog.service';
 
-const REQUEST_TIMEOUT = 180000; // 設定 180 秒逾時
+const REQUEST_TIMEOUT = 300000; // 設定 300 秒逾時
 
 export const httpRequestInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn): Observable<HttpEvent<any>> => {
   const dialogService = inject(DialogService);

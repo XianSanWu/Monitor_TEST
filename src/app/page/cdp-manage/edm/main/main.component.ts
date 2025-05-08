@@ -126,14 +126,14 @@ export default class MainComponent extends BaseComponent implements OnInit {
   };
 
   columnDefs: ColDef[] = [
-    {
-      headerName: '愛酷 SendUuid', field: 'SendUuid',
-      cellRenderer: LinkRenderComponent,
-      cellRendererParams: {
-        basePath: 'cdp/edm_senduuid_detail',  // 固定路徑部分
-        // routeParams: {  }  // 動態參數部分
-      }
-    },
+    // {
+    //   headerName: '愛酷 SendUuid', field: 'SendUuid',
+    //   // cellRenderer: LinkRenderComponent,
+    //   // cellRendererParams: {
+    //   //   basePath: 'cdp/edm_senduuid_detail',  // 固定路徑部分
+    //   //   // routeParams: {  }  // 動態參數部分
+    //   // }
+    // },
     {
       headerName: '批號', field: 'SendUuidSort',
       maxWidth: 90,
@@ -143,6 +143,12 @@ export default class MainComponent extends BaseComponent implements OnInit {
     },
     {
       headerName: '愛酷 BatchId', field: 'BatchId',
+      cellRenderer: (params: ICellRendererParams) => {
+        const batchId = params.value;
+        const sendUuidSort = params.data.SendUuidSort;
+        const link = `/cdp/edm_senduuid_detail/${batchId}/${sendUuidSort}`;
+        return `<a href="${link}">${batchId}</a>`;
+      },
       maxWidth: 160
     },
     // { headerName: '地端 CdpUuid', field: 'CdpUuid' },

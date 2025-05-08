@@ -6,7 +6,7 @@ export const routes: Routes = [
     loadComponent: () => import('./edm/main/main.component'),
   },
   {
-    path: 'edm_senduuid_detail/:SendUuid',
+    path: 'edm_senduuid_detail/:BatchId/:SendUuidSort',
     loadComponent: () => import('./edm/senduuid-detail/senduuid-detail.component'),
   },
   // {
