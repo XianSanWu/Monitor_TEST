@@ -1,6 +1,14 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
+  //#region APP_PUSH
+  {
+    path: 'app_push_main',
+    loadComponent: () => import('./app-push/main/main.component'),
+  },
+  //#endregion
+
+  //#region EDM
   {
     path: 'edm_main',
     loadComponent: () => import('./edm/main/main.component'),
@@ -9,8 +17,12 @@ export const routes: Routes = [
     path: 'edm_senduuid_detail/:BatchId/:SendUuidSort',
     loadComponent: () => import('./edm/senduuid-detail/senduuid-detail.component'),
   },
-  // {
-  //   path: 'sms',
-  //   loadComponent: () => import('./sms/sms.component'),
-  // }
+  //#endregion
+
+  //#region SMS
+  {
+    path: 'sms_main',
+    loadComponent: () => import('./sms/main/main.component'),
+  }
+  //#endregion
 ];
