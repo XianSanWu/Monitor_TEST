@@ -7,7 +7,6 @@ import { GridApi, ColDef, ICellRendererParams, CellDoubleClickedEvent } from 'ag
 import { forkJoin, catchError, of, takeUntil, finalize, tap } from 'rxjs';
 import { CommonUtil } from '../../../../common/utils/common-util';
 import { CustomFilterComponent } from '../../../../component/ag-grid/custom-filter/custom-filter.component';
-import { LinkRenderComponent } from '../../../../component/ag-grid/link-render/link-render.component';
 import { SelectFilterComponent } from '../../../../component/ag-grid/select-filter/select-filter.component';
 import { AttoProgressComponent } from '../../../../component/form/atto-progress/atto-progress.component';
 import { BasicInputComponent } from '../../../../component/form/basic-input/basic-input.component';

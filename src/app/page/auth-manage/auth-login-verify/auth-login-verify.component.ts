@@ -13,6 +13,8 @@ import { LoadingIndicatorComponent } from '../../../component/loading/loading-in
 import { DialogService } from '../../../core/services/dialog.service';
 import { BaseComponent } from '../../base.component';
 import { Base64Util } from '../../../common/utils/base64-util';
+import { ConfigService } from '../../../core/services/config.service';
+import { CryptoUtil } from '../../../common/utils/crypto-util';
 
 @Component({
   selector: 'login-verify',
@@ -29,6 +31,8 @@ import { Base64Util } from '../../../common/utils/base64-util';
 })
 export default class LoginComponent extends BaseComponent {
   validateForm!: FormGroup;
+  key!: string;
+  iv!: string;
   isApiFinish: boolean = true;
 
   constructor(
@@ -36,12 +40,18 @@ export default class LoginComponent extends BaseComponent {
     private AuthManageService: AuthManageService,
     private loadingService: LoadingService,
     private localStorageService: LocalStorageService,
+    private configService: ConfigService,
     private dialogService: DialogService
   ) {
     super();
     this.validateForm = new FormGroup({
       username: new FormControl('', [Validators.required, ValidatorsUtil.blank, ValidatorsUtil.intSymbolsEnglishNumbers]),
       password: new FormControl('', [Validators.required, ValidatorsUtil.blank, ValidatorsUtil.intSymbolsEnglishNumbers]),
+    });
+
+    this.configService.configData$.subscribe(data => {
+      this.key = data?.EncryptionSettings?.AESKey;
+      this.iv = data?.EncryptionSettings?.AESIV;
     });
   }
 
@@ -55,7 +65,7 @@ export default class LoginComponent extends BaseComponent {
     if (this.validateForm.invalid) {
       return; // Form is invalid, exit early.
     }
-    reqData.password = Base64Util.encode(reqData.password);
+    reqData.password = Base64Util.encode(CryptoUtil.encrypt(reqData.password, this.key, this.iv));
 
     this.loadingService.show();
     this.AuthManageService.login(reqData).pipe(
