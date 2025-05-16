@@ -8,14 +8,15 @@ import { tap, catchError } from 'rxjs/operators';
 })
 
 export class ConfigService {
-  private configUrl = 'assets/configs/config.json';
   private configDataSubject = new BehaviorSubject<any>(null);
   public configData$ = this.configDataSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   loadConfig(): Observable<any> {
-    return this.http.get(this.configUrl).pipe(
+    const version = new Date().getTime(); // 加上版本參數避免快取
+    const configUrl = `assets/configs/config.json?v=${version}`;  //放這，避免不更新
+    return this.http.get(configUrl).pipe(
       tap((data) => {
         this.configDataSubject.next(data);
         // console.log('Config Loaded:', data);
