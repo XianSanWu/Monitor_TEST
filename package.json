@@ -1,12 +1,20 @@
 {
-  "name": "monitor",
+  "name": "monitor-system",
   "version": "0.0.0",
+  "publishConfig": {
+    "access": "restricted"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "start:dev": "node set-env.js dev && ng serve",
+    "start:test": "node set-env.js test && ng serve",
+    "build:dev": "node set-env.js dev && ng build",
+    "build:test": "node set-env.js test && ng build --configuration=production",
+    "build:prod": "node set-env.js prod && ng build --configuration=production"
   },
   "private": true,
   "dependencies": {
@@ -25,7 +33,7 @@
     "bootstrap": "^5.3.0",
     "bootstrap-icons": "^1.10.5",
     "crypto-js": "^4.2.0",
-    "monitor": "file:",
+    "monitor-system": "file:",
     "rxjs": "^7.8.0",
     "zone.js": "~0.15.0"
   },

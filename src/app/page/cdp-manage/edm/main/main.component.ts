@@ -21,6 +21,7 @@ import { LoadingService } from '../../../../core/services/loading.service';
 import { BaseComponent } from '../../../base.component';
 import { CdpManageService } from '../../cdp-manage.service';
 import { Channel } from '../../../../core/enums/channel-enum';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'edm-main',
@@ -45,7 +46,7 @@ export default class MainComponent extends BaseComponent implements OnInit {
     private cdpManageService: CdpManageService,
     private configService: ConfigService,
     private loadingService: LoadingService,
-
+    private router: Router
   ) {
     super();
     // 初始化表單
@@ -144,9 +145,22 @@ export default class MainComponent extends BaseComponent implements OnInit {
       headerName: '愛酷 BatchId', field: 'BatchId',
       cellRenderer: (params: ICellRendererParams) => {
         const batchId = params.value;
-        const sendUuidSort = params.data.SendUuidSort;
-        const link = `/cdp/edm_senduuid_detail/${batchId}/${sendUuidSort}`;
-        return `<a href="${link}">${batchId}</a>`;
+    const sendUuidSort = params.data.SendUuidSort;
+    const linkText = batchId;
+
+    // 建立一個元素
+    const a = document.createElement('a');
+    a.href = 'javascript:void(0)';
+    a.innerText = linkText;
+    a.style.cursor = 'pointer';
+
+    // 點擊時用 Angular router 導航，避免整頁刷新
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.router.navigate(['/cdp/edm_senduuid_detail', batchId, sendUuidSort]);
+    });
+
+    return a;
       },
       maxWidth: 160
     },
