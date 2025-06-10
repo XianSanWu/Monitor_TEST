@@ -112,6 +112,20 @@ export default class MainComponent extends BaseComponent implements OnInit {
 
   }
 
+  get committedTotal(): number {
+    return this.respData1?.PartitionLags?.reduce(
+      (sum, x) => sum + (x?.CommittedOffset ?? 0),
+      0
+    ) ?? 0;
+  }
+
+  get highWatermarkTotal(): number {
+    return this.respData1?.PartitionLags?.reduce(
+      (sum, x) => sum + (x?.HighWatermark ?? 0),
+      0
+    ) ?? 0;
+  }
+
 
 
   //#region Ag-grid
@@ -145,22 +159,22 @@ export default class MainComponent extends BaseComponent implements OnInit {
       headerName: '愛酷 BatchId', field: 'BatchId',
       cellRenderer: (params: ICellRendererParams) => {
         const batchId = params.value;
-    const sendUuidSort = params.data.SendUuidSort;
-    const linkText = batchId;
+        const sendUuidSort = params.data.SendUuidSort;
+        const linkText = batchId;
 
-    // 建立一個元素
-    const a = document.createElement('a');
-    a.href = 'javascript:void(0)';
-    a.innerText = linkText;
-    a.style.cursor = 'pointer';
+        // 建立一個元素
+        const a = document.createElement('a');
+        a.href = 'javascript:void(0)';
+        a.innerText = linkText;
+        a.style.cursor = 'pointer';
 
-    // 點擊時用 Angular router 導航，避免整頁刷新
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      this.router.navigate(['/cdp/edm_senduuid_detail', batchId, sendUuidSort]);
-    });
+        // 點擊時用 Angular router 導航，避免整頁刷新
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.router.navigate(['/cdp/edm_senduuid_detail', batchId, sendUuidSort]);
+        });
 
-    return a;
+        return a;
       },
       maxWidth: 160
     },

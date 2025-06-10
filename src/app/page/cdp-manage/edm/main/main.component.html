@@ -7,7 +7,6 @@
   </h2>
 </div>
 
-
 <!-- 狀態流程顯示 -->
 <collapsible-section [isOpen]="false" title="🧭 狀態流程顯示">
   <div style="display: flex; justify-content: flex-start">
@@ -34,7 +33,6 @@
 <!-- 卡夫卡工作量 -->
 <collapsible-section title="📊 Kafka Partition Lag (卡夫卡工作量)">
   <div *ngIf="(respData1?.PartitionLags?.length ?? 0) > 0">
-    <!-- <h5 class="mt-3">📊 Kafka Partition Lag (卡夫卡工作量)</h5> -->
     <div class="row g-3 mt-2">
       <div
         class="col-md-6 col-lg-4"
@@ -69,25 +67,46 @@
       </div>
     </div>
 
-    <div class="alert alert-info mt-4 text-end">
-      <strong>Total Lag: </strong>
-      <span
-        [ngClass]="{
-          'text-success fw-bold': (respData1?.TotalLag ?? 0) <= 10,
-          'text-warning fw-bold':
-            (respData1?.TotalLag ?? 0) > 10 &&
-            (respData1?.TotalLag ?? 0) <= 100,
-          'text-danger fw-bold': (respData1?.TotalLag ?? 0) > 100
-        }"
-      >
-        {{ respData1?.TotalLag }}
-      </span>
-    </div>
+    <!-- 👇 加總區塊 -->
+    <ng-container *ngIf="respData1?.PartitionLags as lags">
+      <div class="alert alert-info mt-4 text-end">
+        <strong>📈 Kafka Lag 概覽：</strong><br />
+        <div>
+          ✅ <strong>已處理：</strong>
+          {{
+          committedTotal
+          }}
+        </div>
+        <div>
+          ⏳ <strong>待處理：</strong>
+          <span
+            [ngClass]="{
+              'text-success fw-bold': (respData1?.TotalLag ?? 0) <= 10,
+              'text-warning fw-bold':
+                (respData1?.TotalLag ?? 0) > 10 &&
+                (respData1?.TotalLag ?? 0) <= 100,
+              'text-danger fw-bold': (respData1?.TotalLag ?? 0) > 100
+            }"
+          >
+            {{ respData1?.TotalLag }}
+          </span>
+        </div>
+        <div>
+          📊 <strong>總數：</strong>
+          {{
+          highWatermarkTotal
+          }}
+        </div>
+      </div>
+    </ng-container>
   </div>
 </collapsible-section>
 
 <!-- ag-grid表單 -->
-<collapsible-section title="📋 EDM 查詢列表" tooltipText="點擊欄位兩下，可以複製該欄位資料，單擊可跳轉超連結（若為網址）">
+<collapsible-section
+  title="📋 EDM 查詢列表"
+  tooltipText="點擊欄位兩下，可以複製該欄位資料，單擊可跳轉超連結（若為網址）"
+>
   <div class="row">
     <ag-grid-angular
       #agGrid

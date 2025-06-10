@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './core/services/auth.service';
 import { ConfigService } from './core/services/config.service';
 import { LoadingService } from './core/services/loading.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -23,8 +24,15 @@ export class AppComponent implements OnInit {
   constructor(
     private configService: ConfigService,
     public authService: AuthService,
-    public loadingService: LoadingService
-  ) { }
+    public loadingService: LoadingService,
+    public router: Router
+  ) {
+     router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      window.scrollTo({ top: 0 });
+    });
+  }
 
   ngOnInit(): void {
     this.configService.loadConfig().subscribe({
