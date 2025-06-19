@@ -140,14 +140,16 @@ export default class MainComponent extends BaseComponent implements OnInit {
   };
 
   columnDefs: ColDef[] = [
-    // {
-    //   headerName: '愛酷 SendUuid', field: 'SendUuid',
-    //   // cellRenderer: LinkRenderComponent,
-    //   // cellRendererParams: {
-    //   //   basePath: 'cdp/edm_senduuid_detail',  // 固定路徑部分
-    //   //   // routeParams: {  }  // 動態參數部分
-    //   // }
-    // },
+    {
+      headerName: "序號",
+      valueGetter: params => {
+        const rowIndex = params.node?.rowIndex ?? -1;
+        const currentPage = params.api.paginationGetCurrentPage();
+        const pageSize = params.api.paginationGetPageSize();
+        return rowIndex >= 0 ? rowIndex + 1 + (currentPage * pageSize) : '';
+      },
+      width: 100
+    },
     {
       headerName: '批號', field: 'SendUuidSort',
       maxWidth: 90,
@@ -296,6 +298,8 @@ export default class MainComponent extends BaseComponent implements OnInit {
 
   //  **呼叫後端 API 載入資料**
   loadData() {
+    this.loadingService.show();
+
     //#region 組裝請求資料
     // 取得 ag-Grid 的排序資訊
     const columnModel = this.gridApi?.getColumnState() || [];
@@ -360,6 +364,7 @@ export default class MainComponent extends BaseComponent implements OnInit {
         }),
         takeUntil(this.destroy$),
         finalize(() => {
+          this.loadingService.hide();
         })
       ).subscribe();
   }

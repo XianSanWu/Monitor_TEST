@@ -247,14 +247,30 @@ export default class SenduuidDetailComponent extends BaseComponent implements On
   onCellDoubleClicked(event: CellDoubleClickedEvent) {
     const value = event.value;
     if (value !== null && value !== undefined) {
-      navigator.clipboard.writeText(value?.toString()?.trim())
-        .then(() => {
-          this.dialogService.openCustomSnackbar({ title: '提示訊息', message: '複製成功：' + value || '複製失敗' });
-        })
-        .catch(err => {
-          this.dialogService.openCustomSnackbar({ title: '提示訊息', message: '複製失敗：' + err.message || '複製失敗' });
-        });
+      this.copyToClipboardFallback(value.toString().trim());
     }
+  }
+
+  copyToClipboardFallback(text: string) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';  // 避免畫面跳動
+    textarea.style.opacity = '0'; // 隱藏元素
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    try {
+      const successful = document.execCommand('copy');
+      if (successful) {
+        this.dialogService.openCustomSnackbar({ title: '提示訊息', message: '複製成功：' + text });
+      } else {
+        this.dialogService.openCustomSnackbar({ title: '提示訊息', message: '複製失敗' });
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      this.dialogService.openCustomSnackbar({ title: '提示訊息', message: '複製失敗：' + errorMessage });
+    }
+    document.body.removeChild(textarea);
   }
 
   // 分頁相關
@@ -269,6 +285,7 @@ export default class SenduuidDetailComponent extends BaseComponent implements On
 
   //  **呼叫後端 API 載入資料**
   loadData() {
+    this.loadingService.show();
     //#region 組裝請求資料
     // 取得 ag-Grid 的排序資訊
     const columnModel = this.gridApi?.getColumnState() || [];
@@ -317,11 +334,6 @@ export default class SenduuidDetailComponent extends BaseComponent implements On
       fieldModel: this.validateForm.getRawValue(),
     };
     //#endregion
-
-    if (this.firstInit) {
-      this.loadingService.show();
-      this.firstInit = !this.firstInit;
-    }
 
     this.cdpManageService.getSearchList(reqData)
       .pipe(

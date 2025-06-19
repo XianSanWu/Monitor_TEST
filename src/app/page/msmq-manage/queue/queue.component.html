@@ -8,7 +8,7 @@
 </div>
 
 <collapsible-section
-  [isOpen]="false"
+  [id]="'QueryQueue'"
   title="🔍 查詢條件"
   tooltipText="請輸入對應條件查詢。(Enter 可直接查詢)"
 >
@@ -40,7 +40,7 @@
   </div>
 </collapsible-section>
 
-<collapsible-section title="📋 及時查看">
+<collapsible-section [id]="'QueryQueueNow'" title="📋 及時查看">
   <div class="">
     <h5 class="text-primary">
       佇列總數：

@@ -8,7 +8,7 @@
 </div>
 
 <!-- 狀態流程顯示 -->
-<collapsible-section [isOpen]="false" title="🧭 狀態流程顯示">
+<collapsible-section [id]="'edmAttoProgress'" title="🧭 狀態流程顯示">
   <div style="display: flex; justify-content: flex-start">
     <atto-progress [items]="edmAttoProgress"> </atto-progress>
   </div>
@@ -31,7 +31,7 @@
 </div>
 
 <!-- 卡夫卡工作量 -->
-<collapsible-section title="📊 Kafka Partition Lag (卡夫卡工作量)">
+<collapsible-section [id]="'KafkaPartitionLag'" title="📊 Kafka Partition Lag (卡夫卡工作量)">
   <div *ngIf="(respData1?.PartitionLags?.length ?? 0) > 0">
     <div class="row g-3 mt-2">
       <div
@@ -69,13 +69,54 @@
 
     <!-- 👇 加總區塊 -->
     <ng-container *ngIf="respData1?.PartitionLags as lags">
+      <div class="card mt-4 shadow-sm border-primary">
+        <div class="card-header bg-primary text-white">
+          <strong>📈 Kafka Lag 概覽</strong>
+        </div>
+
+        <div class="card-body">
+          <div class="row text-center">
+            <div class="col-md-4 mb-3">
+              <div class="text-muted">✅ 已處理</div>
+
+              <h5 class="text-success fw-bold">{{ committedTotal }}</h5>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="text-muted">⏳ 待處理</div>
+
+              <h5
+                [ngClass]="{
+                  'text-success fw-bold': (respData1?.TotalLag ?? 0) <= 10,
+
+                  'text-warning fw-bold':
+                    (respData1?.TotalLag ?? 0) > 10 &&
+                    (respData1?.TotalLag ?? 0) <= 100,
+
+                  'text-danger fw-bold': (respData1?.TotalLag ?? 0) > 100
+                }"
+              >
+                {{ respData1?.TotalLag }}
+              </h5>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="text-muted">📊 總數</div>
+
+              <h5 class="text-primary fw-bold">{{ highWatermarkTotal }}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- 👇 加總區塊 -->
+    <ng-container *ngIf="respData1?.PartitionLags as lags">
       <div class="alert alert-info mt-4 text-end">
         <strong>📈 Kafka Lag 概覽：</strong><br />
         <div>
           ✅ <strong>已處理：</strong>
-          {{
-          committedTotal
-          }}
+          {{ committedTotal }}
         </div>
         <div>
           ⏳ <strong>待處理：</strong>
@@ -93,9 +134,7 @@
         </div>
         <div>
           📊 <strong>總數：</strong>
-          {{
-          highWatermarkTotal
-          }}
+          {{ highWatermarkTotal }}
         </div>
       </div>
     </ng-container>
@@ -104,6 +143,7 @@
 
 <!-- ag-grid表單 -->
 <collapsible-section
+  [id]="'EDM_Main'"
   title="📋 EDM 查詢列表"
   tooltipText="點擊欄位兩下，可以複製該欄位資料，單擊可跳轉超連結（若為網址）"
 >

@@ -5,6 +5,7 @@ export class CustomFilterComponent implements IFilterComp {
   filterText!: string | null;
   gui!: HTMLDivElement;
   eFilterText: any;
+  debounceTimeout: any;
 
   init(params: IFilterParams) {
     this.filterParams = params;
@@ -12,7 +13,6 @@ export class CustomFilterComponent implements IFilterComp {
     this.setupGui(params);
   }
 
-  // not called by AG Grid, just for us to help setup
   setupGui(params: IFilterParams) {
     this.gui = document.createElement('div');
     this.gui.innerHTML = `
@@ -29,15 +29,21 @@ export class CustomFilterComponent implements IFilterComp {
           </div>
         `;
 
-
     const listener = (event: any) => {
       this.filterText = event.target.value;
-      params.filterChangedCallback();
+
+      // 先清掉舊的 timer
+      if (this.debounceTimeout) {
+        clearTimeout(this.debounceTimeout);
+      }
+
+      // 設定 debounce: 例如 500ms
+      this.debounceTimeout = setTimeout(() => {
+        params.filterChangedCallback();
+      }, 500);
     };
 
     this.eFilterText = this.gui.querySelector('#filterText');
-    this.eFilterText.addEventListener('changed', listener);
-    this.eFilterText.addEventListener('paste', listener);
     this.eFilterText.addEventListener('input', listener);
   }
 
@@ -47,20 +53,16 @@ export class CustomFilterComponent implements IFilterComp {
 
   doesFilterPass(params: IDoesFilterPassParams) {
     const { node } = params;
-
-    // make sure each word passes separately, ie search for firstname, lastname
     let passed = true;
     this.filterText
       ?.toLowerCase()
       .split(' ')
       .forEach((filterWord) => {
         const value = this.filterParams.getValue(node);
-
         if (value.toString().toLowerCase().indexOf(filterWord) < 0) {
           passed = false;
         }
       });
-
     return passed;
   }
 
@@ -72,7 +74,6 @@ export class CustomFilterComponent implements IFilterComp {
     if (!this.isFilterActive()) {
       return null;
     }
-
     return { value: this.filterText };
   }
 
@@ -84,8 +85,8 @@ export class CustomFilterComponent implements IFilterComp {
 
   afterGuiAttached(params?: IAfterGuiAttachedParams): void {
     if (!params?.suppressFocus) {
-      // focus the input element for keyboard navigation
       this.eFilterText.focus();
     }
   }
 }
+

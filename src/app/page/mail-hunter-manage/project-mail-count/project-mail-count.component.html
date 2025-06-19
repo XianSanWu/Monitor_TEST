@@ -7,6 +7,7 @@
   </h2>
 </div>
 <collapsible-section
+  [id]="'QueryProjectMailCount'"
   title="🔍 查詢條件"
   tooltipText="請輸入對應條件查詢。(Enter 可直接查詢)"
 >
@@ -47,7 +48,7 @@
 
 <!-- ag-grid表單 -->
 <collapsible-section
-  [isOpen]="isOpenSearch"
+  [id]="'SearchProjectMailCount'"
   title="📋 及時查看"
   tooltipText="點擊欄位兩下，可以複製該欄位資料"
 >

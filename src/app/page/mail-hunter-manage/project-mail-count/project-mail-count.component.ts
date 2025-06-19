@@ -43,7 +43,6 @@ export default class ProjectMailCountComponent extends BaseComponent {
     { key: Department.AT001, value: '個金' },
   ];;
   isApiFinish: boolean = true;
-  isOpenSearch: boolean = false;
 
   constructor(
     private dialogService: DialogService,
@@ -92,7 +91,6 @@ export default class ProjectMailCountComponent extends BaseComponent {
       return;
     }
     this.isApiFinish = false;
-    this.isOpenSearch = true;
 
     const rawValue = this.validateForm.getRawValue();
 
