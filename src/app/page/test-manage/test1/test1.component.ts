@@ -19,6 +19,8 @@ import { TestManageService } from '../test-manage.service';
 import { RestStatus } from '../../../core/enums/rest-enum';
 import { BaseComponent } from '../../base.component';
 import { FieldModel, WorkflowStepsSearchListRequest } from '../../../core/models/requests/workflow-steps.model';
+import { DynamicLineChartComponent } from '../../../component/chart/dynamic-line-chart-component/dynamic-line-chart-component.component';
+import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
 
 @Component({
   selector: 'test1',
@@ -32,6 +34,8 @@ import { FieldModel, WorkflowStepsSearchListRequest } from '../../../core/models
     DateRangeComponent,
     SearchSelectComponent,
     AgGridModule,
+    CollapsibleSectionComponent,
+    DynamicLineChartComponent
   ],
   providers: [LoadingService, TestManageService],
   templateUrl: './test1.component.html',

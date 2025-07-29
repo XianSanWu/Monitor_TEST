@@ -31,7 +31,10 @@
 </div>
 
 <!-- 卡夫卡工作量 -->
-<collapsible-section [id]="'KafkaPartitionLag'" title="📊 Kafka Partition Lag (卡夫卡工作量)">
+<collapsible-section
+  [id]="'KafkaPartitionLag'"
+  title="📊 Kafka Partition Lag (卡夫卡工作量)"
+>
   <div *ngIf="(respData1?.PartitionLags?.length ?? 0) > 0">
     <div class="row g-3 mt-2">
       <div

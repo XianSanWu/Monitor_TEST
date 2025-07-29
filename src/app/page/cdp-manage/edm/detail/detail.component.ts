@@ -20,7 +20,7 @@ import { WorkflowStepsSearchListRequest } from '../../../../core/models/requests
 import { Option, PageBase } from '../../../../core/models/common/base.model';
 
 @Component({
-  selector: 'edm-senduuid-detail',
+  selector: 'edm-detail',
   standalone: true,
   imports: [
     CommonModule,
@@ -31,10 +31,10 @@ import { Option, PageBase } from '../../../../core/models/common/base.model';
     CollapsibleSectionComponent
   ],
   providers: [LoadingService, CdpManageService],
-  templateUrl: './senduuid-detail.component.html',
-  styleUrl: './senduuid-detail.component.scss'
+  templateUrl: './detail.component.html',
+  styleUrl: './detail.component.scss'
 })
-export default class SenduuidDetailComponent extends BaseComponent implements OnInit {
+export default class DetailComponent extends BaseComponent implements OnInit {
   batchId!: string;
   sendUuidSort!: string;
   validateForm: FormGroup;

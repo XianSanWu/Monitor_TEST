@@ -1,0 +1,36 @@
+<div class="dynamicLineChart">
+  <div
+    class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2"
+  >
+    <!-- 左邊 title -->
+    <h2 class="m-0">
+      <strong>{{ title }}</strong>
+    </h2>
+
+    <!-- 右邊按鈕群 -->
+    <div class="d-flex gap-2">
+      <button (click)="exportAsImage()" class="btn btn-success" type="button">
+        <i class="bi bi-file-earmark-arrow-up"></i> 匯出 PNG
+      </button>
+      <button (click)="exportAsPDF()" class="btn btn-success" type="button">
+        <i class="bi bi-file-earmark-arrow-up"></i> 匯出 PDF
+      </button>
+    </div>
+  </div>
+
+  <div
+    #chartWrapper
+    class="chart-wrapper p-4 bg-white rounded shadow w-full overflow-auto"
+    [style.height.px]="chartHeight"
+    style="background-color: white; position: relative; width: 100%; height: 100%;"
+  >
+    <canvas
+        baseChart
+        [data]="lineChartData"
+        [options]="lineChartOptions"
+        [type]="lineChartType"
+        [height]="chartHeight"
+        style="width: 100%; height: 100%; background-color: white;"
+      ></canvas>
+  </div>
+</div>

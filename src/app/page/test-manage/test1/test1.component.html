@@ -78,7 +78,10 @@
     >
     </ag-grid-angular>
 
-    <div style="margin-top: 10px" class="d-flex justify-content-center align-items-center gap-2">
+    <div
+      style="margin-top: 10px"
+      class="d-flex justify-content-center align-items-center gap-2"
+    >
       <button
         class="btn btn-primary"
         (click)="onPageChange(1)"
@@ -110,4 +113,49 @@
       </button>
     </div>
   </div>
+
+  <collapsible-section [id]="'chart'" title="📈 圖表">
+    <div class="row">
+      <dynamic-line-chart-component
+        [title]="'發送量'"
+        [data]="[
+          { date: '2025-07-01', A: 10, B: 20 },
+          { date: '2025-07-02', A: 15, B: 30000000 },
+          { date: '2025-07-03', A: 20000000, B: 25 }
+        ]"
+        [chartHeight]="300"
+        [xKey]="'date'"
+        [yKey]="'封'"
+      ></dynamic-line-chart-component>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-md-6">
+        <dynamic-line-chart-component
+          [title]="'點擊率'"
+          [data]="[
+            { date: '2025-07-01', A: 10, B: 20, C: 60000000, D: 9555 },
+            { date: '2025-07-02', A: 15, B: 30000000, C: 30000000, D: 55555 },
+            { date: '2025-07-03', A: 20000000, B: 25, C: 20000000, D: 75555 }
+          ]"
+          [chartHeight]="200"
+          [xKey]="'date'"
+          [yKey]="'%'"
+        ></dynamic-line-chart-component>
+      </div>
+      <div class="col-md-6">
+        <dynamic-line-chart-component
+          [title]="'連結點擊率'"
+          [chartHeight]="200"
+          [data]="[
+            { date: '2025-07-01', A: 10, B: 20 },
+            { date: '2025-07-02', A: 15, B: 30000000 },
+            { date: '2025-07-03', A: 20000000, B: 25 }
+          ]"
+          [xKey]="'date'"
+          [yKey]="'%'"
+        ></dynamic-line-chart-component>
+      </div>
+    </div>
+  </collapsible-section>
 </div>

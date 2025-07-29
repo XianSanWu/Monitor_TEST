@@ -31,10 +31,8 @@
           "children": []
         }
       ]
-    }
-  ],
-  "testMenu": [
-    {
+    },
+     {
       "title": "登入管理",
       "icon": "lock",
       "link": "/login",
@@ -58,9 +56,7 @@
           "children": []
         }
       ]
-    }
-  ],
-  "otherMenu": [
+    },
     {
       "title": "CDP工作流程管理",
       "icon": "list",
@@ -95,6 +91,19 @@
           "title": "訊息佇列系統",
           "icon": "gear",
           "link": "/msmq/queue",
+          "children": []
+        }
+      ]
+    },
+    {
+      "title": "權限管理",
+      "icon": "list",
+      "link": "",
+      "children": [
+        {
+          "title": "權限設定",
+          "icon": "gear",
+          "link": "/permission/permission_main",
           "children": []
         }
       ]
