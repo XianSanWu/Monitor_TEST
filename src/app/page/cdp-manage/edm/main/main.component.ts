@@ -1,10 +1,11 @@
 
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
-import { AgGridModule, AgGridAngular } from 'ag-grid-angular';
-import { GridApi, ColDef, ICellRendererParams, CellDoubleClickedEvent } from 'ag-grid-community';
-import { forkJoin, catchError, of, takeUntil, finalize, tap } from 'rxjs';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
+import { CellDoubleClickedEvent, ColDef, GridApi, ICellRendererParams } from 'ag-grid-community';
+import { catchError, finalize, forkJoin, of, takeUntil, tap } from 'rxjs';
 import { CommonUtil } from '../../../../common/utils/common-util';
 import { CustomFilterComponent } from '../../../../component/ag-grid/custom-filter/custom-filter.component';
 import { SelectFilterComponent } from '../../../../component/ag-grid/select-filter/select-filter.component';
@@ -12,6 +13,7 @@ import { AttoProgressComponent } from '../../../../component/form/atto-progress/
 import { BasicInputComponent } from '../../../../component/form/basic-input/basic-input.component';
 import { CollapsibleSectionComponent } from '../../../../component/form/collapsible-section/collapsible-section.component';
 import { LoadingIndicatorComponent } from '../../../../component/loading/loading-indicator/loading-indicator.component';
+import { Channel } from '../../../../core/enums/channel-enum';
 import { Option, PageBase } from '../../../../core/models/common/base.model';
 import { WorkflowStepsKafkaRequest, WorkflowStepsSearchListRequest } from '../../../../core/models/requests/workflow-steps.model';
 import { WorkflowStepsKafkaResponse } from '../../../../core/models/responses/workflow-steps.model';
@@ -20,8 +22,6 @@ import { DialogService } from '../../../../core/services/dialog.service';
 import { LoadingService } from '../../../../core/services/loading.service';
 import { BaseComponent } from '../../../base.component';
 import { CdpManageService } from '../../cdp-manage.service';
-import { Channel } from '../../../../core/enums/channel-enum';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'edm-main',
@@ -125,8 +125,6 @@ export default class MainComponent extends BaseComponent implements OnInit {
       0
     ) ?? 0;
   }
-
-
 
   //#region Ag-grid
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;

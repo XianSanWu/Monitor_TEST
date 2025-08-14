@@ -1,0 +1,87 @@
+.module-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1976d2;
+  margin: 24px 0 6px;
+  padding: 8px 20px;
+  border-left: 6px solid #1976d2;
+  background-color: #e3f2fd;
+  border-radius: 4px;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: hidden; /* 桌面版不出現捲軸 */
+}
+
+.permission-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* 固定小欄位寬度，文字欄位自動伸縮 */
+}
+
+.permission-table .small-col { width: 70px; text-align: center; }
+.permission-table .icon-header, .permission-table .icon-cell { width: 50px; text-align: center; }
+
+.permission-table th,
+.permission-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  vertical-align: middle;
+}
+
+.permission-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+/* 固定小欄位: Read/Create/Update/Delete/IsUse/IsVisible */
+.fixed-col {
+  width: 70px;
+  min-width: 70px;
+  max-width: 70px;
+  text-align: center;
+}
+
+/* icon欄位 */
+.icon-header,
+.icon-cell {
+  width: 50px;
+  min-width: 50px;
+  max-width: 50px;
+  text-align: center;
+}
+
+/* 左對齊文字欄位，自動填滿剩餘空間 */
+.text-col {
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* 使用 flex-grow 讓欄位自動填剩餘空間，但不影響固定欄位 */
+  width: 18%;      /* 讓 table-layout: fixed 或 auto 也能運作 */
+}
+
+/* RWD: 小螢幕才出現水平捲軸 */
+@media (max-width: 1024px) {
+  .table-wrapper {
+    overflow-x: auto;
+  }
+  .permission-table {
+    min-width: 700px;
+  }
+}
+
+@media (max-width: 768px) {
+  .permission-table th,
+  .permission-table td {
+    font-size: 0.9rem;
+    padding: 6px;
+  }
+}
+
+.submit-section {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}

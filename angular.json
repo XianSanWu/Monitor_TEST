@@ -37,7 +37,7 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.js"
             ],
             "allowedCommonJsDependencies": [
               "core-js",
@@ -50,6 +50,25 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "assets": [
+                {
+                  "glob": "config.prod.json",
+                  "input": "public/assets/configs",
+                  "output": "assets/configs"
+                },
+                {
+                  "glob": "**/*",
+                  "input": "public/assets",
+                  "output": "assets",
+                  "ignore": ["**/config.*.json", "**/config.json"]
+                }
+              ],
               "budgets": [
                 {
                   "type": "allScript",
@@ -68,6 +87,31 @@
               "extractLicenses": true,
               "namedChunks": false
             },
+            "test": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.test.ts"
+                }
+              ],
+              "assets": [
+                {
+                  "glob": "config.test.json",
+                  "input": "public/assets/configs",
+                  "output": "assets/configs"
+                },
+                {
+                  "glob": "**/*",
+                  "input": "public/assets",
+                  "output": "assets",
+                  "ignore": ["**/config.*.json", "**/config.json"]
+                }
+              ],
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "namedChunks": true
+            },
             "development": {
               "optimization": false,
               "sourceMap": true,
@@ -82,6 +126,9 @@
           "configurations": {
             "production": {
               "buildTarget": "Monitor:build:production"
+            },
+            "test": {
+              "buildTarget": "Monitor:build:test"
             },
             "development": {
               "buildTarget": "Monitor:build:development"

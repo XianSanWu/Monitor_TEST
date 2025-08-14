@@ -1,20 +1,21 @@
-import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, HostListener } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ValidatorsUtil } from '../../../common/utils/validators-util';
-import { AuthManageService } from '../auth-manage.service';
 import { catchError, finalize, takeUntil, tap } from 'rxjs';
-import { LoadingService } from '../../../core/services/loading.service';
-import { LocalStorageService } from '../../../core/services/local-storage.service';
-import { LoginRequest } from '../../../core/models/requests/login.model';
+import { TokenService } from '../../../api/services/token.service';
+import { Base64Util } from '../../../common/utils/base64-util';
+import { CryptoUtil } from '../../../common/utils/crypto-util';
+import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
 import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
-import { DialogService } from '../../../core/services/dialog.service';
-import { BaseComponent } from '../../base.component';
-import { Base64Util } from '../../../common/utils/base64-util';
+import { LoginRequest } from '../../../core/models/requests/login.model';
 import { ConfigService } from '../../../core/services/config.service';
-import { CryptoUtil } from '../../../common/utils/crypto-util';
+import { DialogService } from '../../../core/services/dialog.service';
+import { LoadingService } from '../../../core/services/loading.service';
+import { LocalStorageService } from '../../../core/services/local-storage.service';
+import { BaseComponent } from '../../base.component';
+import { AuthManageService } from '../auth-manage.service';
 
 @Component({
   selector: 'login-verify',
@@ -41,7 +42,8 @@ export default class LoginComponent extends BaseComponent {
     private loadingService: LoadingService,
     private localStorageService: LocalStorageService,
     private configService: ConfigService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private tokenService: TokenService,
   ) {
     super();
     this.validateForm = new FormGroup({
@@ -77,12 +79,21 @@ export default class LoginComponent extends BaseComponent {
         throw Error(err.message);
       }),
       tap(res => {
-        if (!res?.Data) {
+        if (!res?.Data || !res?.Data?.IsLogin) {
           this.dialogService.openCustomSnackbar({
             message: '驗證失敗，請輸入正確帳號密碼'
           });
           return;
         }
+
+        if (!res?.Data || !res?.Data?.Token) {
+          this.dialogService.openCustomSnackbar({
+            message: '驗證失敗，無正確回應Token'
+          });
+          return;
+        }
+
+        this.tokenService.setToken(res?.Data?.Token);
 
         this.localStorageService.setItem('isLoggedIn', reqData.username);
         this.router.navigate(['/home']);

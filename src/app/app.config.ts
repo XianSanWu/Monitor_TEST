@@ -1,10 +1,15 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
-import { routes } from './app.routes';
-import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+} from '@angular/common/http';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { httpRequestInterceptor } from './api/error/http-request-interceptor';
+import { authInterceptor } from './api/Interceptors/auth/auth-interceptor';
+import { httpRequestInterceptor } from './api/Interceptors/error/http-request-interceptor';
+import { routes } from './app.routes';
 // import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
@@ -15,7 +20,7 @@ export const appConfig: ApplicationConfig = {
     // provideClientHydration(withEventReplay()),
     provideHttpClient(
       withFetch(),
-      withInterceptors([httpRequestInterceptor])
+      withInterceptors([httpRequestInterceptor, authInterceptor])
     ),
   ],
 };

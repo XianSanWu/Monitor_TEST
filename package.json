@@ -6,15 +6,20 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "start:dev": "node set-env.js dev && ng serve",
-    "start:test": "node set-env.js test && ng serve",
-    "build:dev": "node set-env.js dev && ng build",
-    "build:test": "node set-env.js test && ng build --configuration=production",
-    "build:prod": "node set-env.js prod && ng build --configuration=production"
+    "//開發環境": "啟動[npm start] ",
+    "start": "ng serve --configuration=development --host 0.0.0.0 --port 4200",
+    "start:fast": "ng serve --configuration=development --disable-host-check --live-reload=false --hmr=false",
+    "build": "不建置",
+    "//測試環境": "啟動[npm run start:test] / 建置[npm run build:test]",
+    "start:test": "ng serve --configuration=test --host 0.0.0.0 --port 4200",
+    "start:test:fast": "ng serve --configuration=test --disable-host-check --live-reload=false --hmr=false",
+    "build:test": "ng build --configuration=test",
+    "//正式環境": "啟動 [npm run start:prod] / 建置 [npm run build:prod]",
+    "start:prod": "ng serve --configuration=production --host 0.0.0.0 --port 4200",
+    "start:prod:fast": "ng serve --configuration=production --host 0.0.0.0 --port 4200 --live-reload=false --hmr=false",
+    "build:prod": "ng build --configuration=production"
   },
   "private": true,
   "dependencies": {

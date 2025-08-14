@@ -3,11 +3,122 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "ng serve",
+      "name": "開發環境偵錯 (快速)",
+      "type": "chrome",
+      "request": "launch",
+      "preLaunchTask": "npm: start:fast",
+      "url": "http://localhost:4200/",
+      "webRoot": "${workspaceFolder}/src",
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/*",
+        "webpack:///./~/*": "${webRoot}/node_modules/*",
+        "webpack:///./*": "${webRoot}/*"
+      },
+      "runtimeArgs": [
+        "--disable-web-security",
+        "--disable-features=VizDisplayCompositor",
+        "--auto-open-devtools-for-tabs"
+      ],
+      "userDataDir": "${workspaceFolder}/.vscode/chrome-debug-profile",
+      "timeout": 30000
+    },
+    {
+      "name": "開發環境偵錯",
       "type": "chrome",
       "request": "launch",
       "preLaunchTask": "npm: start",
-      "url": "http://localhost:4200/"
+      "url": "http://localhost:4200/",
+      "webRoot": "${workspaceFolder}/src",
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/*",
+        "webpack:///./~/*": "${webRoot}/node_modules/*",
+        "webpack:///./*": "${webRoot}/*"
+      },
+      "runtimeArgs": [
+        "--disable-web-security",
+        "--disable-features=VizDisplayCompositor",
+        "--auto-open-devtools-for-tabs"
+      ],
+      "userDataDir": "${workspaceFolder}/.vscode/chrome-debug-profile",
+      "timeout": 30000
+    },
+    {
+      "name": "測試環境偵錯 (快速)",
+      "type": "chrome",
+      "request": "launch",
+      "preLaunchTask": "npm: start:test:fast",
+      "url": "http://localhost:4200/",
+      "webRoot": "${workspaceFolder}/src",
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/*",
+        "webpack:///./~/*": "${webRoot}/node_modules/*",
+        "webpack:///./*": "${webRoot}/*"
+      },
+      "runtimeArgs": [
+        "--disable-web-security",
+        "--disable-features=VizDisplayCompositor",
+        "--auto-open-devtools-for-tabs"
+      ],
+      "userDataDir": "${workspaceFolder}/.vscode/chrome-debug-profile",
+      "timeout": 30000
+    },
+    {
+      "name": "測試環境偵錯",
+      "type": "chrome",
+      "request": "launch",
+      "preLaunchTask": "npm: start:test",
+      "url": "http://localhost:4200/",
+      "webRoot": "${workspaceFolder}/src",
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/*",
+        "webpack:///./~/*": "${webRoot}/node_modules/*",
+        "webpack:///./*": "${webRoot}/*"
+      },
+      "runtimeArgs": [
+        "--disable-web-security",
+        "--disable-features=VizDisplayCompositor",
+        "--auto-open-devtools-for-tabs"
+      ],
+      "userDataDir": "${workspaceFolder}/.vscode/chrome-debug-profile",
+      "timeout": 30000
+    },
+    {
+      "name": "正式環境偵錯 (快速)",
+      "type": "chrome",
+      "request": "launch",
+      "preLaunchTask": "npm: start:prod:fast",
+      "url": "http://localhost:4200/",
+      "webRoot": "${workspaceFolder}/src",
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/*",
+        "webpack:///./~/*": "${webRoot}/node_modules/*",
+        "webpack:///./*": "${webRoot}/*"
+      },
+      "runtimeArgs": [
+        "--disable-features=VizDisplayCompositor",
+        "--auto-open-devtools-for-tabs"
+      ],
+      "userDataDir": "${workspaceFolder}/.vscode/chrome-debug-profile",
+      "timeout": 30000
+    },
+    {
+      "name": "正式環境偵錯",
+      "type": "chrome",
+      "request": "launch",
+      "preLaunchTask": "npm: start:prod",
+      "url": "http://localhost:4200/",
+      "webRoot": "${workspaceFolder}/src",
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/*",
+        "webpack:///./~/*": "${webRoot}/node_modules/*",
+        "webpack:///./*": "${webRoot}/*"
+      },
+      "runtimeArgs": [
+        "--disable-features=VizDisplayCompositor",
+        "--auto-open-devtools-for-tabs"
+      ],
+      "userDataDir": "${workspaceFolder}/.vscode/chrome-debug-profile",
+      "timeout": 30000
     },
     {
       "name": "ng test",

@@ -26,17 +26,11 @@
   </mat-form-field>
 
   <!-- 錯誤訊息 -->
-  <div class="note errorText" *ngIf="hasError()">
-    <p
-      *ngIf="(ctl?.dirty || ctl?.touched) && ctl?.errors?.['required']; else otherErr"
-    >
-      此為必填欄位
-    </p>
+  <div class="note errorText" [style.visibility]="hasError() ? 'visible' : 'hidden'">
+    <p *ngIf="ctl?.errors?.['required']; else otherErr">此為必填欄位</p>
     <ng-template #otherErr>
       <p>{{ firstErr }}</p>
     </ng-template>
   </div>
 
-  <!-- 預留錯誤訊息的空間 -->
-  <div class="errorPlaceholder" *ngIf="!hasError()"></div>
 </div>

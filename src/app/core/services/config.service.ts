@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ export class ConfigService {
 
   loadConfig(): Observable<any> {
     const version = new Date().getTime(); // 加上版本參數避免快取
-    const configUrl = `assets/configs/config.json?v=${version}`;  //放這，避免不更新
+    // const configUrl = `assets/configs/config.json?v=${version}`;  //放這，避免不更新
+    const configUrl = `assets/configs/${environment.configFile}?v=${version}`;  //放這，避免不更新
     return this.http.get(configUrl).pipe(
       tap((data) => {
         this.configDataSubject.next(data);

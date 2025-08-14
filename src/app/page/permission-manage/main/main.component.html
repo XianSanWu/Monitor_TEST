@@ -1,0 +1,89 @@
+<loading-indicator></loading-indicator>
+
+<div class="pageTitle">
+  <h2>
+    <i class="bi bi-list-task"></i>
+    權限管理
+  </h2>
+</div>
+<div class="d-flex justify-content-end align-items-center mb-4 w-100">
+  <div class="d-flex gap-2">
+    <button class="btn btn-primary">
+      <i class="bi bi-pencil-square"></i> 新增 & 修改功能
+    </button>
+    <button class="btn btn-success" (click)="onDetail('Create')">
+      <i class="bi bi-plus-circle"></i> 新增 & 複製權限
+    </button>
+  </div>
+</div>
+
+<collapsible-section [id]="'PermissionFunction'" title="🔑 權限功能">
+  <div class="row">
+    <dropdown
+      title="查看類型"
+      [form]="validateForm"
+      ctlName="isUse"
+      [selectList]="selectList"
+      class="col-3"
+      (valueChange)="onValueChange($event)"
+    ></dropdown>
+  </div>
+</collapsible-section>
+
+<collapsible-section [id]="'PermissionFunction'" title="🛠️ 帳號管理"
+  tooltipText="點擊欄位兩下，可以複製該欄位資料，單擊可跳轉超連結（若為網址或按鈕）"
+>
+  <div class="row">
+    <ag-grid-angular
+      #agGrid
+      style="width: 100%; height: 500px"
+      class="ag-theme-alpine"
+      [rowData]="rowData"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [pagination]="false"
+      [animateRows]="true"
+      [context]="{ componentParent: this }"
+      (gridReady)="onGridReady($event)"
+      (sortChanged)="onSortChanged()"
+      (filterChanged)="onFilterChanged()"
+      (cellDoubleClicked)="onCellDoubleClicked($event)"
+    >
+    </ag-grid-angular>
+
+    <div
+      style="margin-top: 10px"
+      class="d-flex justify-content-center align-items-center gap-2"
+    >
+      <button
+        class="btn btn-primary"
+        (click)="onPageChange(1)"
+        [disabled]="currentPage === 1"
+      >
+        First Page
+      </button>
+      <button
+        class="btn btn-secondary"
+        (click)="onPageChange(currentPage - 1)"
+        [disabled]="currentPage === 1"
+      >
+        Previous
+      </button>
+      <span class="mx-2">Page {{ currentPage }} / {{ totalPages }}</span>
+      <button
+        class="btn btn-secondary"
+        (click)="onPageChange(currentPage + 1)"
+        [disabled]="currentPage === totalPages"
+      >
+        Next
+      </button>
+      <button
+        class="btn btn-primary"
+        (click)="onPageChange(totalPages)"
+        [disabled]="currentPage === totalPages"
+      >
+        Last Page
+      </button>
+    </div>
+  </div>
+</collapsible-section>

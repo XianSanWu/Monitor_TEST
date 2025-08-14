@@ -1,10 +1,10 @@
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
-import { ResponseModel } from '../../core/models/base.model';
-import { RestStatus } from '../../core/enums/rest-enum';
 import { HttpMethod } from '../../core/enums/http-method';
+import { RestStatus } from '../../core/enums/rest-enum';
+import { ResponseModel } from '../../core/models/base.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,36 +16,27 @@ export class ApiService {
     private http: HttpClient,
   ) { }
 
-  // 預設 HTTP headers
-  private defaultHeaders = new HttpHeaders({
-    // 'Content-Type': 'application/json; charset=UTF-8',
-    // 'Access-Control-Allow-Origin': '*',
-  });
-
   doSend<T>(
     method: HttpMethod.GET | HttpMethod.POST | HttpMethod.PUT | HttpMethod.DELETE,
     url: string,
     body?: any,
     params?: HttpParams,
-    headers?: HttpHeaders
   ): Observable<ResponseModel<T>> {
-
-    let requestHeaders = headers ? headers : this.defaultHeaders;
     let request: Observable<any>;
     let errorMsg: { message: string } = { message: '' };  // 用對象包裝錯誤訊息
 
     switch (method) {
       case HttpMethod.GET:
-        request = this.http.get<ResponseModel<T>>(url, { headers: requestHeaders, params });
+        request = this.http.get<ResponseModel<T>>(url, { params });
         break;
       case HttpMethod.POST:
-        request = this.http.post<ResponseModel<T>>(url, body, { headers: requestHeaders });
+        request = this.http.post<ResponseModel<T>>(url, body);
         break;
       case HttpMethod.PUT:
-        request = this.http.put<ResponseModel<T>>(url, body, { headers: requestHeaders });
+        request = this.http.put<ResponseModel<T>>(url, body);
         break;
       case HttpMethod.DELETE:
-        request = this.http.delete<ResponseModel<T>>(url, { headers: requestHeaders, body });
+        request = this.http.delete<ResponseModel<T>>(url, { body });
         break;
       default:
         throw new Error('不支援的 HTTP 方法');

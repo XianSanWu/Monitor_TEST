@@ -1,5 +1,5 @@
 {
-  "SERVER_URL": "https://localhost:44317/  123",
+  "SERVER_URL": "https://localhost:44317/",
   "API_URL": "api/",
   "EDM_ATTO_PROGRESS": [
     "雲端CDP",
@@ -28,6 +28,19 @@
           "title": "年度統計報表",
           "icon": "file-earmark-text-fill",
           "link": "/mailhunter/project_mail_count",
+          "children": []
+        }
+      ]
+    },
+    {
+      "title": "權限管理",
+      "icon": "list",
+      "link": "",
+      "children": [
+        {
+          "title": "權限設定",
+          "icon": "gear",
+          "link": "/permission/permission_main",
           "children": []
         }
       ]

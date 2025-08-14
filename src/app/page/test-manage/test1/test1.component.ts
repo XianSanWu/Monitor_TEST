@@ -1,26 +1,26 @@
-import { catchError, finalize, takeUntil, tap } from 'rxjs';
-import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LoadingService } from '../../../core/services/loading.service';
-import { DropdownComponent } from '../../../component/form/dropdown/dropdown.component';
-import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
+import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
+import { ColDef, GridApi } from 'ag-grid-community';
+import { catchError, finalize, takeUntil, tap } from 'rxjs';
 import { ValidatorsUtil } from '../../../common/utils/validators-util';
-import { ConfirmDialogOption } from '../../../core/models/common/dialog.model';
-import { DialogService } from '../../../core/services/dialog.service';
+import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/custom-filter.component';
+import { DynamicLineChartComponent } from '../../../component/chart/dynamic-line-chart-component/dynamic-line-chart-component.component';
+import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
+import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
 import { DateRangeComponent } from "../../../component/form/date-range/date-range.component";
 import { DateComponent } from '../../../component/form/date/date.component';
+import { DropdownComponent } from '../../../component/form/dropdown/dropdown.component';
 import { SearchSelectComponent } from '../../../component/form/search-select/search-select.component';
-import { ColDef, GridApi } from 'ag-grid-community';
-import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
-import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/custom-filter.component';
-import { Option, PageBase } from '../../../core/models/common/base.model';
-import { TestManageService } from '../test-manage.service';
 import { RestStatus } from '../../../core/enums/rest-enum';
-import { BaseComponent } from '../../base.component';
+import { Option, PageBase } from '../../../core/models/common/base.model';
+import { ConfirmDialogOption } from '../../../core/models/common/dialog.model';
 import { FieldModel, WorkflowStepsSearchListRequest } from '../../../core/models/requests/workflow-steps.model';
-import { DynamicLineChartComponent } from '../../../component/chart/dynamic-line-chart-component/dynamic-line-chart-component.component';
-import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
+import { DialogService } from '../../../core/services/dialog.service';
+import { LoadingService } from '../../../core/services/loading.service';
+import { BaseComponent } from '../../base.component';
+import { TestManageService } from '../test-manage.service';
 
 @Component({
   selector: 'test1',
@@ -53,6 +53,7 @@ export default class Test1Component extends BaseComponent {
     this.validateForm = new FormGroup({
       username: new FormControl('', [Validators.required, ValidatorsUtil.blank, ValidatorsUtil.intSymbolsEnglishNumbers]),
       testControl: new FormControl('', [Validators.required,]),
+      testControl1: new FormControl(1, [Validators.required,]),
       date: new FormControl('', [Validators.required, ValidatorsUtil.dateFmt, ValidatorsUtil.dateNotBeforeToday]),
       startDate: new FormControl('', [Validators.required, ValidatorsUtil.dateFmt]),
       endDate: new FormControl('', [Validators.required, ValidatorsUtil.dateFmt]),

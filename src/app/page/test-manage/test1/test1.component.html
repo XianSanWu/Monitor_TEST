@@ -23,6 +23,17 @@
   </div>
 
   <div class="row">
+    <dropdown
+      title="下拉選單範例"
+      [form]="validateForm"
+      ctlName="testControl1"
+      [selectList]="selectList"
+      class="col-6"
+      (valueChange)="onValueChange($event)"
+    ></dropdown>
+  </div>
+
+  <div class="row">
     <date
       class="col-6"
       title="單一日期"

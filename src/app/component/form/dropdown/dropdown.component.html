@@ -40,14 +40,11 @@
       </mat-select>
     </mat-form-field>
     <!-- 錯誤訊息 -->
-    <div class="note errorText" *ngIf="ctl?.dirty || ctl?.touched">
+    <div class="note errorText" [style.visibility]="hasError() ? 'visible' : 'hidden'">
       <p *ngIf="ctl?.errors?.['required']; else otherErr">此為必填欄位</p>
       <ng-template #otherErr>
         <p>{{ firstErr }}</p>
       </ng-template>
     </div>
-
-    <!-- 預留錯誤訊息的空間，即使錯誤訊息未顯示 -->
-    <div class="errorPlaceholder" *ngIf="!hasError()"></div>
   </div>
 </div>

@@ -31,6 +31,19 @@
           "children": []
         }
       ]
+    },
+    {
+      "title": "權限管理",
+      "icon": "list",
+      "link": "",
+      "children": [
+        {
+          "title": "權限設定",
+          "icon": "gear",
+          "link": "/permission/permission_main",
+          "children": []
+        }
+      ]
     }
   ],
   "testMenu": [

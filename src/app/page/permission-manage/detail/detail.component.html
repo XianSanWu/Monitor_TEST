@@ -1,0 +1,57 @@
+<loading-indicator></loading-indicator>
+
+<div class="pageTitle mb-4">
+  <h2>
+    <i class="bi bi-list-task"></i>
+    權限設定
+  </h2>
+</div>
+
+<div class="permission-form" *ngFor="let group of groupedPermissions">
+  <div class="module-title">
+    {{ group.header.ModuleName }} - {{ group.header.Title }}
+  </div>
+
+  <div class="table-wrapper">
+    <table class="permission-table">
+      <thead>
+        <tr>
+          <th class="text-col">功能</th>
+          <th class="text-col">功能描述</th>
+          <th class="icon-header">圖示</th>
+          <th class="text-col">連結</th>
+          <th *ngFor="let action of actions" class="fixed-col">{{ action }}</th>
+          <th class="fixed-col">IsUse</th>
+          <th class="fixed-col">IsVisible</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of group.items">
+          <td class="text-col ellipsis" [matTooltip]="item.FeatureName">{{ item.FeatureName }}</td>
+          <td class="text-col ellipsis" [matTooltip]="item.Title">{{ item.Title }}</td>
+          <td class="icon-cell">
+            <i *ngIf="item.Icon" [class]="'bi bi-' + item.Icon"></i>
+          </td>
+          <td class="text-col ellipsis" [matTooltip]="item.Link">{{ item.Link }}</td>
+
+          <td *ngFor="let action of actions" class="checkbox-cell fixed-col">
+            <mat-checkbox
+              [checked]="isActionEnabled(item, action)"
+              [disabled]="!isActionEnabled(item, action)"
+            ></mat-checkbox>
+          </td>
+          <td class="checkbox-cell fixed-col">
+            <mat-checkbox [(ngModel)]="item.IsUse"></mat-checkbox>
+          </td>
+          <td class="checkbox-cell fixed-col">
+            <mat-checkbox [(ngModel)]="item.IsVisible"></mat-checkbox>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="submit-section">
+  <button mat-raised-button color="primary">儲存</button>
+</div>

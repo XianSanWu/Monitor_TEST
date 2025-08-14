@@ -32,7 +32,7 @@
         }
       ]
     },
-     {
+    {
       "title": "登入管理",
       "icon": "lock",
       "link": "/login",

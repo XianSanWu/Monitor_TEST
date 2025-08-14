@@ -6,7 +6,17 @@ export const routes: Routes = [
     path: 'permission_main',
     loadComponent: () => import('./main/main.component'),
   },
+  {
+    path: 'permission_detail/:Action',
+    loadComponent: () => import('./detail/detail.component'),
+  },
+  {
+    path: 'permission_detail/:Action/:UserName',
+    loadComponent: () => import('./detail/detail.component'),
+  },
+  {
+    path: 'permission_settings',
+    loadComponent: () => import('./detail/detail.component'),
+  },
   //#endregion
-
-
 ];
