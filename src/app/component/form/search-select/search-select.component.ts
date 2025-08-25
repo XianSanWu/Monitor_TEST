@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { ReactiveFormsModule, FormGroup, FormControl, AbstractControl } from '@angular/forms';
+import { Component, EventEmitter, Input, IterableDiffer, IterableDiffers, OnInit, Output, SimpleChanges } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
 import { Option } from '../../../core/models/common/base.model';
 
@@ -31,7 +31,10 @@ export class SearchSelectComponent implements OnInit {
   firstErr: string = '';
   ctl!: FormControl;
 
-  constructor() { }
+  // 新增：用來偵測 options 陣列內容的變化（即便是 push）
+  private optionsDiffer!: IterableDiffer<Option>;
+
+  constructor(private differs: IterableDiffers) { }
 
   get required(): boolean {
     return this.ctl?.validator ? this.ctl?.validator({} as AbstractControl)?.['required'] !== undefined : false;
@@ -42,6 +45,9 @@ export class SearchSelectComponent implements OnInit {
       this.autocomplete = this.ctlName;
     }
     this.updateControl();
+
+    // 初始化 differ（用空陣列定義型別即可）
+    this.optionsDiffer = this.differs.find([]).create<Option>();
 
     this.filteredOptions = this.ctl.valueChanges.pipe(
       startWith(''),
@@ -56,8 +62,24 @@ export class SearchSelectComponent implements OnInit {
   }
 
   private _filter(value: string): Option[] {
-    const filterValue = value?.toLowerCase();
-    return this.options.filter(option => option.value?.toLowerCase()?.includes(filterValue));
+    const filterValue = (value ?? '').toLowerCase();
+    return (this.options ?? []).filter(option => option.value?.toLowerCase()?.includes(filterValue));
+  }
+
+  // 偵測父層對 options 的 push / splice 等動作，一有變化就強制觸發一次過濾
+  ngDoCheck(): void {
+    if (this.optionsDiffer && this.options) {
+      const diff = this.optionsDiffer.diff(this.options);
+      if (diff) {
+        // 重新觸發 valueChanges，讓面板立刻更新（不需使用者輸入）
+        const v = this.ctl?.value ?? '';
+        this.ctl?.setValue(v); // emitEvent 預設 true -> 會觸發 filteredOptions pipeline
+      }
+    }
+
+    if (this.ctl?.errors) {
+      this.firstErr = Object.values(this.ctl.errors)[0] as string;
+    }
   }
 
   selectOption(key: string) {
@@ -72,16 +94,14 @@ export class SearchSelectComponent implements OnInit {
     if (changes['ctlName'] || changes['form']) {
       this.updateControl();
     }
-  }
-
-  ngDoCheck(): void {
-    if (this.ctl?.errors) {
-      this.firstErr = Object.values(this.ctl.errors)[0] as string;
+    // （可選）若父層是用重新指派新陣列的方式，這裡也一併處理
+    if (changes['options'] && !changes['options'].firstChange) {
+      const v = this.ctl?.value ?? '';
+      this.ctl?.setValue(v);
     }
   }
 
   hasError(): boolean {
     return this.ctl && (this.ctl.dirty || this.ctl.touched) && this.ctl.errors !== null;
   }
-
 }
