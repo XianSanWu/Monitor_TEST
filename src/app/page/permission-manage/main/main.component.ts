@@ -89,7 +89,6 @@ export default class MainComponent extends BaseComponent implements OnInit {
     this.router.navigate([
       '/permission/permission_detail',
       PermissionActionEnum.Create,
-      '',
     ]);
   }
 
