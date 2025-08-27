@@ -59,7 +59,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   /* 使用 flex-grow 讓欄位自動填剩餘空間，但不影響固定欄位 */
-  width: 18%;      /* 讓 table-layout: fixed 或 auto 也能運作 */
+  width: 26%;      /* 讓 table-layout: fixed 或 auto 也能運作 */
 }
 
 /* RWD: 小螢幕才出現水平捲軸 */

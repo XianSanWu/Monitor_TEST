@@ -12,6 +12,9 @@ export interface FeaturePermission {
   Sort: number;
   IsUse: boolean;
   IsVisible: boolean;
+
+  // 新增 ActionMap 用來控制每個 action 勾選
+  ActionMap: { [actionName: string]: boolean };
 }
 
 export interface GroupedPermissions {

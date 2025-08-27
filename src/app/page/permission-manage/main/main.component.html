@@ -11,7 +11,7 @@
     <button class="btn btn-primary">
       <i class="bi bi-pencil-square"></i> 新增 & 修改功能
     </button>
-    <button class="btn btn-success" (click)="onDetail('Create')">
+    <button class="btn btn-success" (click)="onDetail()">
       <i class="bi bi-plus-circle"></i> 新增 & 複製權限
     </button>
   </div>
@@ -30,7 +30,9 @@
   </div>
 </collapsible-section>
 
-<collapsible-section [id]="'PermissionFunction'" title="🛠️ 帳號管理"
+<collapsible-section
+  [id]="'PermissionFunction'"
+  title="🛠️ 帳號管理"
   tooltipText="點擊欄位兩下，可以複製該欄位資料，單擊可跳轉超連結（若為網址或按鈕）"
 >
   <div class="row">

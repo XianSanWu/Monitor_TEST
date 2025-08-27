@@ -1,23 +1,23 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { CollapsibleSectionComponent } from '../../../../component/form/collapsible-section/collapsible-section.component';
-import { LoadingIndicatorComponent } from '../../../../component/loading/loading-indicator/loading-indicator.component';
-import { ActivatedRoute } from '@angular/router';
-import { BasicInputComponent } from '../../../../component/form/basic-input/basic-input.component';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Channel } from '../../../../core/enums/channel-enum';
-import { BaseComponent } from '../../../base.component';
 import { CommonModule } from '@angular/common';
-import { LoadingService } from '../../../../core/services/loading.service';
-import { CdpManageService } from '../../cdp-manage.service';
-import { DialogService } from '../../../../core/services/dialog.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
-import { GridApi, ColDef, ICellRendererParams, CellDoubleClickedEvent } from 'ag-grid-community';
-import { catchError, tap, takeUntil, finalize } from 'rxjs';
+import { CellDoubleClickedEvent, ColDef, GridApi, ICellRendererParams } from 'ag-grid-community';
+import { catchError, finalize, takeUntil, tap } from 'rxjs';
 import { CommonUtil } from '../../../../common/utils/common-util';
 import { CustomFilterComponent } from '../../../../component/ag-grid/custom-filter/custom-filter.component';
 import { SelectFilterComponent } from '../../../../component/ag-grid/select-filter/select-filter.component';
-import { WorkflowStepsSearchListRequest } from '../../../../core/models/requests/workflow-steps.model';
+import { BasicInputComponent } from '../../../../component/form/basic-input/basic-input.component';
+import { CollapsibleSectionComponent } from '../../../../component/form/collapsible-section/collapsible-section.component';
+import { LoadingIndicatorComponent } from '../../../../component/loading/loading-indicator/loading-indicator.component';
+import { Channel } from '../../../../core/enums/channel-enum';
 import { Option, PageBase } from '../../../../core/models/common/base.model';
+import { WorkflowStepsSearchListRequest } from '../../../../core/models/requests/workflow-steps.model';
+import { DialogService } from '../../../../core/services/dialog.service';
+import { LoadingService } from '../../../../core/services/loading.service';
+import { BaseComponent } from '../../../base.component';
+import { CdpManageService } from '../../cdp-manage.service';
 
 @Component({
   selector: 'edm-detail',
@@ -49,8 +49,8 @@ export default class DetailComponent extends BaseComponent implements OnInit {
   ) {
     super();
     // 用 snapshot 拿參數（靜態抓一次）
-    this.batchId = this.route.snapshot.paramMap.get('BatchId') ?? "";
-    this.sendUuidSort = this.route.snapshot.paramMap.get('SendUuidSort') ?? "";
+    this.batchId = this.route.snapshot.paramMap.get('BatchId')?.trim() ?? "";
+    this.sendUuidSort = this.route.snapshot.paramMap.get('SendUuidSort')?.trim() ?? "";
     this.firstInit = true;
     // 或動態監聽 route 參數變化（可選）
     // this.route.paramMap.subscribe(params => {

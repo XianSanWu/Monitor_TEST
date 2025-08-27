@@ -12,7 +12,8 @@ export class PermissionManageService {
   readonly permissionFunc = 'Permission/';
   readonly isUseUserAsync = 'isUseUserAsync/';
   readonly getUsersAsync = 'GetUserListAsync/';
-  readonly getPermissionsAsync = 'GetPermissionListAsync/';
+  readonly getPermissionListAsync = 'GetPermissionListAsync/';
+  readonly getUserPermissionsAsync = 'GetUserPermissionsAsync/';
 
   constructor(
     private apiService: ApiService,
@@ -45,7 +46,16 @@ export class PermissionManageService {
   GetPermissionListAsync(): Observable<ResponseModel<any>> {
     return this.apiService.doSend(
       HttpMethod.POST,
-      this.baseUrl + this.permissionFunc + this.getPermissionsAsync
+      this.baseUrl + this.permissionFunc + this.getPermissionListAsync
+    );
+  }
+
+  //查詢個人權限
+  GetUserPermissionsAsync(req: UserRequest): Observable<ResponseModel<any>> {
+    return this.apiService.doSend(
+      HttpMethod.POST,
+      this.baseUrl + this.permissionFunc + this.getUserPermissionsAsync,
+      req
     );
   }
 }

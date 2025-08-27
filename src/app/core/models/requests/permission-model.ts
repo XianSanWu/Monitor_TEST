@@ -4,14 +4,16 @@ import { FieldWithMetadataModel } from '../common/field-with-metadata.model';
 
 export interface UserRequest {
   page: PageBase;
-  filterModel: Option[];
-  sortModel: Option;
+  filterModel?: Option[];
+  sortModel?: Option;
   fieldModel?: FieldModel;
 }
 
 export class FieldModel {
+  Uuid?: string;
   UserName?: string;
   IsUse?: boolean;
+  BitValue?: number;
 
   constructor(data: Partial<FieldModel>) {
     Object.assign(this, data);
@@ -39,4 +41,3 @@ export class UserUpdateConditionRequest extends BaseConditionModel {
   UserName: FieldWithMetadataModel = new FieldWithMetadataModel();
 }
 //#endregion
-

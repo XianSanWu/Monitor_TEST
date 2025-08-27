@@ -7,51 +7,168 @@
   </h2>
 </div>
 
-<div class="permission-form" *ngFor="let group of groupedPermissions">
-  <div class="module-title">
-    {{ group.header.ModuleName }} - {{ group.header.Title }}
+<collapsible-section
+  [id]="'PermissionDetail'"
+  title="⚙️ 設定條件"
+  tooltipText="請輸入對應條件設定。"
+>
+  <!-- 自訂表單 -->
+  <div [formGroup]="validateForm" class="mb-3">
+    <div
+      class="d-flex justify-content-between align-items-center flex-wrap gap-3"
+    >
+      <!-- 左側欄位 -->
+      <div class="d-flex gap-3 flex-wrap">
+        <!-- 帳號(員編) -->
+        <basic-input
+          title="帳號(員編)"
+          [form]="validateForm"
+          ctlName="userName"
+          placeholder="請輸入帳號"
+          [maxlength]="10"
+        ></basic-input>
+
+        <!-- 可複製啟用帳號 -->
+        <search-select
+          *ngIf="showButtons"
+          title="可複製啟用帳號"
+          [form]="validateForm"
+          ctlName="copyUserName"
+          placeholder="請輸入收尋"
+          [options]="copyUserNameList"
+        >
+        </search-select>
+      </div>
+
+      <!-- 右側按鈕群組 -->
+      <div *ngIf="showButtons" class="d-flex align-items-center gap-2">
+        <!-- 清空勾選 -->
+        <button
+          class="btn d-flex align-items-center justify-content-center gap-2 px-4 py-2 rounded-pill shadow-sm"
+          style="background-color: #dc3545; color: white; min-width: 140px"
+          (click)="clearAll()"
+        >
+          <i class="bi bi-x-lg fs-5"></i>
+          <span class="fw-bold">清空勾選</span>
+        </button>
+
+        <!-- 全選 -->
+        <button
+          class="btn d-flex align-items-center justify-content-center gap-2 px-4 py-2 rounded-pill shadow-sm"
+          style="background-color: #0d6efd; color: white; min-width: 140px"
+          (click)="selectAll()"
+        >
+          <i class="bi bi-check2-all fs-5"></i>
+          <span class="fw-bold">全選</span>
+        </button>
+
+        <!-- 儲存 -->
+        <button
+          class="btn d-flex align-items-center justify-content-center gap-2 px-4 py-2 rounded-pill shadow-sm"
+          [disabled]="validateForm.invalid"
+          style="background-color: #198754; color: white; min-width: 140px"
+          (click)="onSave()"
+        >
+          <i class="bi bi-check-lg fs-5"></i>
+          <span class="fw-bold">儲存</span>
+        </button>
+      </div>
+    </div>
   </div>
+</collapsible-section>
 
-  <div class="table-wrapper">
-    <table class="permission-table">
-      <thead>
-        <tr>
-          <th class="text-col">功能</th>
-          <th class="text-col">功能描述</th>
-          <th class="icon-header">圖示</th>
-          <th class="text-col">連結</th>
-          <th *ngFor="let action of actions" class="fixed-col">{{ action }}</th>
-          <th class="fixed-col">IsUse</th>
-          <th class="fixed-col">IsVisible</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of group.items">
-          <td class="text-col ellipsis" [matTooltip]="item.FeatureName">{{ item.FeatureName }}</td>
-          <td class="text-col ellipsis" [matTooltip]="item.Title">{{ item.Title }}</td>
-          <td class="icon-cell">
-            <i *ngIf="item.Icon" [class]="'bi bi-' + item.Icon"></i>
-          </td>
-          <td class="text-col ellipsis" [matTooltip]="item.Link">{{ item.Link }}</td>
+<collapsible-section
+  [id]="'PermissionDetailBody'"
+  title="💾 勾選設定條件"
+  tooltipText="請勾選設定條件。"
+>
+  <div class="permission-form" *ngFor="let group of groupedPermissions">
+    <div class="module-title">
+      {{ group.header.ModuleName }} - {{ group.header.Title }}
+    </div>
 
-          <td *ngFor="let action of actions" class="checkbox-cell fixed-col">
-            <mat-checkbox
-              [checked]="isActionEnabled(item, action)"
-              [disabled]="!isActionEnabled(item, action)"
-            ></mat-checkbox>
-          </td>
-          <td class="checkbox-cell fixed-col">
+    <div class="table-wrapper">
+      <table class="permission-table">
+        <thead>
+          <tr>
+            <th class="text-col">功能</th>
+            <th class="text-col">功能描述</th>
+            <th class="icon-header">圖示</th>
+            <th class="text-col">連結</th>
+            <th *ngFor="let action of allActions" class="fixed-col">
+              {{ action }}
+            </th>
+            <!-- <th class="fixed-col">IsUse</th>
+          <th class="fixed-col">IsVisible</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of group.items">
+            <td class="text-col ellipsis" [matTooltip]="item.FeatureName">
+              {{ item.FeatureName }}
+            </td>
+            <td class="text-col ellipsis" [matTooltip]="item.Title">
+              {{ item.Title }}
+            </td>
+            <td class="icon-cell">
+              <i *ngIf="item.Icon" [class]="'bi bi-' + item.Icon"></i>
+            </td>
+            <td class="text-col ellipsis" [matTooltip]="item.Link">
+              {{ item.Link }}
+            </td>
+
+            <td
+              *ngFor="let action of allActions"
+              class="checkbox-cell fixed-col"
+            >
+              <!-- [checked]="isActionEnabled(item, action)" -->
+              <mat-checkbox
+                [disabled]="!isActionEnabled(item, action)"
+                [(ngModel)]="item.ActionMap[action]"
+              ></mat-checkbox>
+            </td>
+            <!-- <td class="checkbox-cell fixed-col">
             <mat-checkbox [(ngModel)]="item.IsUse"></mat-checkbox>
           </td>
           <td class="checkbox-cell fixed-col">
             <mat-checkbox [(ngModel)]="item.IsVisible"></mat-checkbox>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          </td> -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
+</collapsible-section>
 
-<div class="submit-section">
-  <button mat-raised-button color="primary">儲存</button>
+<div *ngIf="showButtons" class="submit-section text-end d-flex gap-2 justify-content-end">
+  <!-- 清空勾選 -->
+  <button
+    class="btn d-flex align-items-center justify-content-center gap-2 px-4 py-2 rounded-pill shadow-sm"
+    style="background-color: #dc3545; color: white; min-width: 140px"
+    (click)="clearAll()"
+  >
+    <i class="bi bi-x-lg fs-5"></i>
+    <span class="fw-bold">清空勾選</span>
+  </button>
+
+  <!-- 全選 -->
+  <button
+    class="btn d-flex align-items-center justify-content-center gap-2 px-4 py-2 rounded-pill shadow-sm"
+    style="background-color: #0d6efd; color: white; min-width: 140px"
+    (click)="selectAll()"
+  >
+    <i class="bi bi-check2-all fs-5"></i>
+    <span class="fw-bold">全選</span>
+  </button>
+
+  <!-- 儲存 -->
+  <button
+    class="btn d-flex align-items-center justify-content-center gap-2 px-4 py-2 rounded-pill shadow-sm"
+    [disabled]="validateForm.invalid"
+    style="background-color: #198754; color: white; min-width: 140px"
+    (click)="onSave()"
+  >
+    <i class="bi bi-check-lg fs-5"></i>
+    <span class="fw-bold">儲存</span>
+  </button>
 </div>

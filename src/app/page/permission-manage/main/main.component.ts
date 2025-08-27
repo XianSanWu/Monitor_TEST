@@ -23,6 +23,7 @@ import { DropdownComponent } from '../../../component/form/dropdown/dropdown.com
 import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
 import { LogicOperatorEnum } from '../../../core/enums/logic-operator-enum';
 import { MathSymbolEnum } from '../../../core/enums/math-symbol-enum';
+import { PermissionActionEnum } from '../../../core/enums/permission-enum';
 import { Option, PageBase } from '../../../core/models/common/base.model';
 import {
   UserRequest,
@@ -84,8 +85,12 @@ export default class MainComponent extends BaseComponent implements OnInit {
     this.loadData();
   }
 
-  onDetail(action: string) {
-    this.router.navigate(['/permission/permission_detail', action, '']);
+  onDetail() {
+    this.router.navigate([
+      '/permission/permission_detail',
+      PermissionActionEnum.Create,
+      '',
+    ]);
   }
 
   //#region Ag-grid
@@ -128,7 +133,8 @@ export default class MainComponent extends BaseComponent implements OnInit {
       filter: false,
       cellRenderer: (params: ICellRendererParams) => {
         const userName = params.data.UserName ?? '';
-        const action = this.validateForm.get('isUse')?.value;
+        const userUuid = params.data.Uuid ?? '';
+        const isUse = this.validateForm.get('isUse')?.value;
         const isActive = params.data.IsUse;
 
         // 創建容器
@@ -139,22 +145,38 @@ export default class MainComponent extends BaseComponent implements OnInit {
         const viewBtn = document.createElement('button');
         viewBtn.className = 'btn btn-secondary btn-sm text-white';
         viewBtn.innerHTML = `<i class="bi bi-eye"></i> 查看權限`;
-        viewBtn.addEventListener('click', () => alert(`查看權限: ${userName}`));
+        viewBtn.addEventListener('click', () => {
+          // 轉址查看權限
+          this.router.navigate([
+            '/permission/permission_detail',
+            PermissionActionEnum.Read,
+            userName,
+            userUuid,
+          ]);
+        });
         container.appendChild(viewBtn);
 
         // 修改權限按鈕
         const editBtn = document.createElement('button');
         editBtn.className = 'btn btn-warning btn-sm';
         editBtn.innerHTML = `<i class="bi bi-pencil"></i> 修改權限`;
-        editBtn.addEventListener('click', () => alert(`修改權限: ${userName}`));
+        editBtn.addEventListener('click', () => {
+          // 轉址修改權限
+          this.router.navigate([
+            '/permission/permission_detail',
+            PermissionActionEnum.Update,
+            userName,
+            userUuid,
+          ]);
+        });
         container.appendChild(editBtn);
 
         // 啟用 / 停用按鈕
         const toggleBtn = document.createElement('button');
-        toggleBtn.className = action
+        toggleBtn.className = isUse
           ? 'btn btn-danger btn-sm'
           : 'btn btn-primary btn-sm';
-        toggleBtn.innerHTML = action
+        toggleBtn.innerHTML = isUse
           ? `<i class="bi bi-trash"></i> 停用帳號`
           : `<i class="bi bi-person-check"></i> 啟用帳號`;
         toggleBtn.addEventListener('click', () => {
