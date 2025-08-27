@@ -1,8 +1,13 @@
-import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { ValidateUtil } from './validate-util';
-import { RegExpUtil } from './reg-exp-util';
-import { CommonUtil } from './common-util';
+import {
+  AbstractControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+} from '@angular/forms';
 import { Option } from '../../core/models/common/base.model';
+import { CommonUtil } from './common-util';
+import { RegExpUtil } from './reg-exp-util';
+import { ValidateUtil } from './validate-util';
 
 export const ValidatorsUtil = {
   /** 日期區間 */
@@ -19,9 +24,12 @@ export const ValidatorsUtil = {
     if (startDate && endDate) {
       // 確保日期格式正確，並比對日期大小
       if (endDate < startDate) {
+        startCtl.setErrors(null);
+        endCtl.setErrors(null);
+
         startCtl.setErrors({ dateErrMsg: '結束日期不得早於起始日期' });
         endCtl.setErrors({ dateErrMsg: '結束日期不得早於起始日期' });
-        return { 'dateErrMsg': '結束日期不得早於起始日期' };
+        return { dateErrMsg: '結束日期不得早於起始日期' };
       } else {
         // 若驗證通過，清除 `Ctl` 的錯誤
         if (startCtl.hasError('dateErrMsg')) {
@@ -39,9 +47,9 @@ export const ValidatorsUtil = {
   dateFmt: (ctl: AbstractControl) => {
     const v = ctl.value;
     if (v instanceof Date) {
-      return null
+      return null;
     } else if ((ctl.dirty || ctl.touched) && !RegExpUtil.dateFmt1.test(v)) {
-      return { 'format': '日期格式錯誤，請輸入有效的日期格式' };
+      return { format: '日期格式錯誤，請輸入有效的日期格式' };
     } else {
       return null;
     }
@@ -53,7 +61,7 @@ export const ValidatorsUtil = {
     today.setHours(0, 0, 0, 0);
 
     if ((ctl.dirty || ctl.touched) && endDate < today) {
-      return { 'dateBeforeToday': '不可小於今日' };
+      return { dateBeforeToday: '不可小於今日' };
     }
     return null;
   },
@@ -61,7 +69,7 @@ export const ValidatorsUtil = {
   searchCustId: (ctl: AbstractControl) => {
     const v = ctl.value;
     if (v && (ctl.dirty || ctl.touched) && !/^[a-zA-Z0-9]*$/.test(v)) {
-      return { 'searchCustId': '請輸入有效客戶ID，英文字母或數字' };
+      return { searchCustId: '請輸入有效客戶ID，英文字母或數字' };
     }
     return null;
   },
@@ -69,7 +77,7 @@ export const ValidatorsUtil = {
   number: (ctl: AbstractControl) => {
     const v = ctl.value;
     if (v && (ctl.dirty || ctl.touched) && !/^\d+$/i.test(v)) {
-      return { 'number': '請輸入數字' };
+      return { number: '請輸入數字' };
     }
     return null;
   },
@@ -77,15 +85,19 @@ export const ValidatorsUtil = {
   intNumber: (ctl: AbstractControl) => {
     const v = ctl.value;
     if (v && (ctl.dirty || ctl.touched) && !RegExpUtil.isNumeric.test(v)) {
-      return { 'intNumber': '請輸入整數' };
+      return { intNumber: '請輸入整數' };
     }
     return null;
   },
   /** 檢查:英文、數字、符號格式 */
   intSymbolsEnglishNumbers: (ctl: AbstractControl) => {
     const v = ctl.value;
-    if (v && (ctl.dirty || ctl.touched) && !RegExpUtil.regexSymbolsEnglishNumbers.test(v)) {
-      return { 'intNumber': '請輸入英文、數字、符號' };
+    if (
+      v &&
+      (ctl.dirty || ctl.touched) &&
+      !RegExpUtil.regexSymbolsEnglishNumbers.test(v)
+    ) {
+      return { intNumber: '請輸入英文、數字、符號' };
     }
     return null;
   },
@@ -94,7 +106,7 @@ export const ValidatorsUtil = {
     return (control: AbstractControl) => {
       const value = control.value;
       if (value !== null && value <= 0) {
-        return { 'positiveNumber': '請輸入正整數' };
+        return { positiveNumber: '請輸入正整數' };
       }
       return null;
     };
@@ -103,7 +115,7 @@ export const ValidatorsUtil = {
   phoneNumber: (ctl: AbstractControl) => {
     const v = ctl.value;
     if (v && (ctl.dirty || ctl.touched) && !/^09$|^09\d+$/i.test(v)) {
-      return { 'phoneNumber': '請輸入以 "09" 開頭的數字' };
+      return { phoneNumber: '請輸入以 "09" 開頭的數字' };
     }
     return null;
   },
@@ -111,7 +123,7 @@ export const ValidatorsUtil = {
   mobile: (ctl: AbstractControl) => {
     const v = ctl.value;
     if (v && (ctl.dirty || ctl.touched) && !/^09\d{8}$/i.test(v)) {
-      return { 'mobile': '手機號碼有誤' };
+      return { mobile: '手機號碼有誤' };
     }
     return null;
   },
@@ -136,9 +148,15 @@ export const ValidatorsUtil = {
   /** 檢查:email格式 */
   email: (ctl: AbstractControl) => {
     const v = ctl.value;
-    const exp = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
-    if (v && (ctl.dirty || ctl.touched) && !ValidateUtil.checkEmail(ctl.value) && !exp.test(v)) {
-      return { 'email': '電子郵件輸入錯誤' };
+    const exp =
+      /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+    if (
+      v &&
+      (ctl.dirty || ctl.touched) &&
+      !ValidateUtil.checkEmail(ctl.value) &&
+      !exp.test(v)
+    ) {
+      return { email: '電子郵件輸入錯誤' };
     }
     return null;
   },
@@ -146,7 +164,7 @@ export const ValidatorsUtil = {
   address: (ctl: AbstractControl) => {
     const v = ctl.value;
     if (v && (ctl.dirty || ctl.touched) && !/^[\u4e00-\u9fa50-9\-]+$/.test(v)) {
-      return { 'address': '地址格式有誤' };
+      return { address: '地址格式有誤' };
     }
     return null;
   },
@@ -154,30 +172,39 @@ export const ValidatorsUtil = {
   tagName: (ctl: AbstractControl) => {
     const v = ctl.value;
     const exp = RegExpUtil.regexChineseEnglishNumbers;
-    if (v && (ctl.dirty || ctl.touched) && !ValidateUtil.checkEmail(ctl.value) && !exp.test(v)) {
-      return { 'tagName': '標籤名稱輸入錯誤' };
+    if (
+      v &&
+      (ctl.dirty || ctl.touched) &&
+      !ValidateUtil.checkEmail(ctl.value) &&
+      !exp.test(v)
+    ) {
+      return { tagName: '標籤名稱輸入錯誤' };
     }
     return null;
   },
   /** 名單條件設定->預覽名單->名單上限必填*/
   listLimitRequired: (ctl: AbstractControl) => {
     if (!ctl.value || +ctl.value <= 0) {
-      return { 'listLimit': '請先於表單輸入名單上限，在進行查詢' };
+      return { listLimit: '請先於表單輸入名單上限，在進行查詢' };
     }
     return null;
   },
   /** 檢查數字不為0 */
   notZero: (ctl: AbstractControl) => {
-    if ((ctl.dirty || ctl.touched) && !CommonUtil.isBlank(ctl.value) && +ctl.value === 0) {
-      return { 'zero': '不可為0' };
+    if (
+      (ctl.dirty || ctl.touched) &&
+      !CommonUtil.isBlank(ctl.value) &&
+      +ctl.value === 0
+    ) {
+      return { zero: '不可為0' };
     }
     return null;
   },
   /** 是否為空 */
   blank: (ctl: AbstractControl) => {
     const v: string = ctl.value;
-    if (v && (ctl.dirty || ctl.touched) && ((v || '').trim().length === 0)) {
-      return { 'blank': '不可為空' };
+    if (v && (ctl.dirty || ctl.touched) && (v || '').trim().length === 0) {
+      return { blank: '不可為空' };
     }
     return null;
   },
@@ -196,9 +223,11 @@ export const ValidatorsUtil = {
       const valueList = Object.values(ctl.parent.value);
       const uniqueList = Array.from(new Set(valueList).values());
       let repeatList = new Set();
-      valueList.filter((val, i, arr) => ValidatorsUtil.countInArray(arr, val) > 1).forEach((val) => repeatList.add(val));
+      valueList
+        .filter((val, i, arr) => ValidatorsUtil.countInArray(arr, val) > 1)
+        .forEach((val) => repeatList.add(val));
       if (uniqueList.length !== valueList.length && repeatList.has(v)) {
-        return { 'repeat': '不可重複' };
+        return { repeat: '不可重複' };
       } else {
         return null;
       }
@@ -217,7 +246,9 @@ export const ValidatorsUtil = {
       if (!v?.trim()) {
         return { blank: '不可為空' };
       }
-      const option = options.find(o => o.value?.toLowerCase() === v?.toLowerCase());
+      const option = options.find(
+        (o) => o.value?.toLowerCase() === v?.toLowerCase()
+      );
       return option ? null : { noOption: '查無資料' };
     };
   },
