@@ -16,7 +16,7 @@ export const routes: Routes = [
   },
   {
     path: 'permission_settings',
-    loadComponent: () => import('./detail/detail.component'),
+    loadComponent: () => import('./settings/settings.component'),
   },
   //#endregion
 ];

@@ -85,6 +85,12 @@ export default class MainComponent extends BaseComponent implements OnInit {
     this.loadData();
   }
 
+  onSettings(){
+    this.router.navigate([
+      '/permission/permission_settings',
+    ]);
+  }
+
   onDetail() {
     this.router.navigate([
       '/permission/permission_detail',
@@ -156,6 +162,7 @@ export default class MainComponent extends BaseComponent implements OnInit {
       minWidth: 600,
       cellClass: 'centered-cell',
       headerClass: 'centered-header',
+      sortable: false,
       filter: false,
       cellRenderer: (params: ICellRendererParams) => {
         const userName = params.data.UserName ?? '';

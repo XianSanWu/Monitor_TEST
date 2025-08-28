@@ -41,7 +41,6 @@ import {
   FeaturePermission,
   GroupedPermissions,
 } from '../../../core/models/responses/permission.model';
-import { ConfigService } from '../../../core/services/config.service';
 import { DialogService } from '../../../core/services/dialog.service';
 import { LoadingService } from '../../../core/services/loading.service';
 import { BaseComponent } from '../../base.component';
@@ -82,13 +81,12 @@ export default class DetailComponent extends BaseComponent implements OnInit {
   userUuid: string = '';
 
   constructor(
-    // private dialog: MatDialog,
     private dialogService: DialogService,
     private permissionManageService: PermissionManageService,
-    private configService: ConfigService,
+    // private configService: ConfigService,
     private loadingService: LoadingService,
     private route: ActivatedRoute,
-    private router: Router // private cdr: ChangeDetectorRef
+    private router: Router,
   ) {
     super();
     // 初始化表單

@@ -84,7 +84,10 @@
 >
   <div class="permission-form" *ngFor="let group of groupedPermissions">
     <div class="module-title">
-      {{ group.header.ModuleName }} - {{ group.header.Title }}
+      <span [matTooltip]="group.header.ModuleName + ' - ' + group.header.Title">
+        <i *ngIf="group.header.Icon" [class]="group.header.Icon"></i>
+        {{ group.header.ModuleName }} - {{ group.header.Title }}
+      </span>
     </div>
 
     <div class="table-wrapper">
@@ -110,8 +113,8 @@
             <td class="text-col ellipsis" [matTooltip]="item.Title">
               {{ item.Title }}
             </td>
-            <td class="icon-cell">
-              <i *ngIf="item.Icon" [class]="'bi bi-' + item.Icon"></i>
+            <td class="icon-cell" [matTooltip]="item.Icon">
+              <i *ngIf="item.Icon" [class]="item.Icon"></i>
             </td>
             <td class="text-col ellipsis" [matTooltip]="item.Link">
               {{ item.Link }}
@@ -121,18 +124,19 @@
               *ngFor="let action of allActions"
               class="checkbox-cell fixed-col"
             >
-              <!-- [checked]="isActionEnabled(item, action)" -->
-              <mat-checkbox
-                [disabled]="!isActionEnabled(item, action)"
-                [(ngModel)]="item.ActionMap[action]"
-              ></mat-checkbox>
+              <span
+                [matTooltip]="
+                  isActionEnabled(item, action) ? '可點選' : '禁用點選'
+                "
+              >
+                <!-- matTooltipPosition="above" -->
+                <mat-checkbox
+                  [disabled]="!isActionEnabled(item, action)"
+                  [(ngModel)]="item.ActionMap[action]"
+                >
+                </mat-checkbox>
+              </span>
             </td>
-            <!-- <td class="checkbox-cell fixed-col">
-            <mat-checkbox [(ngModel)]="item.IsUse"></mat-checkbox>
-          </td>
-          <td class="checkbox-cell fixed-col">
-            <mat-checkbox [(ngModel)]="item.IsVisible"></mat-checkbox>
-          </td> -->
           </tr>
         </tbody>
       </table>
@@ -140,7 +144,10 @@
   </div>
 </collapsible-section>
 
-<div *ngIf="showButtons" class="submit-section text-end d-flex gap-2 justify-content-end">
+<div
+  *ngIf="showButtons"
+  class="submit-section text-end d-flex gap-2 justify-content-end"
+>
   <!-- 清空勾選 -->
   <button
     class="btn d-flex align-items-center justify-content-center gap-2 px-4 py-2 rounded-pill shadow-sm"
