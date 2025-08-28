@@ -113,14 +113,41 @@ export default class MainComponent extends BaseComponent implements OnInit {
         return rowIndex >= 0 ? rowIndex + 1 + currentPage * pageSize : '';
       },
       filter: false,
-      width: 100,
+      sortable: false,
+      width: 60,
     },
     {
       headerName: '帳號',
       field: 'UserName',
-      maxWidth: 120,
-      cellClass: 'centered-cell',
-      headerClass: 'centered-header',
+      maxWidth: 170,
+      // cellClass: 'centered-cell',
+      // headerClass: 'centered-header',
+    },
+    {
+      headerName: '建立時間',
+      field: 'CreateAt',
+      maxWidth: 170,
+      cellRenderer: (params: ICellRendererParams) => {
+        const rawValue = params.value || '';
+        if (rawValue === '0001-01-01 00:00:00') {
+          return '';
+        }
+
+        return rawValue;
+      },
+    },
+    {
+      headerName: '更新時間',
+      field: 'UpdateAt',
+      maxWidth: 170,
+      cellRenderer: (params: ICellRendererParams) => {
+        const rawValue = params.value || '';
+        if (rawValue === '0001-01-01 00:00:00') {
+          return '';
+        }
+
+        return rawValue;
+      },
     },
     {
       headerName: '功能',
@@ -156,19 +183,21 @@ export default class MainComponent extends BaseComponent implements OnInit {
         container.appendChild(viewBtn);
 
         // 修改權限按鈕
-        const editBtn = document.createElement('button');
-        editBtn.className = 'btn btn-warning btn-sm';
-        editBtn.innerHTML = `<i class="bi bi-pencil"></i> 修改權限`;
-        editBtn.addEventListener('click', () => {
-          // 轉址修改權限
-          this.router.navigate([
-            '/permission/permission_detail',
-            PermissionActionEnum.Update,
-            userName,
-            userUuid,
-          ]);
-        });
-        container.appendChild(editBtn);
+        if (isUse) {
+          const editBtn = document.createElement('button');
+          editBtn.className = 'btn btn-warning btn-sm';
+          editBtn.innerHTML = `<i class="bi bi-pencil"></i> 修改權限`;
+          editBtn.addEventListener('click', () => {
+            // 轉址修改權限
+            this.router.navigate([
+              '/permission/permission_detail',
+              PermissionActionEnum.Update,
+              userName,
+              userUuid,
+            ]);
+          });
+          container.appendChild(editBtn);
+        }
 
         // 啟用 / 停用按鈕
         const toggleBtn = document.createElement('button');

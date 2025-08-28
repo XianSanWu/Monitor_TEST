@@ -3,6 +3,6 @@ export enum PermissionActionEnum {
   Read = 'Read',
   Create = 'Create',
   Update = 'Update',
-  Delete = 'Delete',
-  Export = 'Export',
+  // Delete = 'Delete',
+  // Export = 'Export',
 }

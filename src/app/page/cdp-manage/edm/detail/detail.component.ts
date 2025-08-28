@@ -106,7 +106,7 @@ export default class DetailComponent extends BaseComponent implements OnInit {
         optionLabels: ['旅程', '群發']
       },
       cellRenderer: (params: ICellRendererParams) => {
-        const value = (params.value || '').toLowerCase();
+        const value = (params.value || '').toLocaleLowerCase();
         if (value === 'journey') {
           return CommonUtil.getColoredLabel(value, '#8e44ad', '旅程'); // 紫色
         } else if (value === 'groupsend') {
@@ -125,7 +125,7 @@ export default class DetailComponent extends BaseComponent implements OnInit {
         optionLabels: ['已完成', '進行中']
       },
       cellRenderer: (params: ICellRendererParams) => {
-        const value = (params.value || '').toLowerCase();
+        const value = (params.value || '').toLocaleLowerCase();
         if (value === 'completed') {
           return CommonUtil.getColoredLabel(value, '#28a745', '已完成'); // 綠
         } else if (value === 'progress') {
@@ -143,7 +143,7 @@ export default class DetailComponent extends BaseComponent implements OnInit {
       },
       cellRenderer: (params: ICellRendererParams): string => {
         const raw = params.value || '';
-        const value = raw.toString().toLowerCase();
+        const value = raw.toString().toLocaleLowerCase();
 
         const wrapperStart = `<div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">`;
         const wrapperEnd = `</div>`;

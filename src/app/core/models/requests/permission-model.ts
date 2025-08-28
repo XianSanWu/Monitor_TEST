@@ -13,7 +13,6 @@ export class FieldModel {
   Uuid?: string;
   UserName?: string;
   IsUse?: boolean;
-  BitValue?: number;
 
   constructor(data: Partial<FieldModel>) {
     Object.assign(this, data);
@@ -32,12 +31,14 @@ export class UserUpdateRequest {
 export class UserUpdateFieldRequest {
   UserName?: string;
   IsUse?: boolean;
+  FeatureMask?: number;
 }
 //#endregion
 
 //#region 更新[條件]
 /** User更新[條件] */
 export class UserUpdateConditionRequest extends BaseConditionModel {
-  UserName: FieldWithMetadataModel = new FieldWithMetadataModel();
+  UserName?: FieldWithMetadataModel = new FieldWithMetadataModel();
+  Uuid?: FieldWithMetadataModel = new FieldWithMetadataModel();
 }
 //#endregion

@@ -11,17 +11,31 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, finalize, forkJoin, of, takeUntil, tap } from 'rxjs';
+import {
+  catchError,
+  finalize,
+  forkJoin,
+  Observable,
+  of,
+  switchMap,
+  takeUntil,
+  tap,
+  throwError,
+} from 'rxjs';
 import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
 import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
 import { SearchSelectComponent } from '../../../component/form/search-select/search-select.component';
 import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
+import { LogicOperatorEnum } from '../../../core/enums/logic-operator-enum';
+import { MathSymbolEnum } from '../../../core/enums/math-symbol-enum';
 import { PermissionActionEnum } from '../../../core/enums/permission-enum';
+import { ResponseModel } from '../../../core/models/base.model';
 import { Option, PageBase } from '../../../core/models/common/base.model';
 import {
   FieldModel,
   UserRequest,
+  UserUpdateRequest,
 } from '../../../core/models/requests/permission-model';
 import {
   FeaturePermission,
@@ -93,10 +107,22 @@ export default class DetailComponent extends BaseComponent implements OnInit {
     console.log('this.action', this.action);
     console.log('this.userName', this.userName);
     console.log('this.userUuid', this.userUuid);
+
     // this.configService.configData$.subscribe((data) => {});
   }
 
   ngOnInit(): void {
+    const isInvalidAction = !Object.values(PermissionActionEnum).includes(
+      this.action as PermissionActionEnum
+    );
+
+    if (isInvalidAction) {
+      this.dialogService.openCustomSnackbar({
+        title: '提示訊息',
+        message: `無此網址功能`,
+      });
+      this.router.navigate(['/permission/permission_main']);
+    }
     this.loadPermissions();
     this.valueChanges();
   }
@@ -203,8 +229,10 @@ export default class DetailComponent extends BaseComponent implements OnInit {
 
     // 如果條件成立，加入額外 API
     if (
-      this.action === PermissionActionEnum.Read ||
-      this.action === PermissionActionEnum.Update
+      this.action.toLocaleLowerCase() ===
+        PermissionActionEnum.Read.toLocaleLowerCase() ||
+      this.action.toLocaleLowerCase() ===
+        PermissionActionEnum.Update.toLocaleLowerCase()
     ) {
       // 取得該使用者資料
       observables.list3 = this.permissionManageService
@@ -254,18 +282,25 @@ export default class DetailComponent extends BaseComponent implements OnInit {
         finalize(() => {
           this.showButtons = true;
           if (
-            this.action === PermissionActionEnum.Read ||
-            this.action === PermissionActionEnum.Update
+            this.action.toLocaleLowerCase() ===
+              PermissionActionEnum.Read.toLocaleLowerCase() ||
+            this.action.toLocaleLowerCase() ===
+              PermissionActionEnum.Update.toLocaleLowerCase()
           ) {
             // disable 帳號(員編)
             this.validateForm.patchValue({ userName: this.userName });
             this.validateForm.get('userName')?.disable();
           }
-          if (this.action === PermissionActionEnum.Read) {
+
+          if (
+            this.action.toLocaleLowerCase() ===
+            PermissionActionEnum.Read.toLocaleLowerCase()
+          ) {
             // disable 可複製啟用帳號
             this.validateForm.get('copyUserName')?.disable();
             this.showButtons = false;
           }
+
           this.loadingService.hide();
         })
       )
@@ -380,7 +415,8 @@ export default class DetailComponent extends BaseComponent implements OnInit {
     return (
       item.Action === action &&
       item.IsUse === true &&
-      this.action !== PermissionActionEnum.Read
+      this.action.toLocaleLowerCase() !==
+        PermissionActionEnum.Read.toLocaleLowerCase()
     );
   }
 
@@ -403,7 +439,7 @@ export default class DetailComponent extends BaseComponent implements OnInit {
           // 僅在該 item 原本有定義 Action 時才設 true
           if (
             item.Action &&
-            item.Action.toLowerCase() === action.toLowerCase()
+            item.Action.toLocaleLowerCase() === action.toLocaleLowerCase()
           ) {
             item.ActionMap[action] = true;
           }
@@ -413,6 +449,7 @@ export default class DetailComponent extends BaseComponent implements OnInit {
   }
 
   onSave() {
+    this.loadingService.show();
     console.log('this.groupedPermissions', this.groupedPermissions);
 
     const totalBitValue = this.groupedPermissions
@@ -428,11 +465,85 @@ export default class DetailComponent extends BaseComponent implements OnInit {
 
     console.log('totalBitValue', totalBitValue);
 
-    const reqData: FieldModel = {
-      Uuid: this.userUuid,
-      UserName: this.validateForm.get('userName')?.value,
-      BitValue: totalBitValue,
+    const reqData: UserUpdateRequest = {
+      FieldRequest: {
+        FeatureMask: totalBitValue,
+        IsUse: true,
+        UserName: this.validateForm.get('userName')?.value,
+      },
+      ConditionRequest: [
+        {
+          Uuid: {
+            Key: 'Uuid',
+            MathSymbol: MathSymbolEnum.Equal,
+            Value: this.userUuid,
+          },
+          InsideLogicOperator: LogicOperatorEnum.None,
+          GroupLogicOperator: LogicOperatorEnum.None,
+        },
+      ],
     };
+
     //Call 更新 API
+    if (
+      this.action.toLocaleLowerCase() ===
+      PermissionActionEnum.Create.toLocaleLowerCase()
+    ) {
+      this.handleSaveUser(reqData, true);
+    } else {
+      this.handleSaveUser(reqData);
+    }
+  }
+
+  handleSaveUser(reqData: any, checkBeforeSave: boolean = false) {
+    let save$: Observable<ResponseModel<any>>;
+
+    if (checkBeforeSave) {
+      // 先檢查再儲存
+      save$ = this.permissionManageService.CheckUpdateUserAsync(reqData).pipe(
+        switchMap((res) => {
+          const isCheckSuccess = !!res.Data && res.Data;
+          this.dialogService.openCustomSnackbar({
+            title: '提示訊息',
+            message: `執行${isCheckSuccess ? '成功' : '失敗' + res.Message}`,
+          });
+
+          if (isCheckSuccess) {
+            return this.permissionManageService.SaveUserAsync(reqData);
+          } else {
+            return throwError(() => new Error(res.Message || '檢查失敗'));
+          }
+        })
+      );
+    } else {
+      // 直接儲存
+      save$ = this.permissionManageService.SaveUserAsync(reqData);
+    }
+
+    save$
+      .pipe(
+        catchError((err) => {
+          this.dialogService.openCustomSnackbar({
+            message: err.message || '執行失敗',
+          });
+          return throwError(() => err);
+        }),
+        tap((res) => {
+          const isSuccess = !!res.Data && res.Data;
+          this.dialogService.openCustomSnackbar({
+            title: '提示訊息',
+            message: `執行${isSuccess ? '成功' : '失敗' + res.Message}`,
+          });
+
+          if (isSuccess) {
+            this.router.navigate(['/permission/permission_main']);
+          }
+        }),
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.loadingService.hide();
+        })
+      )
+      .subscribe();
   }
 }

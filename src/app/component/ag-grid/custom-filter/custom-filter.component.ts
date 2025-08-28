@@ -55,11 +55,11 @@ export class CustomFilterComponent implements IFilterComp {
     const { node } = params;
     let passed = true;
     this.filterText
-      ?.toLowerCase()
+      ?.toLocaleLowerCase()
       .split(' ')
       .forEach((filterWord) => {
         const value = this.filterParams.getValue(node);
-        if (value.toString().toLowerCase().indexOf(filterWord) < 0) {
+        if (value.toString().toLocaleLowerCase().indexOf(filterWord) < 0) {
           passed = false;
         }
       });

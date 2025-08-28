@@ -1,8 +1,8 @@
 import {
-  AbstractControl,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
+    AbstractControl,
+    FormGroup,
+    ValidationErrors,
+    ValidatorFn,
 } from '@angular/forms';
 import { Option } from '../../core/models/common/base.model';
 import { CommonUtil } from './common-util';
@@ -247,7 +247,7 @@ export const ValidatorsUtil = {
         return { blank: '不可為空' };
       }
       const option = options.find(
-        (o) => o.value?.toLowerCase() === v?.toLowerCase()
+        (o) => o.value?.toLocaleLowerCase() === v?.toLocaleLowerCase()
       );
       return option ? null : { noOption: '查無資料' };
     };

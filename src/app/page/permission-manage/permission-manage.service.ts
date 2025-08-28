@@ -10,7 +10,9 @@ import { ConfigService } from '../../core/services/config.service';
 export class PermissionManageService {
   private baseUrl: string = '';
   readonly permissionFunc = 'Permission/';
-  readonly isUseUserAsync = 'isUseUserAsync/';
+  readonly isUseUserAsync = 'IsUseUserAsync/';
+  readonly saveUserAsync = 'SaveUserAsync/';
+  readonly checkUpdateUserAsync = 'CheckUpdateUserAsync/';
   readonly getUsersAsync = 'GetUserListAsync/';
   readonly getPermissionListAsync = 'GetPermissionListAsync/';
   readonly getUserPermissionsAsync = 'GetUserPermissionsAsync/';
@@ -22,6 +24,24 @@ export class PermissionManageService {
     this.configService.configData$.subscribe((data) => {
       this.baseUrl = data?.SERVER_URL + data?.API_URL;
     });
+  }
+
+  // 檢查需更新使用者是否存在
+  CheckUpdateUserAsync(req: UserUpdateRequest): Observable<ResponseModel<any>> {
+    return this.apiService.doSend(
+      HttpMethod.POST,
+      this.baseUrl + this.permissionFunc + this.checkUpdateUserAsync,
+      req
+    );
+  }
+
+  // 儲存使用者
+  SaveUserAsync(req: UserUpdateRequest): Observable<ResponseModel<any>> {
+    return this.apiService.doSend(
+      HttpMethod.POST,
+      this.baseUrl + this.permissionFunc + this.saveUserAsync,
+      req
+    );
   }
 
   //啟用及停用帳號

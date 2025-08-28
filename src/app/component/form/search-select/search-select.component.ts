@@ -62,8 +62,8 @@ export class SearchSelectComponent implements OnInit {
   }
 
   private _filter(value: string): Option[] {
-    const filterValue = (value ?? '').toLowerCase();
-    return (this.options ?? []).filter(option => option.value?.toLowerCase()?.includes(filterValue));
+    const filterValue = (value ?? '').toLocaleLowerCase();
+    return (this.options ?? []).filter(option => option.value?.toLocaleLowerCase()?.includes(filterValue));
   }
 
   // 偵測父層對 options 的 push / splice 等動作，一有變化就強制觸發一次過濾
@@ -83,7 +83,7 @@ export class SearchSelectComponent implements OnInit {
   }
 
   selectOption(key: string) {
-    const option = this.options.find(option => option.key?.toLowerCase() === key?.toLowerCase());
+    const option = this.options.find(option => option.key?.toLocaleLowerCase() === key?.toLocaleLowerCase());
     if (option) {
       this.ctl.setValue(option.value, { emitEvent: false });
       this.selected.emit(key);

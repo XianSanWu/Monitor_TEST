@@ -30,12 +30,17 @@ export const httpRequestInterceptor: HttpInterceptorFn = (
     }),
     catchError((error) => {
       let errorMessage = '發生未知錯誤';
+      let isShow = true;
 
       if (error instanceof TimeoutError) {
         errorMessage = '⏳ 請求逾時，請稍後再試！';
         router.navigate(['/']); // ✅ 導回首頁（或登入頁）
       } else if (error instanceof HttpErrorResponse) {
-        if (error.status === 401 || error.status === 403 ) {
+        if(error.status === 500){
+          isShow = false;
+        }
+
+        if (error.status === 401 || error.status === 403) {
           errorMessage = '未授權，請重新登入';
           router.navigate(['/home']); // ✅ 導回首頁（或登入頁）
         } else {
@@ -45,7 +50,9 @@ export const httpRequestInterceptor: HttpInterceptorFn = (
 
       // console.log('errorMessage', errorMessage)
       // 使用 DialogService 顯示錯誤訊息
-      dialogService.openCustomSnackbar({ message: errorMessage });
+      if (isShow) {
+        dialogService.openCustomSnackbar({ message: errorMessage });
+      }
 
       return throwError(() => new Error(errorMessage));
     })
