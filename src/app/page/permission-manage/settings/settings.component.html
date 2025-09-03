@@ -1,1 +1,350 @@
-<p>settings works!</p>
+<loading-indicator></loading-indicator>
+
+<div class="pageTitle mb-4">
+  <h2>
+    <i class="bi bi-list-task"></i>
+    權限設定 - 新增/修改權限
+  </h2>
+</div>
+
+<collapsible-section
+  [id]="'PermissionDetailBody'"
+  title="💾 設定條件"
+  tooltipText="請設定條件。"
+>
+  <div *ngIf="showButton" class="d-flex justify-content-end">
+    <button
+      class="btn d-flex align-items-center gap-2 px-3 py-2 rounded-pill shadow-sm"
+      style="background-color: #6f42c1; color: white"
+      (click)="addModule()"
+    >
+      <i class="bi bi-folder-plus"></i>
+      <span class="fw-bold">新增模組</span>
+    </button>
+  </div>
+
+  <div class="permission-form" *ngFor="let group of groupedPermissions">
+    <div
+      class="module-title d-flex justify-content-between align-items-center mb-2"
+    >
+      <!-- 左邊：模組欄位 -->
+      <div class="d-flex align-items-center gap-3 flex-wrap">
+        <!-- 模組名稱 -->
+        <div class="d-flex flex-column" style="width: 180px">
+          <label class="form-label mb-1">名稱</label>
+          <input
+            type="text"
+            [(ngModel)]="group.header.ModuleName"
+            (ngModelChange)="
+              clearModuleError(group.header.Uuid, 'ModuleName', $event)
+            "
+            class="form-control"
+            placeholder="模組名稱"
+            [ngClass]="{
+              'is-invalid': fieldErrors[group.header.Uuid].module?.ModuleName
+            }"
+            [matTooltip]="group.header.ModuleName"
+          />
+        </div>
+
+        <!-- 模組描述 -->
+        <div class="d-flex flex-column" style="width: 240px">
+          <label class="form-label mb-1">描述</label>
+          <input
+            type="text"
+            [(ngModel)]="group.header.Title"
+            (ngModelChange)="
+              clearModuleError(group.header.Uuid, 'Title', $event)
+            "
+            class="form-control"
+            placeholder="模組描述"
+            [ngClass]="{
+              'is-invalid': fieldErrors[group.header.Uuid].module?.Title
+            }"
+            [matTooltip]="group.header.Title"
+          />
+        </div>
+
+        <!-- 模組圖示 -->
+        <div class="d-flex flex-column" style="width: 160px">
+          <label class="form-label mb-1">圖示</label>
+          <div class="input-group">
+            <input
+              type="text"
+              [(ngModel)]="group.header.Icon"
+              (ngModelChange)="
+                clearModuleError(group.header.Uuid, 'Icon', $event)
+              "
+              class="form-control"
+              placeholder="請輸入icon"
+              [ngClass]="{
+                'is-invalid': fieldErrors[group.header.Uuid].module?.Icon
+              }"
+              [matTooltip]="group.header.Icon"
+            />
+            <span class="input-group-text">
+              <i
+                [class]="group.header.Icon || 'bi bi-circle'"
+                [ngClass]="{ 'placeholder-icon': !group.header.Icon }"
+              ></i>
+            </span>
+          </div>
+        </div>
+
+        <!-- 模組連結 -->
+        <div class="d-flex flex-column" style="width: 140px">
+          <label class="form-label mb-1">連結</label>
+          <input
+            type="text"
+            [(ngModel)]="group.header.Link"
+            (ngModelChange)="
+              clearModuleError(group.header.Uuid, 'Link', $event)
+            "
+            class="form-control"
+            placeholder="模組連結"
+            [ngClass]="{
+              'is-invalid': fieldErrors[group.header.Uuid].module?.Link
+            }"
+            [matTooltip]="group.header.Link"
+          />
+        </div>
+
+        <!-- 模組啟用 -->
+        <div class="d-flex flex-column" style="width: 40px">
+          <label class="form-label mb-1">啟用</label>
+          <mat-checkbox
+            [(ngModel)]="group.header.IsUse"
+            [matTooltip]="group.header.IsUse ? 'true' : 'false'"
+          ></mat-checkbox>
+        </div>
+
+        <!-- 模組排序 -->
+        <div class="d-flex flex-column" style="width: 80px">
+          <label class="form-label mb-1">排序</label>
+          <input
+            type="number"
+            [(ngModel)]="group.header.Sort"
+            (ngModelChange)="
+              clearModuleError(group.header.Uuid, 'Sort', $event)
+            "
+            class="form-control text-center sort"
+            placeholder="排序"
+            min="0"
+            [ngClass]="{
+              'is-invalid': fieldErrors[group.header.Uuid].module?.Sort
+            }"
+            [matTooltip]="'' + group.header.Sort"
+          />
+        </div>
+      </div>
+
+      <!-- 右邊按鈕 -->
+      <div class="d-flex gap-2">
+        <button
+          *ngIf="group.header.Id === 0"
+          class="btn btn-sm d-flex align-items-center gap-1 px-3 py-1 rounded-pill shadow-sm"
+          style="background-color: #dc3545; color: white"
+          (click)="removeModule(group)"
+        >
+          <i class="bi bi-trash"></i>
+          <span class="fw-bold">刪除模組</span>
+        </button>
+
+        <button
+          class="btn btn-sm d-flex align-items-center gap-1 px-3 py-1 rounded-pill shadow-sm"
+          style="background-color: #0d6efd; color: white"
+          (click)="addFeature(group)"
+        >
+          <i class="bi bi-plus-lg"></i>
+          <span class="fw-bold">新增功能</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 功能表格 -->
+    <div class="table-wrapper">
+      <table class="permission-table">
+        <thead>
+          <tr>
+            <th class="delete-col">刪除</th>
+            <th class="wide-col">功能</th>
+            <th class="wide-col">功能描述</th>
+            <th class="wide-col">圖示</th>
+            <th class="wide-col">頁面連結</th>
+            <th class="fixed-col">啟用</th>
+            <th class="fixed-col">可見</th>
+            <th class="fixed-col">排序</th>
+            <th *ngFor="let action of allActions" class="fixed-col">
+              {{ action }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of group.items">
+            <!-- 刪除 -->
+            <td class="delete-col">
+              <button
+                class="delete-btn"
+                (click)="removeFeature(group, item)"
+                [disabled]="item.Id !== 0"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+
+            <!-- 功能名稱 -->
+            <td class="wide-col ellipsis">
+              <input
+                type="text"
+                [(ngModel)]="item.FeatureName"
+                (ngModelChange)="
+                  clearItemError(
+                    group.header.Uuid,
+                    item.Uuid,
+                    'FeatureName',
+                    $event
+                  )
+                "
+                class="form-control"
+                placeholder="請輸入功能名稱"
+                [ngClass]="{
+                  'is-invalid':
+                    fieldErrors[group.header.Uuid].items[item.Uuid].FeatureName
+                }"
+                [matTooltip]="item.FeatureName"
+              />
+            </td>
+
+            <!-- 功能描述 -->
+            <td class="wide-col ellipsis">
+              <input
+                type="text"
+                [(ngModel)]="item.Title"
+                (ngModelChange)="
+                  clearItemError(group.header.Uuid, item.Uuid, 'Title', $event)
+                "
+                class="form-control"
+                placeholder="請輸入功能描述"
+                [ngClass]="{
+                  'is-invalid':
+                    fieldErrors[group.header.Uuid].items[item.Uuid].Title
+                }"
+                [matTooltip]="item.Title"
+              />
+            </td>
+
+            <!-- 功能圖示 -->
+            <td class="wide-col ellipsis">
+              <div class="icon-input-wrapper">
+                <input
+                  type="text"
+                  [(ngModel)]="item.Icon"
+                  class="form-control"
+                  placeholder="請輸入icon"
+                  [matTooltip]="item.Icon"
+                />
+                <i
+                  [class]="item.Icon || 'bi bi-circle'"
+                  [ngClass]="{ 'placeholder-icon': !item.Icon }"
+                ></i>
+              </div>
+            </td>
+
+            <!-- 連結 -->
+            <td class="wide-col ellipsis">
+              <input
+                type="text"
+                [(ngModel)]="item.Link"
+                class="form-control"
+                placeholder="請輸入連結"
+                [matTooltip]="item.Link"
+              />
+            </td>
+
+            <!-- 啟用 -->
+            <td class="fixed-col">
+              <mat-checkbox
+                [(ngModel)]="item.IsUse"
+                [matTooltip]="item.IsUse ? 'true' : 'false'"
+              ></mat-checkbox>
+            </td>
+
+            <!-- 可見 -->
+            <td class="fixed-col">
+              <mat-checkbox
+                [(ngModel)]="item.IsVisible"
+                [matTooltip]="item.IsVisible ? 'true' : 'false'"
+              ></mat-checkbox>
+            </td>
+
+            <!-- 排序 -->
+            <td class="fixed-col">
+              <input
+                type="number"
+                [(ngModel)]="item.Sort"
+                (ngModelChange)="
+                  clearItemError(group.header.Uuid, item.Uuid, 'Sort', $event)
+                "
+                class="form-control text-center"
+                placeholder="排序"
+                min="0"
+                class="form-control sort"
+                [ngClass]="{
+                  'is-invalid':
+                    fieldErrors[group.header.Uuid].items[item.Uuid].Sort
+                }"
+                [matTooltip]="'' + item.Sort"
+              />
+            </td>
+
+            <!-- Action 欄位 -->
+            <td
+              *ngFor="let action of allActions"
+              class="checkbox-cell fixed-col"
+            >
+              <mat-checkbox
+                [(ngModel)]="item.ActionMap[action]"
+                (ngModelChange)="onActionChange(group, item, action, $event)"
+                [ngClass]="{
+                  'is-invalid':
+                    fieldErrors[group.header.Uuid].items[item.Uuid].Action
+                }"
+                [matTooltip]="item.ActionMap[action] ? 'true' : 'false'"
+              ></mat-checkbox>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</collapsible-section>
+
+<!-- 底部操作按鈕 -->
+<div
+  *ngIf="showButton"
+  class="submit-section text-end d-flex gap-2 justify-content-end mt-3"
+>
+  <button
+    class="btn d-flex align-items-center justify-content-center gap-2 px-4 py-2 rounded-pill shadow-sm"
+    style="background-color: #fd7e14; color: white; min-width: 140px"
+    (click)="reply()"
+    [disabled]="
+      areGroupedPermissionsEqual(originalGroupedPermissions, groupedPermissions)
+    "
+  >
+    <i class="bi bi-arrow-counterclockwise fs-5"></i>
+    <span class="fw-bold">還原</span>
+  </button>
+
+  <button
+    class="btn d-flex align-items-center justify-content-center gap-2 px-4 py-2 rounded-pill shadow-sm"
+    style="background-color: #198754; color: white; min-width: 140px"
+    (click)="onSave()"
+    [disabled]="
+      areGroupedPermissionsEqual(originalGroupedPermissions, groupedPermissions)
+    "
+  >
+    <i class="bi bi-check-lg fs-5"></i>
+    <span class="fw-bold">儲存</span>
+  </button>
+</div>

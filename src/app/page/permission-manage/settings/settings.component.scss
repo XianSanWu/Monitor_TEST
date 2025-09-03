@@ -1,0 +1,171 @@
+/* ===== 父層區塊 ===== */
+.permission-form {
+  display: flex;
+  flex-direction: column;
+  position: relative;   /* 不要用 fixed，保留 relative */
+  width: 100%;
+  min-height: 100px;
+  z-index: 1;           /* 保持低於 dialog 的層級 */
+  /* 移除可能造成 stacking context 的屬性 */
+  transform: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* ===== 模組標題 ===== */
+.module-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1976d2;
+  margin: 24px 0 6px;
+  padding: 8px 10px;
+  border-left: 6px solid #1976d2;
+  background-color: #e3f2fd;
+  border-radius: 4px;
+}
+
+/* ===== Table 包裝器，支援水平 + 垂直滾動 ===== */
+.table-wrapper {
+  width: 100%;
+  max-height: 70vh;      /* 超出視窗高度自動滾動 */
+  overflow-x: auto;      /* 水平滾動 */
+  overflow-y: auto;      /* 垂直滾動 */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  position: relative;    /* 避免 fixed，保持在正常文檔流 */
+  z-index: 1;            /* 避免覆蓋 dialog */
+}
+
+/* ===== Table ===== */
+.permission-table {
+  border-collapse: collapse;
+  table-layout: auto;
+  min-width: 1200px;     /* 表格寬度，依欄位調整 */
+}
+
+.permission-table th,
+.permission-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  vertical-align: middle;
+}
+
+.permission-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+/* 固定小欄位 */
+.fixed-col {
+  width: 70px;
+  min-width: 70px;
+  max-width: 70px;
+  text-align: center;
+}
+
+/* 功能名稱欄位，寬度可伸縮 */
+.wide-col {
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 200px;
+  max-width: 320px;
+}
+
+/* 刪除欄位 */
+.delete-col {
+  width: 70px;
+  min-width: 70px;
+  text-align: center;
+}
+
+.delete-btn {
+  padding: 4px 8px;
+  border: 2px solid #f44336;
+  border-radius: 6px;
+  background: transparent;
+  color: #f44336;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* hover 效果 */
+.delete-btn:hover:enabled {
+  background: #f44336;
+  color: #fff;
+}
+
+/* disabled 狀態 */
+.delete-btn:disabled {
+  border-color: #ccc;
+  color: #ccc;
+  background: #f9f9f9;
+  cursor: not-allowed;
+}
+
+
+/* icon 欄位 */
+.icon-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-input-wrapper input {
+  flex: 1;
+}
+
+.icon-input-wrapper i {
+  font-size: 20px;
+  width: 24px;
+  text-align: center;
+}
+
+.placeholder-icon {
+  color: #ccc;
+}
+
+/* ===== Submit 區塊 ===== */
+.submit-section {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+
+/* ===== 錯誤定義 ===== */
+.is-invalid {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* 功能排序專用，移除背景的驚嘆號 */
+.sort.form-control.is-invalid {
+  background-image: none !important;
+  padding-right: 0.375rem; /* 避免多餘空隙 */
+}
+
+/* ===== 圖示反灰 ===== */
+.placeholder-icon {
+  color: #ccc; /* 淺灰色 */
+}
+
+/* ===== RWD ===== */
+@media (max-width: 1024px) {
+  .table-wrapper {
+    overflow-x: auto;
+  }
+  .permission-table {
+    min-width: 700px;
+  }
+}
+
+@media (max-width: 768px) {
+  .permission-table th,
+  .permission-table td {
+    font-size: 0.9rem;
+    padding: 6px;
+  }
+}

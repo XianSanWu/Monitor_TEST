@@ -3,7 +3,8 @@ import { Observable } from 'rxjs';
 import { ApiService } from '../../api/services/api.service';
 import { HttpMethod } from '../../core/enums/http-method';
 import { ResponseModel } from '../../core/models/base.model';
-import { UserRequest, UserUpdateRequest } from '../../core/models/requests/permission-model';
+import { PermissionRequest, PermissionUpdateRequest } from '../../core/models/requests/permission-model';
+import { UserRequest, UserUpdateRequest } from '../../core/models/requests/user-model';
 import { ConfigService } from '../../core/services/config.service';
 
 @Injectable()
@@ -16,6 +17,7 @@ export class PermissionManageService {
   readonly getUsersAsync = 'GetUserListAsync/';
   readonly getPermissionListAsync = 'GetPermissionListAsync/';
   readonly getUserPermissionsAsync = 'GetUserPermissionsAsync/';
+  readonly saveFeaturePermissionsAsync = 'SaveFeaturePermissionsAsync/';
 
   constructor(
     private apiService: ApiService,
@@ -63,10 +65,11 @@ export class PermissionManageService {
   }
 
   //查詢全部權限
-  GetPermissionListAsync(): Observable<ResponseModel<any>> {
+  GetPermissionListAsync(req: PermissionRequest): Observable<ResponseModel<any>> {
     return this.apiService.doSend(
       HttpMethod.POST,
-      this.baseUrl + this.permissionFunc + this.getPermissionListAsync
+      this.baseUrl + this.permissionFunc + this.getPermissionListAsync,
+      req
     );
   }
 
@@ -75,6 +78,15 @@ export class PermissionManageService {
     return this.apiService.doSend(
       HttpMethod.POST,
       this.baseUrl + this.permissionFunc + this.getUserPermissionsAsync,
+      req
+    );
+  }
+
+  //儲存全部權限
+  SaveFeaturePermissionsAsync(req: PermissionUpdateRequest): Observable<ResponseModel<any>> {
+    return this.apiService.doSend(
+      HttpMethod.POST,
+      this.baseUrl + this.permissionFunc + this.saveFeaturePermissionsAsync,
       req
     );
   }

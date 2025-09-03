@@ -32,11 +32,12 @@ import { MathSymbolEnum } from '../../../core/enums/math-symbol-enum';
 import { PermissionActionEnum } from '../../../core/enums/permission-enum';
 import { ResponseModel } from '../../../core/models/base.model';
 import { Option, PageBase } from '../../../core/models/common/base.model';
+import { PermissionRequest } from '../../../core/models/requests/permission-model';
 import {
   FieldModel,
   UserRequest,
   UserUpdateRequest,
-} from '../../../core/models/requests/permission-model';
+} from '../../../core/models/requests/user-model';
 import {
   FeaturePermission,
   GroupedPermissions,
@@ -86,7 +87,7 @@ export default class DetailComponent extends BaseComponent implements OnInit {
     // private configService: ConfigService,
     private loadingService: LoadingService,
     private route: ActivatedRoute,
-    private router: Router,
+    private router: Router
   ) {
     super();
     // 初始化表單
@@ -184,6 +185,14 @@ export default class DetailComponent extends BaseComponent implements OnInit {
     });
 
     // 組裝請求資料
+    const reqData1: PermissionRequest = {
+      page: pageBaseBig,
+      sortModel: undefined,
+      filterModel: undefined,
+      fieldModel: new FieldModel({ IsUse: true }),
+    };
+
+    // 組裝請求資料
     const reqData2: UserRequest = {
       page: pageBaseBig,
       sortModel: undefined,
@@ -201,7 +210,7 @@ export default class DetailComponent extends BaseComponent implements OnInit {
 
     const observables: any = {
       // 取得全部權限
-      list1: this.permissionManageService.GetPermissionListAsync().pipe(
+      list1: this.permissionManageService.GetPermissionListAsync(reqData1).pipe(
         catchError((err) => {
           this.dialogService.openCustomSnackbar({
             message: '錯誤在API：GetPermissionListAsync。' + err.message,
@@ -372,29 +381,26 @@ export default class DetailComponent extends BaseComponent implements OnInit {
     checkData: FeaturePermission[]
   ): GroupedPermissions[] {
     const groups: GroupedPermissions[] = [];
-    const headers = data.filter((x) => !x.ParentUuid);
-    // console.log('headers',headers)
-    // const bodys = data.filter((x) => !!x.ParentUuid);
-    // console.log('bodys',bodys)
-    // console.log('data', data);
-    // console.log('checkData', checkData);
+
+    // 先把 header 排序
+    const headers = data
+      .filter((x) => !x.ParentUuid || x.BitValue === 0)
+      .sort((a, b) => (a.Sort ?? 0) - (b.Sort ?? 0));
 
     headers.forEach((header) => {
+      // 取出該 header 的 items 並依 Sort 排序
       const items = data
         .filter((x) => x.ParentUuid === header.Uuid)
+        .sort((a, b) => (a.Sort ?? 0) - (b.Sort ?? 0))
         .map((item) => {
           const map: { [actionName: string]: boolean } = {};
 
           this.allActions.forEach((action) => {
-            // 檢查 checkData 裡是否有相同 Uuid + Action
-            // console.log('item', item);
-            // console.log('checkData', checkData);
             const hasPermission = checkData.some(
               (cd) =>
                 cd.Uuid === item.Uuid &&
                 cd.Action?.toLocaleLowerCase() === action?.toLocaleLowerCase()
             );
-            // console.log('hasPermission', hasPermission);
 
             map[action] = hasPermission;
           });
@@ -404,7 +410,6 @@ export default class DetailComponent extends BaseComponent implements OnInit {
 
       groups.push({ header, items });
     });
-    // console.log('groups', groups);
 
     return groups;
   }

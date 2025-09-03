@@ -28,7 +28,7 @@ import { Option, PageBase } from '../../../core/models/common/base.model';
 import {
   UserRequest,
   UserUpdateRequest,
-} from '../../../core/models/requests/permission-model';
+} from '../../../core/models/requests/user-model';
 import { ConfigService } from '../../../core/services/config.service';
 import { DialogService } from '../../../core/services/dialog.service';
 import { LoadingService } from '../../../core/services/loading.service';

@@ -1,8 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { ConfirmDialogOption } from '../../../core/models/common/dialog.model';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog'; // 引入 MatDialogRef
 import { CommonModule } from '@angular/common';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button'; // 引入 Material 按鈕模組
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog'; // 引入 MatDialogRef
+import { ConfirmDialogOption } from '../../../core/models/common/dialog.model';
 
 @Component({
   selector: 'confirm-dialog',
