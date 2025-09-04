@@ -1,13 +1,25 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { MatIconModule } from '@angular/material/icon';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { LocalStorageService } from '../../core/services/local-storage.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { RouterModule } from '@angular/router';
 import { MenuItem } from '../../core/models/common/menu.model';
+import {
+  FeaturePermission,
+  GroupedPermissions,
+} from '../../core/models/responses/permission.model';
 import { ConfigService } from '../../core/services/config.service';
+import { LocalStorageService } from '../../core/services/local-storage.service';
 
 @Component({
   selector: 'sidebar',
@@ -18,7 +30,7 @@ import { ConfigService } from '../../core/services/config.service';
     MatSidenavModule,
     MatListModule,
     MatIconModule,
-    MatExpansionModule
+    MatExpansionModule,
   ],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
@@ -30,30 +42,69 @@ export class SidebarComponent implements OnInit {
   @Output() menuItemClicked = new EventEmitter<void>();
 
   menuItems!: MenuItem[];
-  testMenu!: MenuItem[];
-  adminMenu!: MenuItem[];
-  otherMenu!: MenuItem[];
 
   constructor(
     private localStorageService: LocalStorageService,
     private cd: ChangeDetectorRef,
-    private configService: ConfigService,
-  ) {
-    this.configService.configData$.subscribe(data => {
-      this.testMenu = data?.testMenu;
-      this.otherMenu = data?.otherMenu;
-      this.adminMenu = [...(data?.adminMenu ?? []), ...(this?.otherMenu ?? []), ...(this.testMenu ?? [])];
+    private configService: ConfigService
+  ) {}
+
+  ngOnInit(): void {
+    const permissions = JSON.parse(
+      this.localStorageService.getItem('userPermissionsMenu') ?? '[]'
+    );
+    // console.log('permissions', permissions);
+
+    this.menuItems = this.transformMenu(this.groupPermissions(permissions));
+    console.log('menuItems', this.menuItems);
+
+    this.cd.detectChanges();
+  }
+
+  // 轉成menu
+  transformMenu(raw: GroupedPermissions[]): MenuItem[] {
+    return raw.map((r) => {
+      const children = r.items
+        .filter((item) => item.IsUse && item.IsVisible) // 只保留啟用且可見的項目
+        .map((item) => ({
+          title: item.Title,
+          icon: item.Icon ?? '', // 若 icon 為 null，給空字串
+          link: item.Link ?? undefined,
+          bitValue: item.BitValue ?? 0,
+        }));
+
+      return {
+        title: r.header.Title,
+        icon: r.header.Icon ?? '',
+        link: r.header.Link ?? undefined,
+        bitValue: r.header.BitValue ?? 0,
+        children: children.length > 0 ? children : undefined,
+      };
     });
   }
 
-  ngOnInit(): void {
-    // console.log('SSSS.isSmallScreen', this.isSmallScreen);
-    // console.log('SSSS.opened', this.opened);
-    const user = this.localStorageService.getItem('isLoggedIn')?.toLocaleLowerCase();
-    this.menuItems = (user === 'admin') ? Object.values(this.adminMenu) : Object.values(this.otherMenu);
-    // console.log('SSSS.user', user);
-    // console.log('SSSS.menuItems', this.menuItems);
-    this.cd.detectChanges();
+  // 整理資料為UI可視化
+  groupPermissions(data: FeaturePermission[]): GroupedPermissions[] {
+    // 先挑出所有 header，並依 Sort 排序
+    const headers = data
+      .filter((x) => !x.ParentUuid || x.BitValue === 0)
+      .sort((a, b) => (a.Sort ?? 0) - (b.Sort ?? 0));
+
+    const groups: GroupedPermissions[] = [];
+
+    headers.forEach((header) => {
+      // 每個 header 下的 items 依 Sort 排序
+      const items = data
+        .filter((x) => x.ParentUuid === header.Uuid)
+        .sort((a, b) => (a.Sort ?? 0) - (b.Sort ?? 0))
+        .map((item) => {
+          return { ...item };
+        });
+
+      groups.push({ header, items });
+    });
+    // console.log('groups', groups);
+    return groups;
   }
 
   onMenuItemClick() {

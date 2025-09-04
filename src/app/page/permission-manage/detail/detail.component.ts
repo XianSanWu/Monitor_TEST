@@ -466,7 +466,7 @@ export default class DetailComponent extends BaseComponent implements OnInit {
       ) // 過濾符合條件
       .reduce((sum, item) => sum + item.BitValue, 0); // 加總 BitValue
 
-    console.log('totalBitValue', totalBitValue);
+    // console.log('totalBitValue', totalBitValue);
 
     const reqData: UserUpdateRequest = {
       FieldRequest: {

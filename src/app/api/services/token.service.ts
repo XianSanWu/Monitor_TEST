@@ -3,6 +3,17 @@ import { Injectable } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 export class TokenService {
   private readonly TOKEN_KEY = 'token';
+  private readonly TOKEN_UUID_KEY = 'tokenUuid';
+
+  // 儲存 token 到 sessionStorage
+  setTokenUuid(tokenUuid: string): void {
+    sessionStorage.setItem(this.TOKEN_UUID_KEY, tokenUuid);
+  }
+
+  // 取得 token
+  getTokenUuid(): string | null {
+    return sessionStorage.getItem(this.TOKEN_UUID_KEY);
+  }
 
   // 儲存 token 到 sessionStorage
   setToken(token: string): void {
@@ -15,9 +26,9 @@ export class TokenService {
   }
 
   // 移除 token
-  clearToken(): void {
-    sessionStorage.removeItem(this.TOKEN_KEY);
-  }
+  // clearToken(): void {
+  //   sessionStorage.removeItem(this.TOKEN_KEY);
+  // }
 
   // 解碼 JWT 並取得 payload
   getTokenPayload(): any {
@@ -36,7 +47,7 @@ export class TokenService {
   }
 
   // 快速取得 userId（從 payload）
-  getUserId(): number | null {
+  getUserId(): string | number | null {
     const payload = this.getTokenPayload();
     return payload?.UserId ?? null;
   }

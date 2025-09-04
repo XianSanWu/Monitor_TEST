@@ -505,7 +505,7 @@ export default class SettingsComponent extends BaseComponent implements OnInit {
     }
 
     this.SaveFeaturePermission();
-    console.log('驗證通過，送出資料', this.processData());
+    // console.log('驗證通過，送出資料', this.processData());
     this.loadingService.hide();
   }
 

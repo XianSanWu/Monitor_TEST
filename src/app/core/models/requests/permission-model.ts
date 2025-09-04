@@ -13,6 +13,7 @@ export interface PermissionRequest {
 export class FieldModel {
   Id?: number;
   Uuid?: string;
+  TokenUuid?: string;
   ParentUuid?: string;
   FeatureName?: string;
   ModuleName?: string;
