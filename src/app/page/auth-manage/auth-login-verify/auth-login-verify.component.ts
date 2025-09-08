@@ -76,94 +76,98 @@ export default class LoginComponent extends BaseComponent {
   }
 
   submit() {
-    if (!this.isApiFinish) {
-      return;
-    }
-    this.isApiFinish = false;
-
-    if (this.validateForm.invalid) {
-      return; // Form is invalid, exit early.
-    }
-
-    let reqData: LoginRequest = this.validateForm.getRawValue();
-    reqData.password = Base64Util.encode(
-      CryptoUtil.encrypt(reqData.password, this.key, this.iv)
-    );
-
-    this.loadingService.show();
-
-    this.AuthManageService.login(reqData)
-      .pipe(
-        catchError((err) => {
-          this.localStorageService.clear();
-          this.dialogService.openCustomSnackbar({
-            message: err.message || '登入時發生錯誤',
-          });
-          throw err;
-        }),
-        switchMap((res) => {
-          if (!res?.Data?.IsLogin) {
-            this.dialogService.openCustomSnackbar({
-              message: '驗證失敗，請輸入正確帳號密碼',
-            });
-            throw new Error('Login failed');
-          }
-
-          if (!res?.Data?.Token) {
-            this.dialogService.openCustomSnackbar({
-              message: '驗證失敗，無正確回應Token',
-            });
-            throw new Error('Invalid token');
-          }
-
-          // 儲存 Token
-          this.tokenService.setToken(res.Data.Token);
-          this.tokenService.setTokenUuid(res.Data.TokenUuid);
-          this.localStorageService.setItem('isLoggedIn', reqData.username);
-
-          // 準備權限查詢請求
-          const pageBaseBig = new PageBase({
-            pageSize: 2147483647,
-            pageIndex: 1,
-            totalCount: 0,
-          });
-          const userReq: UserRequest = {
-            page: pageBaseBig,
-            sortModel: undefined,
-            filterModel: undefined,
-            fieldModel: new FieldModel({
-              TokenUuid: this.tokenService.getTokenUuid()?.toString(),
-            }),
-          };
-
-          // 串接權限 API
-          return this.permissionManageService.GetUserPermissionsMenuAsync(userReq);
-        }),
-        tap((permRes) => {
-          if (!!permRes?.Data) {
-            this.localStorageService.setItem(
-              'userPermissionsMenu',
-              JSON.stringify(permRes.Data)
-            );
-          } else {
-            this.dialogService.openCustomSnackbar({
-              message: '無法取得使用者權限',
-            });
-          }
-        }),
-        finalize(() => {
-          this.isApiFinish = true;
-          this.loadingService.hide();
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: () => {
-          // 權限完成後再跳轉
-          this.router.navigate(['/home']);
-        },
-      });
+  if (!this.isApiFinish) {
+    return;
   }
+  this.isApiFinish = false;
+
+  if (this.validateForm.invalid) {
+    this.isApiFinish = true;
+    return; // Form is invalid, exit early.
+  }
+
+  let reqData: LoginRequest = this.validateForm.getRawValue();
+  reqData.password = Base64Util.encode(
+    CryptoUtil.encrypt(reqData.password, this.key, this.iv)
+  );
+
+  this.loadingService.show();
+
+  this.AuthManageService.login(reqData)
+    .pipe(
+      catchError((err) => {
+        this.localStorageService.clear();
+        this.dialogService.openCustomSnackbar({
+          message: err.message || '登入時發生錯誤',
+        });
+        throw err;
+      }),
+      switchMap((res) => {
+        if (!res?.Data?.IsLogin) {
+          this.dialogService.openCustomSnackbar({
+            message: '驗證失敗，請輸入正確帳號密碼',
+          });
+          throw new Error('Login failed');
+        }
+
+        // AccessToken 已改為 HttpOnly cookie，前端無需存取
+        // 保留 TokenUuid 供前端查權限使用
+        if (!res?.Data?.TokenUuid) {
+          this.dialogService.openCustomSnackbar({
+            message: '登入失敗，無正確 TokenUuid 回應',
+          });
+          throw new Error('Invalid TokenUuid');
+        }
+        this.tokenService.setTokenUuid(res.Data.TokenUuid);
+        this.localStorageService.setItem('isLoggedIn', reqData.username);
+
+        // 準備權限查詢請求
+        const pageBaseBig = new PageBase({
+          pageSize: 2147483647,
+          pageIndex: 1,
+          totalCount: 0,
+        });
+        const userReq: UserRequest = {
+          page: pageBaseBig,
+          sortModel: undefined,
+          filterModel: undefined,
+          fieldModel: new FieldModel({
+            TokenUuid: this.tokenService.getTokenUuid()?.toString(),
+          }),
+        };
+
+        // 呼叫權限 API
+        return this.permissionManageService.GetUserPermissionsMenuAsync(userReq);
+      }),
+      tap((permRes) => {
+        if (!!permRes?.Data) {
+          this.localStorageService.setItem(
+            'userPermissionsMenu',
+            JSON.stringify(permRes.Data)
+          );
+        } else {
+          this.dialogService.openCustomSnackbar({
+            message: '無法取得使用者權限',
+          });
+        }
+      }),
+      finalize(() => {
+        this.isApiFinish = true;
+        this.loadingService.hide();
+      }),
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: () => {
+        // 權限完成後再跳轉
+        this.router.navigate(['/home']);
+      },
+      error: () => {
+        this.isApiFinish = true;
+        this.loadingService.hide();
+      }
+    });
+}
 
   // 監聽 Enter 鍵
   @HostListener('document:keydown.enter', ['$event'])

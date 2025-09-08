@@ -7,7 +7,7 @@ import {
   withInterceptors,
 } from '@angular/common/http';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { authInterceptor } from './api/Interceptors/auth/auth-interceptor';
+// import { authInterceptor } from './api/Interceptors/auth/auth-interceptor';
 import { httpRequestInterceptor } from './api/Interceptors/error/http-request-interceptor';
 import { routes } from './app.routes';
 // import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
@@ -20,7 +20,7 @@ export const appConfig: ApplicationConfig = {
     // provideClientHydration(withEventReplay()),
     provideHttpClient(
       withFetch(),
-      withInterceptors([httpRequestInterceptor, authInterceptor])
+      withInterceptors([httpRequestInterceptor, ])//authInterceptor
     ),
   ],
 };

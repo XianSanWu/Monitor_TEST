@@ -56,7 +56,7 @@ export class SidebarComponent implements OnInit {
     // console.log('permissions', permissions);
 
     this.menuItems = this.transformMenu(this.groupPermissions(permissions));
-    console.log('menuItems', this.menuItems);
+    // console.log('menuItems', this.menuItems);
 
     this.cd.detectChanges();
   }
