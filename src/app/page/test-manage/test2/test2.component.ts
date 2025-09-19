@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
-import { LoadingService } from '../../../core/services/loading.service';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { catchError, finalize, takeUntil, tap } from 'rxjs';
 import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { FileInputComponent } from '../../../component/form/file-input/file-input.component';
-import { TestManageService } from '../test-manage.service';
-import { DialogService } from '../../../core/services/dialog.service';
-import { catchError, finalize, takeUntil, tap } from 'rxjs';
 import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
+import { DialogService } from '../../../core/services/dialog.service';
+import { LoadingService } from '../../../core/services/loading.service';
 import { BaseComponent } from '../../base.component';
+import { TestManageService } from '../test-manage.service';
 
 @Component({
   selector: 'test2',
@@ -17,7 +17,7 @@ import { BaseComponent } from '../../base.component';
     FileInputComponent,
     LoadingIndicatorComponent
   ],
-  providers: [LoadingService, TestManageService],
+  providers: [TestManageService],
   templateUrl: './test2.component.html',
   styleUrl: './test2.component.scss'
 })

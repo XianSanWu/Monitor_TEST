@@ -35,7 +35,7 @@ import { AuthManageService } from '../auth-manage.service';
     BasicInputComponent,
     LoadingIndicatorComponent,
   ],
-  providers: [LoadingService, AuthManageService, PermissionManageService],
+  providers: [AuthManageService, PermissionManageService],
   templateUrl: './auth-login-verify.component.html',
   styleUrl: './auth-login-verify.component.scss',
 })

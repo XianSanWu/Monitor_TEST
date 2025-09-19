@@ -30,7 +30,7 @@ import { CdpManageService } from '../../cdp-manage.service';
     AgGridModule,
     CollapsibleSectionComponent
   ],
-  providers: [LoadingService, CdpManageService],
+  providers: [ CdpManageService],
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.scss'
 })

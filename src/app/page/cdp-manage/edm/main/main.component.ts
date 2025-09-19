@@ -35,7 +35,7 @@ import { CdpManageService } from '../../cdp-manage.service';
     LoadingIndicatorComponent,
     CollapsibleSectionComponent
   ],
-  providers: [LoadingService, CdpManageService],
+  providers: [CdpManageService],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })

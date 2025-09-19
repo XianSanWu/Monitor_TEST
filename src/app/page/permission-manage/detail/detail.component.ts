@@ -62,7 +62,7 @@ import { PermissionManageService } from '../permission-manage.service';
     CollapsibleSectionComponent,
     SearchSelectComponent,
   ],
-  providers: [LoadingService, PermissionManageService],
+  providers: [PermissionManageService],
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.scss',
 })

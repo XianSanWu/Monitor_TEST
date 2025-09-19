@@ -1,17 +1,17 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { BaseComponent } from '../../base.component';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { DialogService } from '../../../core/services/dialog.service';
-import { LoadingService } from '../../../core/services/loading.service';
 import { CommonModule } from '@angular/common';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { catchError, finalize, forkJoin, of, takeUntil, tap } from 'rxjs';
+import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
 import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
 import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
-import { forkJoin, catchError, of, takeUntil, finalize, tap } from 'rxjs';
-import { MsmqManageService } from '../msmq-manage.service';
 import { MsmqQueueInfoRequest } from '../../../core/models/requests/msmq.model';
 import { MsmqQueueDetailsResponse } from '../../../core/models/responses/msmq.model';
-import { ValidatorsUtil } from '../../../common/utils/validators-util';
+import { DialogService } from '../../../core/services/dialog.service';
+import { LoadingService } from '../../../core/services/loading.service';
+import { BaseComponent } from '../../base.component';
+import { MsmqManageService } from '../msmq-manage.service';
 
 @Component({
   selector: 'queue',
@@ -23,7 +23,7 @@ import { ValidatorsUtil } from '../../../common/utils/validators-util';
     LoadingIndicatorComponent,
     CollapsibleSectionComponent
   ],
-  providers: [LoadingService, MsmqManageService],
+  providers: [MsmqManageService],
   templateUrl: './queue.component.html',
   styleUrl: './queue.component.scss'
 })

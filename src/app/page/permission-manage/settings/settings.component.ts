@@ -37,7 +37,7 @@ import { PermissionManageService } from '../permission-manage.service';
     MatTooltipModule,
     CollapsibleSectionComponent,
   ],
-  providers: [LoadingService, PermissionManageService],
+  providers: [PermissionManageService],
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss'],
 })

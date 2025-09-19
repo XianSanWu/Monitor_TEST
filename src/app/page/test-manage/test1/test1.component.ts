@@ -18,7 +18,6 @@ import { Option, PageBase } from '../../../core/models/common/base.model';
 import { ConfirmDialogOption } from '../../../core/models/common/dialog.model';
 import { FieldModel, WorkflowStepsSearchListRequest } from '../../../core/models/requests/workflow-steps.model';
 import { DialogService } from '../../../core/services/dialog.service';
-import { LoadingService } from '../../../core/services/loading.service';
 import { BaseComponent } from '../../base.component';
 import { TestManageService } from '../test-manage.service';
 
@@ -37,7 +36,7 @@ import { TestManageService } from '../test-manage.service';
     CollapsibleSectionComponent,
     DynamicLineChartComponent
   ],
-  providers: [LoadingService, TestManageService],
+  providers: [TestManageService],
   templateUrl: './test1.component.html',
   styleUrl: './test1.component.scss'
 })

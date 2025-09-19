@@ -48,7 +48,7 @@ import { PermissionManageService } from '../permission-manage.service';
     MatButtonModule,
     CollapsibleSectionComponent,
   ],
-  providers: [LoadingService, PermissionManageService],
+  providers: [PermissionManageService],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
 })

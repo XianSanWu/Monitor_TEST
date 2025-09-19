@@ -1,23 +1,23 @@
-import { Component, HostListener, ViewChild } from '@angular/core';
-import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
-import { LoadingService } from '../../../core/services/loading.service';
-import { MailHunterManageService } from '../mail-hunter-manage.service';
 import { CommonModule } from '@angular/common';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
-import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
-import { BaseComponent } from '../../base.component';
-import { DialogService } from '../../../core/services/dialog.service';
-import { SearchSelectComponent } from '../../../component/form/search-select/search-select.component';
-import { DateRangeComponent } from '../../../component/form/date-range/date-range.component';
-import { ValidatorsUtil } from '../../../common/utils/validators-util';
-import { GridApi, ColDef, CellDoubleClickedEvent } from 'ag-grid-community';
-import { Option, PageBase } from '../../../core/models/common/base.model';
-import { Department } from '../../../core/enums/department-enum';
-import { MailHunterSearchListRequest } from '../../../core/models/requests/mail-hunter.model';
+import { CellDoubleClickedEvent, ColDef, GridApi } from 'ag-grid-community';
 import { catchError, finalize, takeUntil, tap } from 'rxjs';
 import { CommonUtil } from '../../../common/utils/common-util';
+import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/custom-filter.component';
+import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
+import { DateRangeComponent } from '../../../component/form/date-range/date-range.component';
+import { SearchSelectComponent } from '../../../component/form/search-select/search-select.component';
+import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
+import { Department } from '../../../core/enums/department-enum';
+import { Option, PageBase } from '../../../core/models/common/base.model';
+import { MailHunterSearchListRequest } from '../../../core/models/requests/mail-hunter.model';
+import { DialogService } from '../../../core/services/dialog.service';
+import { LoadingService } from '../../../core/services/loading.service';
+import { BaseComponent } from '../../base.component';
+import { MailHunterManageService } from '../mail-hunter-manage.service';
 
 @Component({
   selector: 'project-mail-count',
@@ -31,7 +31,7 @@ import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/
     AgGridModule,
     CollapsibleSectionComponent
   ],
-  providers: [LoadingService, MailHunterManageService],
+  providers: [MailHunterManageService],
   templateUrl: './project-mail-count.component.html',
   styleUrl: './project-mail-count.component.scss'
 })
