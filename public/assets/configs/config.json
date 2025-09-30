@@ -8,8 +8,8 @@
     "Mail Hunter",
     "完成"
   ],
-  "EncryptionSettings": {
-    "AESKey": "kS3Bv9qZLrM7YcXwP4fX8mJ2hG9vRqLq",
-    "AESIV": "a8F3dK2pM1zQ9rTf"
-  }
+  "EncryptionSettings": [
+    "kS3Bv9qZLrM7YcXwP4fX8mJ2hG9vRqLq",
+    "a8F3dK2pM1zQ9rTf"
+  ]
 }

@@ -70,8 +70,8 @@ export default class LoginComponent extends BaseComponent {
     });
 
     this.configService.configData$.subscribe((data) => {
-      this.key = data?.EncryptionSettings?.AESKey;
-      this.iv = data?.EncryptionSettings?.AESIV;
+      this.key = data?.EncryptionSettings?.[0];
+      this.iv = data?.EncryptionSettings?.[1];
     });
   }
 
