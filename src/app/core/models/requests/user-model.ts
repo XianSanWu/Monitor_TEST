@@ -11,6 +11,7 @@ export interface UserRequest {
 
 export class FieldModel {
   Uuid?: string;
+  UserId?: string;
   UserName?: string;
   IsUse?: boolean;
 

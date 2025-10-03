@@ -146,7 +146,7 @@ export default class DetailComponent extends BaseComponent implements OnInit {
           page: pageBase,
           sortModel: undefined,
           filterModel: undefined,
-          fieldModel: new FieldModel({ Uuid: copyUserNameUuid, IsUse: true }),
+          fieldModel: new FieldModel({ UserId: copyUserNameUuid, IsUse: true }),
         };
 
         // 取得該使用者資料
@@ -205,7 +205,7 @@ export default class DetailComponent extends BaseComponent implements OnInit {
       page: pageBaseBig,
       sortModel: undefined,
       filterModel: undefined,
-      fieldModel: new FieldModel({ Uuid: this.userUuid, IsUse: true }),
+      fieldModel: new FieldModel({ UserId: this.userUuid, IsUse: true }),
     };
 
     const observables: any = {
