@@ -32,7 +32,10 @@ export class ApiService {
 
     const httpOptions: any = {
       params,
-      withCredentials: options?.withCredentials ?? true,// 帶 cookie
+      withCredentials: options?.withCredentials ?? true, // 帶 cookie
+      headers: {
+        'X-FrontUrl': window.location.href, // 新增：傳送前端完整網址 (含路由與參數)
+      },
     };
 
     switch (method) {
