@@ -9,12 +9,16 @@ import { catchError, map, take } from 'rxjs/operators';
 import { HttpMethod } from '../../core/enums/http-method';
 import { RestStatus } from '../../core/enums/rest-enum';
 import { ResponseModel } from '../../core/models/base.model';
+import { AuditActionService } from '../../core/services/audit-action.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private auditAction: AuditActionService
+  ) {}
 
   doSend<T>(
     method:
@@ -30,12 +34,22 @@ export class ApiService {
     let request: Observable<any>;
     let errorMsg: { message: string } = { message: '' };
 
+    const lastAction = this.auditAction.get();
+    console.log('lastAction', lastAction);
+    
+    const headers = lastAction
+      ? {
+          'X-FrontUrl': window.location.href,
+          'X-ActionName': encodeURIComponent(lastAction),
+        }
+      : { 'X-FrontUrl': window.location.href };
+
+    console.log('headers', headers);
+
     const httpOptions: any = {
       params,
-      withCredentials: options?.withCredentials ?? true, // 帶 cookie
-      headers: {
-        'X-FrontUrl': window.location.href, // 新增：傳送前端完整網址 (含路由與參數)
-      },
+      withCredentials: options?.withCredentials ?? true,
+      headers: headers,
     };
 
     switch (method) {

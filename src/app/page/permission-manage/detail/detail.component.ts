@@ -27,6 +27,7 @@ import { BasicInputComponent } from '../../../component/form/basic-input/basic-i
 import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
 import { SearchSelectComponent } from '../../../component/form/search-select/search-select.component';
 import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
+import { SmartAuditDirective } from '../../../core/directivies/smart-audit-directive';
 import { LogicOperatorEnum } from '../../../core/enums/logic-operator-enum';
 import { MathSymbolEnum } from '../../../core/enums/math-symbol-enum';
 import { PermissionActionEnum } from '../../../core/enums/permission-enum';
@@ -61,6 +62,7 @@ import { PermissionManageService } from '../permission-manage.service';
     MatTooltipModule,
     CollapsibleSectionComponent,
     SearchSelectComponent,
+    SmartAuditDirective,
   ],
   providers: [PermissionManageService],
   templateUrl: './detail.component.html',
