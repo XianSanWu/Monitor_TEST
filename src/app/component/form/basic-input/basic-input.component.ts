@@ -1,13 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'basic-input',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatIconModule, MatButtonModule],
   templateUrl: './basic-input.component.html',
   styleUrl: './basic-input.component.scss'
 })
@@ -26,6 +28,9 @@ export class BasicInputComponent implements OnInit {
   firstErr: string = '';
   ctl!: FormControl;
 
+  // 新增 flag 控制密碼顯示
+  showPassword: boolean = false;
+
   constructor() { }
 
   get required(): boolean {
@@ -36,7 +41,6 @@ export class BasicInputComponent implements OnInit {
     if (!this.autocomplete) {
       this.autocomplete = this.ctlName;
     }
-    // console.log('basic-input:', this.ctlName, this.form);
     this.updateControl();
   }
 
@@ -62,4 +66,16 @@ export class BasicInputComponent implements OnInit {
     return this.ctl && (this.ctl.dirty || this.ctl.touched) && this.ctl.errors !== null;
   }
 
+  // getter 控制 input type
+  get inputType(): 'text' | 'password' | 'number' {
+    if (this.type === 'password' && this.showPassword) {
+      return 'text';
+    }
+    return this.type;
+  }
+
+  // 切換密碼顯示
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
 }

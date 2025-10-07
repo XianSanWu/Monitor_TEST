@@ -1,28 +1,21 @@
-<div
-  class="fieldGroup"
-  [ngClass]="{
+<div class="fieldGroup" [ngClass]="{
     'col-12': true,
     'error': hasError(),
     'essential': required,
-    'disabled': disabled,
-  }"
-  [ngStyle]="{'display': isHidden ? 'none' : 'block'}"
-  [formGroup]="form"
->
-  <label>
-    {{ title }}
-  </label>
+    'disabled': disabled
+  }" [ngStyle]="{'display': isHidden ? 'none' : 'block'}" [formGroup]="form">
+  <label>{{ title }}</label>
+
   <mat-form-field appearance="fill" [ngClass]="'col-12'">
     <mat-label>{{ title }}</mat-label>
-    <input
-      matInput
-      [type]="type"
-      [placeholder]="placeholder"
-      [formControlName]="ctlName"
-      [maxlength]="maxlength"
-      [readonly]="disabled"
-      [autocomplete]="autocomplete"
-    />
+    <input matInput [type]="inputType" [placeholder]="placeholder" [formControlName]="ctlName" [maxlength]="maxlength"
+      [readonly]="disabled" [autocomplete]="autocomplete" />
+
+    <!-- 只有 type=password 才顯示眼睛 -->
+    <button *ngIf="type === 'password'" type="button" matSuffix (click)="togglePassword()" [attr.aria-label]="'切換密碼顯示'"
+      class="password-toggle-btn">
+      <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+    </button>
   </mat-form-field>
 
   <!-- 錯誤訊息 -->
@@ -32,5 +25,4 @@
       <p>{{ firstErr }}</p>
     </ng-template>
   </div>
-
 </div>

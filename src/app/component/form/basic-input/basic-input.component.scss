@@ -49,3 +49,27 @@
     visibility: hidden;
   }
 }
+
+
+.password-toggle-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+
+  position: relative;    // 重要
+  right: 20px;           // 往左移動
+  display: flex;
+  align-items: center;
+
+  i.bi {
+    font-size: 1.6rem;   // 放大 icon
+    color: #495057;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
