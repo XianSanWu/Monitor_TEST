@@ -1,31 +1,13 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  IterableDiffer,
-  IterableDiffers,
-  OnInit,
-  Output,
-} from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import {
-  MatAutocompleteModule,
-  MatAutocompleteSelectedEvent,
-} from '@angular/material/autocomplete';
+import { Component, EventEmitter, Input, IterableDiffer, IterableDiffers, OnInit, Output } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Observable, map, startWith } from 'rxjs';
 import { Option } from '../../../core/models/common/base.model';
-
-// 只能判斷是否必填
 
 @Component({
   selector: 'search-multiselect',
@@ -49,7 +31,6 @@ export class SearchMultiselectComponent implements OnInit {
   @Input() placeholder: string = '請輸入以搜尋';
   @Input() disabled: boolean = false;
   @Input() options: Option[] = [];
-  @Input() required: boolean = false;
 
   @Output() selectedChange = new EventEmitter<string[]>();
 
@@ -63,12 +44,15 @@ export class SearchMultiselectComponent implements OnInit {
 
   constructor(private differs: IterableDiffers) {}
 
+ get required(): boolean {
+    return this.ctl?.validator ? this.ctl?.validator({} as AbstractControl)?.['required'] !== undefined : false;
+  }
+
   ngOnInit(): void {
-    if (!this.form || !this.ctlName)
-      throw new Error('form 與 ctlName 為必填屬性');
+    if (!this.form || !this.ctlName) throw new Error('form 與 ctlName 為必填屬性');
+
     this.ctl = this.form.get(this.ctlName) as FormControl;
     if (!this.ctl.value) this.ctl.setValue([]);
-
     if (this.required) this.ctl.addValidators(Validators.required);
 
     this.optionsDiffer = this.differs.find([]).create<Option>();
@@ -85,9 +69,7 @@ export class SearchMultiselectComponent implements OnInit {
       const diff = this.optionsDiffer.diff(this.options);
       if (diff) this.refresh();
     }
-
-    if (this.ctl?.errors)
-      this.firstErr = Object.values(this.ctl.errors)[0] as string;
+    if (this.ctl?.errors) this.firstErr = Object.values(this.ctl.errors)[0] as string;
   }
 
   private getSelectedOptions(): Option[] {
@@ -99,16 +81,11 @@ export class SearchMultiselectComponent implements OnInit {
     const filterValue = value.toLowerCase();
     const currentKeys = this.ctl.value ?? [];
     return this.options.filter(
-      (option) =>
-        option.value?.toLowerCase().includes(filterValue) &&
-        !currentKeys.includes(option.key)
+      (option) => option.value?.toLowerCase().includes(filterValue) && !currentKeys.includes(option.key)
     );
   }
 
   onOptionSelected(event: MatAutocompleteSelectedEvent): void {
-    this.ctl.markAsUntouched();
-    this.ctl.markAsPristine();
-
     const key = event.option.value;
     const current = this.ctl.value ?? [];
     if (!current.includes(key)) {
@@ -128,7 +105,6 @@ export class SearchMultiselectComponent implements OnInit {
       this.ctl.setValue([...current]);
       this.selectedOptions = this.getSelectedOptions();
       this.selectedChange.emit([...current]);
-
       this.ctl.markAsDirty();
       this.ctl.markAsTouched();
     }
@@ -141,17 +117,7 @@ export class SearchMultiselectComponent implements OnInit {
     this.ctl?.setValue(v, { emitEvent: true });
   }
 
-  get requiredField(): boolean {
-    return this.ctl?.validator
-      ? this.ctl?.validator({} as any)?.['required'] !== undefined
-      : false;
-  }
-
   hasError(): boolean {
-    return (
-      this.ctl &&
-      (this.ctl.dirty || this.ctl.touched) &&
-      this.ctl.errors !== null
-    );
+    return this.ctl && (this.ctl.dirty || this.ctl.touched) && this.ctl.errors != null;
   }
 }
