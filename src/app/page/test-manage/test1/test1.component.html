@@ -3,49 +3,23 @@
 </div>
 <div [formGroup]="validateForm">
   <div class="row">
-    <basic-input
-      title="輸入框範例"
-      class="col-6"
-      [form]="validateForm"
-      ctlName="username"
-      placeholder="請輸入帳號"
-      [maxlength]="30"
-    ></basic-input>
-    <dropdown
-      title="下拉選單範例"
-      [form]="validateForm"
-      ctlName="testControl"
-      [selectList]="selectList"
-      [disabledSelectList]="disabledSelectList"
-      class="col-6"
-      (valueChange)="onValueChange($event)"
-    ></dropdown>
+    <basic-input title="輸入框範例" class="col-6" [form]="validateForm" ctlName="username" placeholder="請輸入帳號"
+      [maxlength]="30"></basic-input>
+    <dropdown title="下拉選單範例" [form]="validateForm" ctlName="testControl" [selectList]="selectList"
+      [disabledSelectList]="disabledSelectList" class="col-6" (valueChange)="onValueChange($event)"></dropdown>
   </div>
 
   <div class="row">
-    <dropdown
-      title="下拉選單範例"
-      [form]="validateForm"
-      ctlName="testControl1"
-      [selectList]="selectList"
-      class="col-6"
-      (valueChange)="onValueChange($event)"
-    ></dropdown>
+    <dropdown title="下拉選單範例" [form]="validateForm" ctlName="testControl1" [selectList]="selectList" class="col-6"
+      (valueChange)="onValueChange($event)"></dropdown>
+
+    <search-multiselect [title]="'可複選 下拉選單範例'" [form]="validateForm" ctlName="tags" [options]="tagOptions" class="col-6"
+      (selectedChange)="onSelectedTags($event)"></search-multiselect>
   </div>
 
   <div class="row">
-    <date
-      class="col-6"
-      title="單一日期"
-      ctlName="date"
-      [form]="validateForm"
-    ></date>
-    <date-range
-      class="col-6"
-      titleStart="起日"
-      titleEnd="迄日"
-      [form]="validateForm"
-    ></date-range>
+    <date class="col-6" title="單一日期" ctlName="date" [form]="validateForm"></date>
+    <date-range class="col-6" titleStart="起日" titleEnd="迄日" [form]="validateForm"></date-range>
   </div>
 
   <div class="row">
@@ -61,65 +35,29 @@
   </div>
 
   <div class="row">
-    <search-select
-      title="下拉收尋框範例"
-      class="col-6"
-      [form]="validateForm"
-      ctlName="searchSelect"
-      placeholder="請輸入收尋"
-      [options]="options"
-      (selected)="onItemSelected($event)"
-    >
+    <search-select title="下拉收尋框範例" class="col-6" [form]="validateForm" ctlName="searchSelect" placeholder="請輸入收尋"
+      [options]="options" (selected)="onItemSelected($event)">
     </search-select>
   </div>
 
   <div class="row">
-    <ag-grid-angular
-      #agGrid
-      style="width: 100%; height: 500px"
-      class="ag-theme-alpine"
-      [rowData]="rowData"
-      [columnDefs]="columnDefs"
-      [defaultColDef]="defaultColDef"
-      [pagination]="false"
-      [animateRows]="true"
-      (gridReady)="onGridReady($event)"
-      (sortChanged)="onSortChanged()"
-      (filterChanged)="onFilterChanged()"
-    >
+    <ag-grid-angular #agGrid style="width: 100%; height: 500px" class="ag-theme-alpine" [rowData]="rowData"
+      [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [pagination]="false" [animateRows]="true"
+      (gridReady)="onGridReady($event)" (sortChanged)="onSortChanged()" (filterChanged)="onFilterChanged()">
     </ag-grid-angular>
 
-    <div
-      style="margin-top: 10px"
-      class="d-flex justify-content-center align-items-center gap-2"
-    >
-      <button
-        class="btn btn-primary"
-        (click)="onPageChange(1)"
-        [disabled]="currentPage === 1"
-      >
+    <div style="margin-top: 10px" class="d-flex justify-content-center align-items-center gap-2">
+      <button class="btn btn-primary" (click)="onPageChange(1)" [disabled]="currentPage === 1">
         First Page
       </button>
-      <button
-        class="btn btn-secondary"
-        (click)="onPageChange(currentPage - 1)"
-        [disabled]="currentPage === 1"
-      >
+      <button class="btn btn-secondary" (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">
         Previous
       </button>
       <span class="mx-2">Page {{ currentPage }} / {{ totalPages }}</span>
-      <button
-        class="btn btn-secondary"
-        (click)="onPageChange(currentPage + 1)"
-        [disabled]="currentPage === totalPages"
-      >
+      <button class="btn btn-secondary" (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">
         Next
       </button>
-      <button
-        class="btn btn-primary"
-        (click)="onPageChange(totalPages)"
-        [disabled]="currentPage === totalPages"
-      >
+      <button class="btn btn-primary" (click)="onPageChange(totalPages)" [disabled]="currentPage === totalPages">
         Last Page
       </button>
     </div>
@@ -127,45 +65,27 @@
 
   <collapsible-section [id]="'chart'" title="📈 圖表">
     <div class="row">
-      <dynamic-line-chart-component
-        [title]="'發送量'"
-        [data]="[
+      <dynamic-line-chart-component [title]="'發送量'" [data]="[
           { date: '2025-07-01', A: 10, B: 20 },
           { date: '2025-07-02', A: 15, B: 30000000 },
           { date: '2025-07-03', A: 20000000, B: 25 }
-        ]"
-        [chartHeight]="300"
-        [xKey]="'date'"
-        [yKey]="'封'"
-      ></dynamic-line-chart-component>
+        ]" [chartHeight]="300" [xKey]="'date'" [yKey]="'封'"></dynamic-line-chart-component>
     </div>
     <br />
     <div class="row">
       <div class="col-md-6">
-        <dynamic-line-chart-component
-          [title]="'點擊率'"
-          [data]="[
+        <dynamic-line-chart-component [title]="'點擊率'" [data]="[
             { date: '2025-07-01', A: 10, B: 20, C: 60000000, D: 9555 },
             { date: '2025-07-02', A: 15, B: 30000000, C: 30000000, D: 55555 },
             { date: '2025-07-03', A: 20000000, B: 25, C: 20000000, D: 75555 }
-          ]"
-          [chartHeight]="200"
-          [xKey]="'date'"
-          [yKey]="'%'"
-        ></dynamic-line-chart-component>
+          ]" [chartHeight]="200" [xKey]="'date'" [yKey]="'%'"></dynamic-line-chart-component>
       </div>
       <div class="col-md-6">
-        <dynamic-line-chart-component
-          [title]="'連結點擊率'"
-          [chartHeight]="200"
-          [data]="[
+        <dynamic-line-chart-component [title]="'連結點擊率'" [chartHeight]="200" [data]="[
             { date: '2025-07-01', A: 10, B: 20 },
             { date: '2025-07-02', A: 15, B: 30000000 },
             { date: '2025-07-03', A: 20000000, B: 25 }
-          ]"
-          [xKey]="'date'"
-          [yKey]="'%'"
-        ></dynamic-line-chart-component>
+          ]" [xKey]="'date'" [yKey]="'%'"></dynamic-line-chart-component>
       </div>
     </div>
   </collapsible-section>

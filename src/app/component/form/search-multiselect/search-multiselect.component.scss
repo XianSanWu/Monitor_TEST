@@ -1,0 +1,127 @@
+mat-chip-listbox {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  min-height: 40px;
+  padding: 4px;
+
+  mat-chip {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 0 12px;
+    height: 32px;
+    font-size: 13px;
+    background-color: #e0e0e0;
+    color: #333;
+    cursor: default;
+    pointer-events: none;
+
+    span {
+      line-height: 32px;
+    }
+
+    .btn-remove {
+      pointer-events: auto;
+      background: transparent;
+      border: none;
+      color: #495057;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      padding: 0;
+      border-radius: 50%;
+      line-height: 1;
+      transition: opacity 0.2s;
+
+      &:hover {
+        background-color: #dc3545;
+        color: #fff;
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.5);
+      }
+    }
+
+    &:hover .btn-remove {
+      opacity: 1;
+    }
+  }
+
+  input[matInput] {
+    flex: 1 1 auto;
+    min-width: 120px;
+    border: none;
+    outline: none;
+    padding: 6px 0;
+    font-size: 13px;
+  }
+}
+
+/* 移除 Material 勾勾 */
+mat-chip.mat-chip-selected::before,
+mat-chip.mat-chip-selected .mat-chip-checkmark {
+  display: none !important;
+  content: none !important;
+}
+
+/* ------------------------ */
+/* 錯誤訊息樣式 + 紅框 + * */
+/* ------------------------ */
+.fieldGroup {
+  &.essential label::after {
+    content: '*';
+    color: red;
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  label {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+    color: #333;
+  }
+
+  mat-form-field {
+    width: 100%;
+
+    &.mat-form-field-invalid {
+      .mat-form-field-outline,
+      .mat-form-field-outline-thick,
+      .mat-form-field-flex {
+        border-color: #f44336 !important;
+      }
+    }
+  }
+
+  .note {
+    margin-top: 0;
+    display: block;
+    color: #f44336;
+    font-size: 12px;
+    line-height: 1.5;
+
+    p {
+      margin: 0;
+      font-size: 12px;
+    }
+
+    &.errorText {
+      min-height: 20px;
+    }
+  }
+}

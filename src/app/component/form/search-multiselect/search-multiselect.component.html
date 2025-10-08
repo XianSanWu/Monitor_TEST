@@ -1,0 +1,34 @@
+<div class="fieldGroup" [ngClass]="{ error: hasError(), essential: required, disabled: disabled }" [formGroup]="form">
+    <label>{{ title }}</label>
+
+    <mat-form-field appearance="outline" class="col-12" [ngClass]="{'error': hasError()}">
+        <mat-chip-listbox #chipList aria-label="選擇的項目" multiple>
+            <!-- 已選清單 -->
+            <mat-chip *ngFor="let opt of selectedOptions" [disabled]="disabled">
+                <span>{{ opt.value }}</span>
+                <button type="button" class="btn-remove" title="移除選項" aria-label="移除選項" (click)="remove(opt)"
+                    [disabled]="disabled">
+                    ×
+                </button>
+            </mat-chip>
+
+            <!-- 搜尋輸入框 -->
+            <input matInput [placeholder]="placeholder" [matAutocomplete]="auto" [formControl]="inputCtrl"
+                [readonly]="disabled" />
+        </mat-chip-listbox>
+
+        <!-- 下拉搜尋選項 -->
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+            <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option.key">{{ option.value
+                }}</mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <!-- 錯誤訊息 -->
+    <div class="note errorText" [style.visibility]="hasError() ? 'visible' : 'hidden'">
+        <p *ngIf="ctl?.errors?.['required']; else otherErr">此為必填欄位</p>
+        <ng-template #otherErr>
+            <p>{{ firstErr }}</p>
+        </ng-template>
+    </div>
+</div>
