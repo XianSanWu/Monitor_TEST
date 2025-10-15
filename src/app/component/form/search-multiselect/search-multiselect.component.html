@@ -12,7 +12,7 @@
 
       <!-- 搜尋輸入框 -->
       <input matInput [placeholder]="placeholder" [formControl]="inputCtrl" [matAutocomplete]="auto"
-        [readonly]="disabled" />
+        [readonly]="disabled" [errorStateMatcher]="errorMatcher" />
     </mat-chip-listbox>
 
     <!-- 下拉搜尋選項 -->
