@@ -1,16 +1,22 @@
-// 📘 AuditNameEnum.ts
+// AuditNameEnum.ts
 // 用於稽核紀錄、路由標識、或行為追蹤的名稱定義
 export namespace AuditNameEnum {
-  // 🏠 首頁
+  // 授權
+  export enum Auth {
+    Login = '登入',
+    Logout = '登出',
+  }
+
+  // 首頁
   export enum Home {
     Main = '首頁_主頁',
   }
-  // 👤 稽核軌跡管理
+  // 稽核軌跡管理
   export enum Audit {
     Main = '稽核軌跡_主頁',
   }
 
-  // 👤 權限管理
+  // 權限管理
   export enum Permission {
     Main = '權限管理_主頁',
     Detail_Read = '權限管理_詳細頁_讀取',
@@ -24,22 +30,22 @@ export namespace AuditNameEnum {
     Btn_Setting = '新增 & 修改功能',
   }
 
-  // 📬 Mail Hunter
+  // Mail Hunter
   export enum MailHunter {
     Main = 'Mail Hunter 主頁',
   }
 
-  // 💾 MSMQ
+  // MSMQ
   export enum MSMQ {
     Main = 'MSMQ 主頁',
   }
 
-  // 📊 CDP
+  // CDP
   export enum CDP {
     Main = 'CDP 主頁',
   }
 
-  // 🧪 測試頁
+  // 測試頁
   export enum Test {
     Main = '測試頁 主頁',
   }

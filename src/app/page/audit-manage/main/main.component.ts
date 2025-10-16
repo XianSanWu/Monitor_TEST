@@ -9,7 +9,12 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
-import { CellDoubleClickedEvent, ColDef, GridApi } from 'ag-grid-community';
+import {
+  CellDoubleClickedEvent,
+  ColDef,
+  GridApi,
+  ICellRendererParams,
+} from 'ag-grid-community';
 import { catchError, finalize, forkJoin, of, takeUntil, tap } from 'rxjs';
 import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/custom-filter.component';
@@ -22,7 +27,6 @@ import { Option, PageBase } from '../../../core/models/common/base.model';
 import { MsmqQueueInfoRequest } from '../../../core/models/requests/msmq.model';
 import { FieldModel } from '../../../core/models/requests/permission-model';
 import { UserRequest } from '../../../core/models/requests/user-model';
-import { MsmqQueueDetailsResponse } from '../../../core/models/responses/msmq.model';
 import { AuditActionService } from '../../../core/services/audit-action.service';
 import { DialogService } from '../../../core/services/dialog.service';
 import { LoadingService } from '../../../core/services/loading.service';
@@ -49,7 +53,6 @@ import { PermissionManageService } from '../../permission-manage/permission-mana
 })
 export default class MainComponent extends BaseComponent implements OnInit {
   validateForm: FormGroup;
-  respData1!: MsmqQueueDetailsResponse;
   // 資料
   auditNameList: Option[] = [];
   userNameList: Option[] = [];
@@ -76,22 +79,20 @@ export default class MainComponent extends BaseComponent implements OnInit {
           Validators.required,
           ValidatorsUtil.dateFmt,
         ]),
-        auditName: new FormControl([], [Validators.required]),
-        userName: new FormControl('', []),
+        auditName: new FormControl([], []),
+        userName: new FormControl([], []),
       },
       { validators: ValidatorsUtil.dateRangeValidator }
     );
   }
 
   generateAuditNameOptions(): Option[] {
-    return Object.entries(AuditNameEnum)
-      .flatMap(([group, enums]) =>
-        Object.entries(enums).map(([key, value]) => ({
-          key: `${group}.${key}`,
-          value: value as string,
-        }))
-      )
-      .sort((a, b) => a.key.localeCompare(b.key)); // 排序讓結果一致
+    return Object.entries(AuditNameEnum).flatMap(([group, enums]) =>
+      Object.entries(enums).map(([key, value]) => ({
+        key: `${group}.${key}`,
+        value: value as string,
+      }))
+    );
   }
 
   ngOnInit(): void {
@@ -215,6 +216,29 @@ export default class MainComponent extends BaseComponent implements OnInit {
         return rowIndex >= 0 ? rowIndex + 1 + currentPage * pageSize : '';
       },
       width: 100,
+    },
+    { headerName: '使用者帳號', field: 'UserName', width: 140 },
+    { headerName: '使用者UuId', field: 'UserId', width: 140 },
+    { headerName: '前端URL', field: 'FrontUrl', width: 200 },
+    { headerName: '前端操作名稱', field: 'FrontActionName', width: 180 },
+    { headerName: '後端操作名稱', field: 'BackActionName', width: 180 },
+    { headerName: 'HTTP', field: 'HttpMethod', width: 120 },
+    { headerName: '狀態碼', field: 'HttpStatusCode', width: 120 },
+    { headerName: '請求路徑', field: 'RequestPath', width: 200 },
+    { headerName: '參數', field: 'Parameters', width: 250 },
+    { headerName: 'IP位址', field: 'IpAddress', width: 150 },
+    {
+      headerName: '建立時間',
+      field: 'CreateAt',
+      maxWidth: 170,
+      cellRenderer: (params: ICellRendererParams) => {
+        const rawValue = params.value || '';
+        if (rawValue === '0001-01-01 00:00:00') {
+          return '';
+        }
+
+        return rawValue;
+      },
     },
   ];
 
