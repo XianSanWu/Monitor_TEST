@@ -11,13 +11,28 @@
       </mat-chip>
 
       <!-- 搜尋輸入框 -->
-      <input matInput [placeholder]="placeholder" [formControl]="inputCtrl" [matAutocomplete]="auto"
-        [readonly]="disabled" [errorStateMatcher]="errorMatcher" />
+      <input
+        matInput
+        [placeholder]="placeholder"
+        [formControl]="inputCtrl"
+        [matAutocomplete]="auto"
+        [readonly]="disabled"
+        [errorStateMatcher]="errorMatcher"
+        (click)="onInputClick()"
+      />
     </mat-chip-listbox>
 
     <!-- 下拉搜尋選項 -->
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
-      <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option.key">{{ option.value }}</mat-option>
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="onOptionSelected($event)"
+      [displayWith]="displayFn">
+      <mat-option
+        *ngFor="let option of filteredOptions$ | async"
+        [value]="option.key"
+        >
+        {{ option.value }}
+      </mat-option>
     </mat-autocomplete>
   </mat-form-field>
 

@@ -7,6 +7,8 @@ import {
   IterableDiffers,
   OnInit,
   Output,
+  SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -20,6 +22,7 @@ import {
 import {
   MatAutocompleteModule,
   MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
 } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -29,10 +32,9 @@ import { MatInputModule } from '@angular/material/input';
 import { Observable, map, startWith } from 'rxjs';
 import { Option } from '../../../core/models/common/base.model';
 
-/** 🔴 自訂錯誤顯示控制器，讓 mat-form-field 能顯示紅框 */
+/** 自訂錯誤顯示控制器 */
 class MultiSelectErrorStateMatcher implements ErrorStateMatcher {
   constructor(private ctl: FormControl) {}
-
   isErrorState(
     control: FormControl | null,
     form: FormGroupDirective | NgForm | null
@@ -78,7 +80,10 @@ export class SearchMultiselectComponent implements OnInit {
   firstErr: string = '';
 
   private optionsDiffer!: IterableDiffer<Option>;
-  errorMatcher!: ErrorStateMatcher; // 🔴 加入錯誤匹配器
+  errorMatcher!: ErrorStateMatcher;
+
+  @ViewChild(MatAutocompleteTrigger)
+  autocompleteTrigger!: MatAutocompleteTrigger;
 
   constructor(private differs: IterableDiffers) {}
 
@@ -87,6 +92,9 @@ export class SearchMultiselectComponent implements OnInit {
       ? this.ctl?.validator({} as AbstractControl)?.['required'] !== undefined
       : false;
   }
+
+  /** 永遠不顯示選中值，避免 autocomplete 打勾勾 */
+  displayFn = () => '';
 
   ngOnInit(): void {
     if (!this.form || !this.ctlName)
@@ -98,14 +106,19 @@ export class SearchMultiselectComponent implements OnInit {
 
     this.optionsDiffer = this.differs.find([]).create<Option>();
     this.selectedOptions = this.getSelectedOptions();
-
-    // 🔴 初始化錯誤匹配器
     this.errorMatcher = new MultiSelectErrorStateMatcher(this.ctl);
 
+    // 收尋 Observable
     this.filteredOptions$ = this.inputCtrl.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter(value || ''))
     );
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['options']) {
+      this.refresh();
+    }
   }
 
   ngDoCheck(): void {
@@ -117,45 +130,70 @@ export class SearchMultiselectComponent implements OnInit {
       this.firstErr = Object.values(this.ctl.errors)[0] as string;
   }
 
-  private getSelectedOptions(): Option[] {
-    const keys = this.ctl?.value ?? [];
-    return (this.options ?? []).filter((o) => keys.includes(o.key));
+  /** 點擊輸入框 → 打開下拉 */
+  onInputClick(): void {
+    if (this.disabled) return;
+
+    // 清空輸入框，觸發重新篩選
+    this.inputCtrl.setValue('');
+
+    // 強制打開下拉
+    setTimeout(() => {
+      if (this.autocompleteTrigger && !this.autocompleteTrigger.panelOpen) {
+        this.autocompleteTrigger.openPanel();
+      }
+    });
   }
 
-  private _filter(value: string): Option[] {
-    const filterValue = value.toLowerCase();
-    const currentKeys = this.ctl.value ?? [];
-    return this.options.filter(
-      (option) =>
-        option.value?.toLowerCase().includes(filterValue) &&
-        !currentKeys.includes(option.key)
-    );
-  }
-
+  /** 選取選項 */
   onOptionSelected(event: MatAutocompleteSelectedEvent): void {
     const key = event.option.value;
-    const current = this.ctl.value ?? [];
+    const current: string[] = this.ctl.value ?? [];
     if (!current.includes(key)) {
       const newVal = [...current, key];
       this.ctl.setValue(newVal);
       this.selectedOptions = this.getSelectedOptions();
       this.selectedChange.emit(newVal);
     }
-    this.inputCtrl.setValue('');
+    this.inputCtrl.setValue(''); // 清空輸入框
   }
 
+  /** 移除已選項目 */
   remove(option: Option): void {
-    const current = this.ctl.value ?? [];
-    const index = current.indexOf(option.key);
-    if (index >= 0) {
-      current.splice(index, 1);
-      this.ctl.setValue([...current]);
-      this.selectedOptions = this.getSelectedOptions();
-      this.selectedChange.emit([...current]);
-      this.ctl.markAsDirty();
-      this.ctl.markAsTouched();
-    }
+    const current: string[] = this.ctl.value ?? [];
+    const newVal: string[] = current.filter((k: string) => k !== option.key);
+
+    this.ctl.setValue(newVal);
+    this.selectedOptions = this.getSelectedOptions();
+    this.selectedChange.emit(newVal);
+    this.ctl.markAsDirty();
+    this.ctl.markAsTouched();
+
+    // 重新觸發收尋 observable
     this.inputCtrl.setValue(this.inputCtrl.value ?? '');
+  }
+
+  private getSelectedOptions(): Option[] {
+    const keys: string[] = (this.ctl?.value ?? []) as string[];
+    return Array.isArray(this.options)
+      ? this.options.filter((o) => o.key && keys.includes(o.key))
+      : [];
+  }
+
+  private _filter(value: string): Option[] {
+    const filterValue = value.toLowerCase();
+    const currentKeys = this.ctl.value ?? [];
+
+    if (!value) {
+      // 空字串 → 顯示所有未選取項目
+      return this.options.filter((o) => !currentKeys.includes(o.key));
+    }
+
+    return this.options.filter(
+      (o) =>
+        o.value?.toLowerCase().includes(filterValue) &&
+        !currentKeys.includes(o.key)
+    );
   }
 
   private refresh() {
@@ -165,7 +203,7 @@ export class SearchMultiselectComponent implements OnInit {
   }
 
   hasError(): boolean {
-    return (
+    return !!(
       this.ctl &&
       (this.ctl.dirty || this.ctl.touched) &&
       this.ctl.errors != null
