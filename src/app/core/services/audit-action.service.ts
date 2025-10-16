@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 export class AuditActionService {
   private key = 'lastUserAction';
-  private currentAction: string | null = null; // <-- 方法三核心：暫存 action
+  private currentAction: string | null = null; // <-- 暫存 action
 
   constructor() {
     // 頁面初始化時，從 sessionStorage 讀一次（可選 TTL 檢查）
@@ -12,7 +12,7 @@ export class AuditActionService {
         const raw = sessionStorage.getItem(this.key);
         if (raw) {
           const rec = JSON.parse(raw);
-          const ttl = 5000; // 可自定義 TTL
+          const ttl = 5000; // TTL，存取5秒，5秒後消除
           if (Date.now() - rec.ts <= ttl) {
             this.currentAction = rec.actionName;
           } else {

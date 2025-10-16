@@ -171,7 +171,7 @@ export default class MainComponent extends BaseComponent implements OnInit {
         // 點擊時用 Angular router 導航，避免整頁刷新
         a.addEventListener('click', (e) => {
           e.preventDefault();
-          this.router.navigate(['/cdp/edm_senduuid_detail', batchId, sendUuidSort]);
+          this.router.navigate(['/cdp/edm_detail', batchId, sendUuidSort]);
         });
 
         return a;

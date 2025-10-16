@@ -21,7 +21,7 @@ import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/
 import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
 import { DropdownComponent } from '../../../component/form/dropdown/dropdown.component';
 import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
-import { SmartAuditDirective } from '../../../core/directivies/smart-audit-directive';
+import { AuditNameEnum } from '../../../core/enums/audit-name-enum';
 import { LogicOperatorEnum } from '../../../core/enums/logic-operator-enum';
 import { MathSymbolEnum } from '../../../core/enums/math-symbol-enum';
 import { PermissionActionEnum } from '../../../core/enums/permission-enum';
@@ -49,7 +49,6 @@ import { PermissionManageService } from '../permission-manage.service';
     MatCheckboxModule,
     MatButtonModule,
     CollapsibleSectionComponent,
-    SmartAuditDirective,
   ],
   providers: [PermissionManageService],
   templateUrl: './main.component.html',
@@ -74,14 +73,16 @@ export default class MainComponent extends BaseComponent implements OnInit {
     private configService: ConfigService,
     private loadingService: LoadingService,
     private router: Router,
-     private auditSvc: AuditActionService
+    private auditSvc: AuditActionService
   ) {
     super();
     this.validateForm = new FormGroup({
       isUse: new FormControl(true, [Validators.required]),
     });
 
-    this.auditSvc.set('權限管理 主頁');
+    // if (this.auditSvc.get() === null) {
+      this.auditSvc.set(AuditNameEnum.Permission.Main);
+    // }
 
   }
 
@@ -92,10 +93,8 @@ export default class MainComponent extends BaseComponent implements OnInit {
     this.loadData();
   }
 
-  onSettings(){
-    this.router.navigate([
-      '/permission/permission_settings',
-    ]);
+  onSettings() {
+    this.router.navigate(['/permission/permission_settings']);
   }
 
   onDetail() {

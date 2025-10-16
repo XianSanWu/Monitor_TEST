@@ -31,27 +31,29 @@ mat-form-field.error {
 /* chip list */
 mat-chip-listbox {
   display: flex;
+  flex-direction: column; /* ✅ 改為垂直排列 */
   flex-wrap: wrap;
   gap: 6px;
-  align-items: center;
   min-height: 40px;
   padding: 4px;
 
   mat-chip {
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: flex-start;
+    display: flex !important;
+    align-items: flex-start; /* 文字可以換行 */
+    justify-content: space-between;
     gap: 6px;
-    padding: 0 12px;
-    height: 32px;
+    padding: 4px 8px;
     font-size: 13px;
     background-color: #e0e0e0;
     color: #333;
     cursor: default;
     pointer-events: none;
+    word-break: break-word; /* ✅ 文字可斷行 */
+    flex-shrink: 1;
 
     span {
-      line-height: 32px;
+      line-height: 1.3;
+      word-break: break-word; /* ✅ 文字可斷行 */
     }
 
     .btn-remove {
@@ -82,19 +84,35 @@ mat-chip-listbox {
         box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.5);
       }
     }
-
-    &:hover .btn-remove {
-      opacity: 1;
-    }
   }
 
+  /* 將 input 放在最下方 */
   input[matInput] {
-    flex: 1 1 auto;
-    min-width: 120px;
+    order: 1; /* ✅ input always 最後 */
+    flex: 1 1 100%;
+    min-width: 0;
     border: none;
     outline: none;
     padding: 6px 0;
     font-size: 13px;
+  }
+}
+
+/* 小螢幕優化 */
+@media (max-width: 480px) {
+  mat-chip-listbox {
+    gap: 4px;
+    padding: 2px;
+
+    mat-chip {
+      padding: 4px 6px;
+      font-size: 12px;
+      height: auto; /* ✅ chip 高度自動 */
+    }
+
+    input[matInput] {
+      min-width: 0;
+    }
   }
 }
 

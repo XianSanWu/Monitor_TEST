@@ -28,6 +28,7 @@ import { CollapsibleSectionComponent } from '../../../component/form/collapsible
 import { SearchSelectComponent } from '../../../component/form/search-select/search-select.component';
 import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
 import { SmartAuditDirective } from '../../../core/directivies/smart-audit-directive';
+import { AuditNameEnum } from '../../../core/enums/audit-name-enum';
 import { LogicOperatorEnum } from '../../../core/enums/logic-operator-enum';
 import { MathSymbolEnum } from '../../../core/enums/math-symbol-enum';
 import { PermissionActionEnum } from '../../../core/enums/permission-enum';
@@ -43,6 +44,7 @@ import {
   FeaturePermission,
   GroupedPermissions,
 } from '../../../core/models/responses/permission.model';
+import { AuditActionService } from '../../../core/services/audit-action.service';
 import { DialogService } from '../../../core/services/dialog.service';
 import { LoadingService } from '../../../core/services/loading.service';
 import { BaseComponent } from '../../base.component';
@@ -89,7 +91,8 @@ export default class DetailComponent extends BaseComponent implements OnInit {
     // private configService: ConfigService,
     private loadingService: LoadingService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private auditSvc: AuditActionService
   ) {
     super();
     // 初始化表單
@@ -108,6 +111,29 @@ export default class DetailComponent extends BaseComponent implements OnInit {
     console.log('this.action', this.action);
     console.log('this.userName', this.userName);
     console.log('this.userUuid', this.userUuid);
+
+    if (this.auditSvc.get() === null) {
+      if (
+        this.action.toLocaleLowerCase() ===
+        PermissionActionEnum.Read.toLocaleLowerCase()
+      ) {
+        this.auditSvc.set(AuditNameEnum.Permission.Detail_Read);
+      }
+
+      if (
+        this.action.toLocaleLowerCase() ===
+        PermissionActionEnum.Create.toLocaleLowerCase()
+      ) {
+        this.auditSvc.set(AuditNameEnum.Permission.Detail_Create);
+      }
+
+      if (
+        this.action.toLocaleLowerCase() ===
+        PermissionActionEnum.Update.toLocaleLowerCase()
+      ) {
+        this.auditSvc.set(AuditNameEnum.Permission.Detail_Update);
+      }
+    }
 
     // this.configService.configData$.subscribe((data) => {});
   }

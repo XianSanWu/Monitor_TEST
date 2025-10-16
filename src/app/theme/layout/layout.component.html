@@ -1,9 +1,9 @@
 <div class="layout-container">
   <header [isSmallScreen]="isSmallScreen" (toggleSidenavEvent)="toggleSidenav()"></header>
   <sidebar
-    [opened]="opened"
-    [isSmallScreen]="isSmallScreen"
-    (menuItemClicked)="onMenuItemClick()"
+  [opened]="opened"
+  [isSmallScreen]="isSmallScreen"
+  (menuItemClicked)="onMenuItemClick()"
   ></sidebar>
   <div class="content-container">
     <!-- <loading-indicator></loading-indicator> -->
