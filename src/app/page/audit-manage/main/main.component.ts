@@ -16,6 +16,7 @@ import {
   ICellRendererParams,
 } from 'ag-grid-community';
 import { catchError, finalize, forkJoin, of, takeUntil, tap } from 'rxjs';
+import { CommonUtil } from '../../../common/utils/common-util';
 import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/custom-filter.component';
 import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
@@ -24,7 +25,7 @@ import { SearchMultiselectComponent } from '../../../component/form/search-multi
 import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
 import { AuditNameEnum } from '../../../core/enums/audit-name-enum';
 import { Option, PageBase } from '../../../core/models/common/base.model';
-import { MsmqQueueInfoRequest } from '../../../core/models/requests/msmq.model';
+import { AuditSearchListRequest } from '../../../core/models/requests/audit.model';
 import { FieldModel } from '../../../core/models/requests/permission-model';
 import { UserRequest } from '../../../core/models/requests/user-model';
 import { AuditActionService } from '../../../core/services/audit-action.service';
@@ -32,6 +33,7 @@ import { DialogService } from '../../../core/services/dialog.service';
 import { LoadingService } from '../../../core/services/loading.service';
 import { BaseComponent } from '../../base.component';
 import { PermissionManageService } from '../../permission-manage/permission-manage.service';
+import { AuditManageService } from '../audit-manage.service';
 
 @Component({
   selector: 'audit-main',
@@ -47,7 +49,7 @@ import { PermissionManageService } from '../../permission-manage/permission-mana
     CollapsibleSectionComponent,
     DateRangeComponent,
   ],
-  providers: [PermissionManageService],
+  providers: [PermissionManageService, AuditManageService],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
 })
@@ -61,6 +63,7 @@ export default class MainComponent extends BaseComponent implements OnInit {
     private dialogService: DialogService,
     private loadingService: LoadingService,
     private permissionManageService: PermissionManageService,
+    private auditManageService: AuditManageService,
     private auditSvc: AuditActionService,
     private router: Router
   ) {
@@ -71,11 +74,11 @@ export default class MainComponent extends BaseComponent implements OnInit {
 
     this.validateForm = new FormGroup(
       {
-        startDate: new FormControl('', [
+        startDate: new FormControl(this.getOneYearAgo(), [
           Validators.required,
           ValidatorsUtil.dateFmt,
         ]),
-        endDate: new FormControl('', [
+        endDate: new FormControl(this.getToday(), [
           Validators.required,
           ValidatorsUtil.dateFmt,
         ]),
@@ -84,6 +87,19 @@ export default class MainComponent extends BaseComponent implements OnInit {
       },
       { validators: ValidatorsUtil.dateRangeValidator }
     );
+  }
+
+  // 一年前的日期（格式: yyyy-MM-dd）
+  getOneYearAgo(): string {
+    const today = new Date();
+    today.setFullYear(today.getFullYear() - 1); // 一年前
+    return CommonUtil.formatDate(today);
+  }
+
+  // 今天的日期（格式: yyyy-MM-dd）
+  getToday(): string {
+    const today = new Date();
+    return CommonUtil.formatDate(today);
   }
 
   generateAuditNameOptions(): Option[] {
@@ -97,7 +113,7 @@ export default class MainComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPermissions();
-    this.Search();
+    // this.Search();
   }
 
   loadPermissions() {
@@ -161,38 +177,7 @@ export default class MainComponent extends BaseComponent implements OnInit {
   }
 
   Search(): void {
-    this.loadingService.show();
-    const list1_reqData = new MsmqQueueInfoRequest({
-      queueName: this.validateForm.get('queueName')?.value,
-    });
-
-    forkJoin({
-      // list1: this.msmqManageService.GetAllQueue(list1_reqData).pipe(
-      //   catchError((err) => {
-      //     this.dialogService.openCustomSnackbar({
-      //       message:
-      //         '錯誤在API：GetAllQueue。' + err.message ||
-      //         '錯誤在API：GetAllQueue',
-      //     });
-      //     console.error('[list1] 錯誤在API：GetAllQueue。API error:', err);
-      //     return of(null); // 不要 throw，讓流程繼續
-      //   })
-      // ),
-    })
-      .pipe(
-        takeUntil(this.destroy$),
-        tap((result) => {
-          // 同時取得多個 API 的回傳結果
-          // if (result.list1) {
-          //   this.respData1 = result.list1.Data;
-          //   // console.log('list1 成功', this.respData1);
-          // }
-        }),
-        finalize(() => {
-          this.loadingService.hide();
-        })
-      )
-      .subscribe();
+    this.loadData();
   }
 
   //#region Ag-grid
@@ -315,33 +300,41 @@ export default class MainComponent extends BaseComponent implements OnInit {
       totalCount: this.totalCount,
     });
 
+    const formattedData = {
+      ...this.validateForm.getRawValue(),
+      startDate: this.validateForm.getRawValue().startDate ? CommonUtil.formatDateTime(new Date(this.validateForm.getRawValue().startDate)) : null,
+      endDate: this.validateForm.getRawValue().endDate ? CommonUtil.formatDateTime(new Date(this.validateForm.getRawValue().endDate)) : null
+    };
+
     // 組裝請求資料
-    // const reqData: WorkflowStepsSearchListRequest = {
-    //   page: pageBase,
-    //   sortModel: sortModel,
-    //   filterModel: filterModel,
-    //   fieldModel: this.validateForm.getRawValue(),
-    // };
+    const reqData: AuditSearchListRequest = {
+      page: pageBase,
+      sortModel: sortModel,
+      filterModel: filterModel,
+      fieldModel: formattedData,
+    };
     //#endregion
 
-    // this.cdpManageService.getSearchListList(reqData)
-    //   .pipe(
-    //     catchError((err) => {
-    //       this.dialogService.openCustomSnackbar({
-    //         message: err.message || '查詢列表失敗'
-    //       });
-    //       throw Error(err.message);
-    //     }),
-    //     tap(res => {
-    //       this.rowData = res.Data.SearchItem;
-    //       this.totalCount = res.Data.Page.TotalCount;
-    //       this.totalPages = Math.ceil(this.totalCount / this.pageSize);
-    //     }),
-    //     takeUntil(this.destroy$),
-    //     finalize(() => {
-    //       this.loadingService.hide();
-    //     })
-    //   ).subscribe();
+    this.auditManageService
+      .GetAllAudit(reqData)
+      .pipe(
+        catchError((err) => {
+          this.dialogService.openCustomSnackbar({
+            message: err.message || '查詢列表失敗',
+          });
+          throw Error(err.message);
+        }),
+        tap((res) => {
+          this.rowData = res.Data.SearchItem;
+          this.totalCount = res.Data.Page.TotalCount;
+          this.totalPages = Math.ceil(this.totalCount / this.pageSize);
+        }),
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.loadingService.hide();
+        })
+      )
+      .subscribe();
   }
 
   //  **處理分頁按鈕點擊**

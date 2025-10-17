@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { ApiService } from '../../api/services/api.service';
+import { HttpMethod } from '../../core/enums/http-method';
+import { ResponseModel } from '../../core/models/base.model';
+import { AuditSearchListRequest } from '../../core/models/requests/audit.model';
+import { AuditSearchResponse } from '../../core/models/responses/audit.model';
 import { ConfigService } from '../../core/services/config.service';
 
 @Injectable()
@@ -17,14 +22,14 @@ export class AuditManageService {
     });
   }
 
-  //查詢佇列
-//   GetAllQueue(
-//     req: MsmqQueueInfoRequest
-//   ): Observable<ResponseModel<MsmqQueueDetailsResponse>> {
-//     return this.apiService.doSend(
-//       HttpMethod.POST,
-//       this.baseUrl + this.msmqFunc + this.searchListFunc,
-//       req
-//     );
-//   }
+  //查詢稽核軌跡
+  GetAllAudit(
+    req: AuditSearchListRequest
+  ): Observable<ResponseModel<AuditSearchResponse>> {
+    return this.apiService.doSend(
+      HttpMethod.POST,
+      this.baseUrl + this.auditFunc + this.searchListFunc,
+      req
+    );
+  }
 }
