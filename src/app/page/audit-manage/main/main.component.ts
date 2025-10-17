@@ -111,6 +111,12 @@ export default class MainComponent extends BaseComponent implements OnInit {
     );
   }
 
+  getAuditNameDisplayValue(key: string): string {
+    const [group, itemKey] = key.split('.');
+    const groupEnum = (AuditNameEnum as any)[group];
+    return groupEnum ? groupEnum[itemKey] : key;
+  }
+
   ngOnInit(): void {
     this.loadPermissions();
     // this.Search();
@@ -203,7 +209,8 @@ export default class MainComponent extends BaseComponent implements OnInit {
       width: 100,
     },
     { headerName: '使用者帳號', field: 'UserName', width: 140 },
-    { headerName: '使用者UuId', field: 'UserId', width: 140 },
+    { headerName: 'IP位址', field: 'IpAddress', width: 150 },
+    // { headerName: '使用者UuId', field: 'UserId', width: 140 },
     { headerName: '前端URL', field: 'FrontUrl', width: 200 },
     { headerName: '前端操作名稱', field: 'FrontActionName', width: 180 },
     { headerName: '後端操作名稱', field: 'BackActionName', width: 180 },
@@ -211,7 +218,7 @@ export default class MainComponent extends BaseComponent implements OnInit {
     { headerName: '狀態碼', field: 'HttpStatusCode', width: 120 },
     { headerName: '請求路徑', field: 'RequestPath', width: 200 },
     { headerName: '參數', field: 'Parameters', width: 250 },
-    { headerName: 'IP位址', field: 'IpAddress', width: 150 },
+    { headerName: '回傳', field: 'ResponseBody', width: 250 },
     {
       headerName: '建立時間',
       field: 'CreateAt',
@@ -300,10 +307,13 @@ export default class MainComponent extends BaseComponent implements OnInit {
       totalCount: this.totalCount,
     });
 
+    const rawValue = this.validateForm.getRawValue();
+
     const formattedData = {
-      ...this.validateForm.getRawValue(),
-      startDate: this.validateForm.getRawValue().startDate ? CommonUtil.formatDateTime(new Date(this.validateForm.getRawValue().startDate)) : null,
-      endDate: this.validateForm.getRawValue().endDate ? CommonUtil.formatDateTime(new Date(this.validateForm.getRawValue().endDate)) : null
+      ...rawValue,
+      startDate: rawValue.startDate ? CommonUtil.formatDateTime(new Date(rawValue.startDate)) : null,
+      endDate: rawValue.endDate ? CommonUtil.formatDateTime(new Date(rawValue.endDate)) : null,
+      auditName: (rawValue.auditName || []).map((key: string) => this.getAuditNameDisplayValue(key)),
     };
 
     // 組裝請求資料
