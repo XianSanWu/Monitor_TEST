@@ -122,9 +122,19 @@ export default class MainComponent extends BaseComponent implements OnInit {
   }
 
   getAuditNameDisplayValue(key: string): string {
-    const [group, itemKey] = key.split('.');
-    const groupEnum = (AuditNameEnum as any)[group];
-    return groupEnum ? groupEnum[itemKey] : key;
+    const parts = key.split('.');
+    let current: any = AuditNameEnum;
+
+    for (const part of parts) {
+      if (current && part in current) {
+        current = current[part];
+      } else {
+        return key; // 找不到時回傳原 key
+      }
+    }
+
+    // 只要有找到，就回傳 current
+    return current;
   }
 
   ngOnInit(): void {
