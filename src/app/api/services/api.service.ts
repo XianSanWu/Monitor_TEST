@@ -40,7 +40,8 @@ export class ApiService {
     const headers = lastAction
       ? {
           'X-FrontUrl': window.location.href,
-          'X-ActionName': encodeURIComponent(lastAction),
+          'X-ActionName': encodeURIComponent(lastAction.name),
+          'X-ActionId': lastAction.uuid,
         }
       : { 'X-FrontUrl': window.location.href };
 
