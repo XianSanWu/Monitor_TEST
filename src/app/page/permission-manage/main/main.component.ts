@@ -21,6 +21,7 @@ import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/
 import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
 import { DropdownComponent } from '../../../component/form/dropdown/dropdown.component';
 import { LoadingIndicatorComponent } from '../../../component/loading/loading-indicator/loading-indicator.component';
+import { SmartAuditDirective } from '../../../core/directivies/smart-audit-directive';
 import { AuditNameEnum } from '../../../core/enums/audit-name-enum';
 import { LogicOperatorEnum } from '../../../core/enums/logic-operator-enum';
 import { MathSymbolEnum } from '../../../core/enums/math-symbol-enum';
@@ -49,6 +50,7 @@ import { PermissionManageService } from '../permission-manage.service';
     MatCheckboxModule,
     MatButtonModule,
     CollapsibleSectionComponent,
+    SmartAuditDirective
   ],
   providers: [PermissionManageService],
   templateUrl: './main.component.html',

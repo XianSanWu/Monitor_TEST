@@ -103,12 +103,22 @@ export default class MainComponent extends BaseComponent implements OnInit {
   }
 
   generateAuditNameOptions(): Option[] {
-    return Object.entries(AuditNameEnum).flatMap(([group, enums]) =>
-      Object.entries(enums).map(([key, value]) => ({
-        key: `${group}.${key}`,
-        value: value as string,
-      }))
-    );
+    const result: Option[] = [];
+
+    function traverse(obj: any, prefix: string = '') {
+      for (const [key, value] of Object.entries(obj)) {
+        const path = prefix ? `${prefix}.${key}` : key;
+
+        if (typeof value === 'object') {
+          traverse(value, path); // 遞迴處理子層 (namespace 或 enum)
+        } else {
+          result.push({ key: path, value: value as string }); // 最底層 enum 值
+        }
+      }
+    }
+
+    traverse(AuditNameEnum);
+    return result;
   }
 
   getAuditNameDisplayValue(key: string): string {
@@ -311,9 +321,15 @@ export default class MainComponent extends BaseComponent implements OnInit {
 
     const formattedData = {
       ...rawValue,
-      startDate: rawValue.startDate ? CommonUtil.formatDateTime(new Date(rawValue.startDate)) : null,
-      endDate: rawValue.endDate ? CommonUtil.formatDateTime(new Date(rawValue.endDate)) : null,
-      auditName: (rawValue.auditName || []).map((key: string) => this.getAuditNameDisplayValue(key)),
+      startDate: rawValue.startDate
+        ? CommonUtil.formatDateTime(new Date(rawValue.startDate))
+        : null,
+      endDate: rawValue.endDate
+        ? CommonUtil.formatDateTime(new Date(rawValue.endDate))
+        : null,
+      auditName: (rawValue.auditName || []).map((key: string) =>
+        this.getAuditNameDisplayValue(key)
+      ),
     };
 
     // 組裝請求資料

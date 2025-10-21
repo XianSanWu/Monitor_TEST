@@ -64,7 +64,7 @@
 
         <!-- 儲存 -->
         <button
-          data-action="權限設定 - 帳號設定 儲存"
+          [smartAudit]="'權限設定 - 帳號設定 儲存'"
           class="btn d-flex align-items-center justify-content-center gap-2 px-4 py-2 rounded-pill shadow-sm"
           [disabled]="validateForm.invalid"
           style="background-color: #198754; color: white; min-width: 140px"
@@ -169,7 +169,7 @@
 
   <!-- 儲存 -->
   <button
-    data-action="權限設定 - 帳號設定 儲存"
+    [smartAudit]="'權限設定 - 帳號設定 儲存'"
     class="btn d-flex align-items-center justify-content-center gap-2 px-4 py-2 rounded-pill shadow-sm"
     [disabled]="validateForm.invalid"
     style="background-color: #198754; color: white; min-width: 140px"

@@ -8,11 +8,11 @@
 </div>
 <div class="d-flex justify-content-end align-items-center mb-4 w-100">
   <div class="d-flex gap-2">
-    <button [attr.data-action]="AuditNameEnum.Permission.Btn_Setting" class="btn btn-primary" (click)="onSettings()">
-      <i class="bi bi-pencil-square"></i> {{AuditNameEnum.Permission.Btn_Setting}}
+    <button [smartAudit]="AuditNameEnum.Permission.Btn_Main_Setting" class="btn btn-primary" (click)="onSettings()">
+      <i class="bi bi-pencil-square"></i> 新增 & 修改功能
     </button>
-    <button [attr.data-action]="AuditNameEnum.Permission.Btn_Main_Create" class="btn btn-success" (click)="onDetail()">
-      <i class="bi bi-plus-circle"></i> {{AuditNameEnum.Permission.Btn_Main_Create}}
+    <button [smartAudit]="AuditNameEnum.Permission.Btn_Main_Create_Copy" class="btn btn-success" (click)="onDetail()">
+      <i class="bi bi-plus-circle"></i> 新增 & 複製權限
     </button>
   </div>
 </div>
