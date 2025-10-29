@@ -337,9 +337,10 @@ export default class MainComponent extends BaseComponent implements OnInit {
       endDate: rawValue.endDate
         ? CommonUtil.formatDateTime(new Date(rawValue.endDate))
         : null,
-      auditName: (rawValue.auditName || []).map((key: string) =>
+      frontActionName: (rawValue.auditName || []).map((key: string) =>
         this.getAuditNameDisplayValue(key)
       ),
+      userId: rawValue.userName
     };
 
     // 組裝請求資料
