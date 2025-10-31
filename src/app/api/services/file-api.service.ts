@@ -47,13 +47,13 @@ export class FileApiService {
 
     const requestHeaders = lastAction
       ? new HttpHeaders({
-          'Content-Type': 'file', //隨便定義，為了不要讓後端AuditMiddleware抓到
+          'IsFile': 'true', //隨便定義，為了不要讓後端AuditMiddleware抓到
           'X-FrontUrl': window.location.href,
           'X-ActionName': encodeURIComponent(lastAction.name),
           'X-ActionId': lastAction.uuid,
         })
       : new HttpHeaders({
-          'Content-Type': 'file', //隨便定義，為了不要讓後端AuditMiddleware抓到
+          'IsFile': 'true', //隨便定義，為了不要讓後端AuditMiddleware抓到
           'X-FrontUrl': window.location.href,
         });
 
