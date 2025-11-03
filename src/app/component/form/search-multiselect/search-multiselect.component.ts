@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -85,7 +86,7 @@ export class SearchMultiselectComponent implements OnInit {
   @ViewChild(MatAutocompleteTrigger)
   autocompleteTrigger!: MatAutocompleteTrigger;
 
-  constructor(private differs: IterableDiffers) {}
+  constructor(private differs: IterableDiffers, private cdr: ChangeDetectorRef) {}
 
   get required(): boolean {
     return this.ctl?.validator
@@ -134,14 +135,19 @@ export class SearchMultiselectComponent implements OnInit {
   onInputClick(): void {
     if (this.disabled) return;
 
-    // 清空輸入框，觸發重新篩選
     this.inputCtrl.setValue('');
+    this.cdr.detectChanges();
 
-    // 強制打開下拉
+    // 強制確保面板重建後打開
     setTimeout(() => {
-      if (this.autocompleteTrigger && !this.autocompleteTrigger.panelOpen) {
-        this.autocompleteTrigger.openPanel();
-      }
+      if (!this.autocompleteTrigger) return;
+
+      this.autocompleteTrigger.closePanel();
+      setTimeout(() => {
+        if (this.autocompleteTrigger) {
+          this.autocompleteTrigger.openPanel();
+        }
+      }, 50);
     });
   }
 
