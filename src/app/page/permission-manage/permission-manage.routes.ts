@@ -11,7 +11,7 @@ export const routes: Routes = [
     loadComponent: () => import('./detail/detail.component'),
   },
   {
-    path: 'permission_detail/:Action/:UserName/:UserUuid',
+    path: 'permission_detail/:Action/:UserName/:UserUuid/:IsUse',
     loadComponent: () => import('./detail/detail.component'),
   },
   {

@@ -36,5 +36,14 @@ export const CommonUtil = {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
-  }
-}
+  },
+  safeToBoolean(input: any): boolean {
+    if (typeof input === 'boolean') return input;
+    if (typeof input === 'number') return input === 1;
+    if (typeof input === 'string') {
+      const normalized = input.trim().toLowerCase();
+      return normalized === 'true' || normalized === '1';
+    }
+    return false;
+  },
+};

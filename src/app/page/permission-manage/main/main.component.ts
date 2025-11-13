@@ -50,7 +50,7 @@ import { PermissionManageService } from '../permission-manage.service';
     MatCheckboxModule,
     MatButtonModule,
     CollapsibleSectionComponent,
-    SmartAuditDirective
+    SmartAuditDirective,
   ],
   providers: [PermissionManageService],
   templateUrl: './main.component.html',
@@ -83,9 +83,8 @@ export default class MainComponent extends BaseComponent implements OnInit {
     });
 
     // if (this.auditSvc.get() === null) {
-      this.auditSvc.set(AuditNameEnum.Permission.Main);
+    this.auditSvc.set(AuditNameEnum.Permission.Main);
     // }
-
   }
 
   ngOnInit(): void {}
@@ -193,6 +192,7 @@ export default class MainComponent extends BaseComponent implements OnInit {
             PermissionActionEnum.Read,
             userName,
             userUuid,
+            isUse,
           ]);
         });
         container.appendChild(viewBtn);
@@ -209,6 +209,7 @@ export default class MainComponent extends BaseComponent implements OnInit {
               PermissionActionEnum.Update,
               userName,
               userUuid,
+              isUse,
             ]);
           });
           container.appendChild(editBtn);

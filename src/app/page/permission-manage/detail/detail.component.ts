@@ -22,6 +22,7 @@ import {
   tap,
   throwError,
 } from 'rxjs';
+import { CommonUtil } from '../../../common/utils/common-util';
 import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
 import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
@@ -84,6 +85,7 @@ export default class DetailComponent extends BaseComponent implements OnInit {
   action: string = '';
   userName: string = '';
   userUuid: string = '';
+  isUse: boolean = false;
 
   constructor(
     private dialogService: DialogService,
@@ -107,10 +109,12 @@ export default class DetailComponent extends BaseComponent implements OnInit {
     this.action = this.route.snapshot.paramMap.get('Action')?.trim() ?? '';
     this.userName = this.route.snapshot.paramMap.get('UserName')?.trim() ?? '';
     this.userUuid = this.route.snapshot.paramMap.get('UserUuid')?.trim() ?? '';
-
-    console.log('this.action', this.action);
-    console.log('this.userName', this.userName);
-    console.log('this.userUuid', this.userUuid);
+    const bool = this.route.snapshot.paramMap.get('IsUse')?.trim() ?? '';
+    this.isUse = CommonUtil.safeToBoolean(bool);
+    
+    // console.log('this.action', this.action);
+    // console.log('this.userName', this.userName);
+    // console.log('this.userUuid', this.userUuid);
 
     if (this.auditSvc.get() === null) {
       if (
@@ -233,7 +237,7 @@ export default class DetailComponent extends BaseComponent implements OnInit {
       page: pageBaseBig,
       sortModel: undefined,
       filterModel: undefined,
-      fieldModel: new FieldModel({ UserId: this.userUuid, IsUse: true }),
+      fieldModel: new FieldModel({ UserId: this.userUuid, IsUse: this.isUse }),
     };
 
     const observables: any = {
