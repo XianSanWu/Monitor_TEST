@@ -232,6 +232,7 @@ export default class MainComponent extends BaseComponent implements OnInit {
     { headerName: 'IP位址', field: 'IpAddress', width: 150 },
     // { headerName: '使用者UuId', field: 'UserId', width: 140 },
     { headerName: '前端URL', field: 'FrontUrl', width: 200 },
+    { headerName: '前端ActionId', field: 'FrontActionId', width: 200 },
     { headerName: '前端操作名稱', field: 'FrontActionName', width: 180 },
     { headerName: '後端操作名稱', field: 'BackActionName', width: 180 },
     { headerName: 'HTTP', field: 'HttpMethod', width: 120 },

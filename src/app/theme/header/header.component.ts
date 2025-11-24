@@ -1,15 +1,19 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { LocalStorageService } from '../../core/services/local-storage.service';
-import { CommonModule } from '@angular/common';
+import { SessionStorageService } from '../../core/services/session-storage.service';
 
 @Component({
   selector: 'header',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-  ],
+  imports: [CommonModule, RouterModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.Default,
@@ -20,9 +24,10 @@ export class HeaderComponent {
   @Output() toggleSidenavEvent = new EventEmitter<void>();
 
   constructor(
+    public sessionStorageService: SessionStorageService,
     private router: Router,
-    private localStorageService: LocalStorageService,
-  ) { }
+    private localStorageService: LocalStorageService
+  ) {}
 
   logout() {
     this.localStorageService.clear();

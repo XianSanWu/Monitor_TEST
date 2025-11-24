@@ -24,6 +24,7 @@ import { ConfigService } from '../../../core/services/config.service';
 import { DialogService } from '../../../core/services/dialog.service';
 import { LoadingService } from '../../../core/services/loading.service';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
+import { SessionStorageService } from '../../../core/services/session-storage.service';
 import { BaseComponent } from '../../base.component';
 import { PermissionManageService } from '../../permission-manage/permission-manage.service';
 import { AuthManageService } from '../auth-manage.service';
@@ -52,6 +53,7 @@ export default class LoginComponent extends BaseComponent {
     private AuthManageService: AuthManageService,
     private loadingService: LoadingService,
     private localStorageService: LocalStorageService,
+    public sessionStorageService: SessionStorageService,
     private configService: ConfigService,
     private dialogService: DialogService,
     private tokenService: TokenService,
@@ -125,7 +127,7 @@ export default class LoginComponent extends BaseComponent {
           }
           this.tokenService.setTokenUuid(res.Data.TokenUuid);
           this.localStorageService.setItem('isLoggedIn', reqData.username);
-
+          this.sessionStorageService.setItem('userName', reqData.username);
           // 準備權限查詢請求
           const pageBaseBig = new PageBase({
             pageSize: 2147483647,

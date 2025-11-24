@@ -10,7 +10,7 @@
     </button>
 
     <h1 class="ms-3 my-0 flex-grow-1">監控系統</h1>
-
+    <h1 class="ms-3 my-0 fs-6 me-2 flex-grow-2">當前登入帳號：{{sessionStorageService.getItem('userName')?.toUpperCase()}}</h1>
     <button class="btn logout-btn d-flex align-items-center" (click)="logout()">
       <i class="bi bi-box-arrow-right me-2"></i>登出
     </button>
