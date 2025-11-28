@@ -88,5 +88,17 @@
           ]" [xKey]="'date'" [yKey]="'%'"></dynamic-line-chart-component>
       </div>
     </div>
+
+    <br />
+    <div class="row">
+      <div class="col-md-6">
+        <dynamic-bar [options]="bar_options" title="每月銷售額">
+        </dynamic-bar>
+      </div>
+      <div class="col-md-6">
+        <dynamic-bar [options]="bar_options" title="每月銷售額" color="#009688">
+        </dynamic-bar>
+      </div>
+    </div>
   </collapsible-section>
 </div>

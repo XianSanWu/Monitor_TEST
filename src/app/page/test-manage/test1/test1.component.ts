@@ -11,6 +11,7 @@ import { ColDef, GridApi } from 'ag-grid-community';
 import { catchError, finalize, takeUntil, tap } from 'rxjs';
 import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/custom-filter.component';
+import { DynamicBarComponent } from '../../../component/chart/dynamic-bar/dynamic-bar.component';
 import { DynamicLineChartComponent } from '../../../component/chart/dynamic-line-chart-component/dynamic-line-chart-component.component';
 import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
 import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
@@ -45,6 +46,7 @@ import { TestManageService } from '../test-manage.service';
     CollapsibleSectionComponent,
     DynamicLineChartComponent,
     SearchMultiselectComponent,
+    DynamicBarComponent,
   ],
   providers: [TestManageService],
   templateUrl: './test1.component.html',
@@ -85,9 +87,7 @@ export default class Test1Component extends BaseComponent {
           ValidatorsUtil.blank,
           ValidatorsUtil.intSymbolsEnglishNumbers,
         ]),
-        tags: new FormControl(null, [
-          Validators.required,
-        ]),
+        tags: new FormControl(null, [Validators.required]),
       },
       { validators: ValidatorsUtil.dateRangeValidator }
     );
@@ -316,4 +316,19 @@ export default class Test1Component extends BaseComponent {
     this.currentPage = 1; // 重新篩選時回到第一頁
     this.loadData();
   }
+
+  bar_options = [
+    new Option({ key: '1', value: '10' }),
+    new Option({ key: '2', value: '20' }),
+    new Option({ key: '3', value: '15' }),
+    new Option({ key: '4', value: '15' }),
+    new Option({ key: '5', value: '15' }),
+    new Option({ key: '6', value: '15' }),
+    new Option({ key: '7', value: '15' }),
+    new Option({ key: '8', value: '15' }),
+    new Option({ key: '9', value: '15' }),
+    new Option({ key: '10', value: '15' }),
+    new Option({ key: '11', value: '15' }),
+    new Option({ key: '12', value: '15' }),
+  ];
 }
