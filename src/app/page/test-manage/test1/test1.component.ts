@@ -13,6 +13,7 @@ import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/custom-filter.component';
 import { DynamicBarComponent } from '../../../component/chart/dynamic-bar/dynamic-bar.component';
 import { DynamicLineChartComponent } from '../../../component/chart/dynamic-line-chart-component/dynamic-line-chart-component.component';
+import { NumberCenterComponent } from '../../../component/chart/number-center/number-center.component';
 import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
 import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
 import { DateRangeComponent } from '../../../component/form/date-range/date-range.component';
@@ -47,6 +48,7 @@ import { TestManageService } from '../test-manage.service';
     DynamicLineChartComponent,
     SearchMultiselectComponent,
     DynamicBarComponent,
+    NumberCenterComponent,
   ],
   providers: [TestManageService],
   templateUrl: './test1.component.html',
@@ -331,4 +333,7 @@ export default class Test1Component extends BaseComponent {
     new Option({ key: '11', value: '15' }),
     new Option({ key: '12', value: '15' }),
   ];
+
+  center_value = 75;
+  center_max = 100;
 }
