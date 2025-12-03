@@ -1,0 +1,14 @@
+<div class="pie-container">
+  <h3 *ngIf="title" class="chart-title">{{ title }}</h3>
+  
+  <div class="chart-card">
+    <div class="chart-area">
+      <canvas
+        baseChart
+        [data]="pieChartData"
+        [type]="pieChartType"
+        [options]="pieChartOptions">
+      </canvas>
+    </div>
+  </div>
+</div>

@@ -14,7 +14,7 @@ export class DynamicBarComponent implements OnChanges {
 
   @Input() options: Option[] = [];
   @Input() title: string = '';
-  @Input() color?: string; // ⭐ 外部單一顏色
+  @Input() color?: string; // 外部單一顏色
 
   barChartData: ChartData<'bar'> = {
     labels: [],

@@ -13,6 +13,7 @@ import { ValidatorsUtil } from '../../../common/utils/validators-util';
 import { CustomFilterComponent } from '../../../component/ag-grid/custom-filter/custom-filter.component';
 import { DynamicBarComponent } from '../../../component/chart/dynamic-bar/dynamic-bar.component';
 import { DynamicLineChartComponent } from '../../../component/chart/dynamic-line-chart-component/dynamic-line-chart-component.component';
+import { DynamicPieComponent } from '../../../component/chart/dynamic-pie/dynamic-pie.component';
 import { NumberCenterComponent } from '../../../component/chart/number-center/number-center.component';
 import { BasicInputComponent } from '../../../component/form/basic-input/basic-input.component';
 import { CollapsibleSectionComponent } from '../../../component/form/collapsible-section/collapsible-section.component';
@@ -49,6 +50,7 @@ import { TestManageService } from '../test-manage.service';
     SearchMultiselectComponent,
     DynamicBarComponent,
     NumberCenterComponent,
+    DynamicPieComponent,
   ],
   providers: [TestManageService],
   templateUrl: './test1.component.html',
@@ -336,4 +338,16 @@ export default class Test1Component extends BaseComponent {
 
   center_value = 75;
   center_max = 100;
+
+  pieChartData: Option[] = [
+    new Option({ key: '伺服器 CPU 使用率非常高', value: '35' }),
+    new Option({ key: '網路流量過大', value: '25' }),
+    new Option({ key: '資料庫讀寫延遲', value: '20' }),
+    new Option({ key: 'API 回應變慢', value: '20' }),
+    new Option({ key: 'TEST', value: '20' }),
+    new Option({ key: 'TEST_1', value: '20' }),
+    new Option({ key: 'TEST_1', value: '20' }),
+    new Option({ key: 'TEST_1', value: '20' }),
+    new Option({ key: 'TEST_1', value: '20' }),
+  ];
 }
